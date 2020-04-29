@@ -1,0 +1,77 @@
+.layout {
+    width: 100%;
+    height: calc(100% - 1px);
+}
+
+.layout > tr > td {
+    border: 1px solid #e6e6e6;
+    position: relative;
+}
+
+.left, .right, .form {
+    padding: 10px;
+}
+
+.left {
+    width: 280px;
+    vertical-align: top;
+}
+
+.right {
+    width: 280px;
+    vertical-align: top;
+}
+
+.panel {
+    width: 100%;
+    list-style: none;
+    padding: 0;
+}
+
+.widget {
+    width: 125px;
+    display: inline-block;
+    cursor: move;
+    border: 1px solid #a3a3a3;
+    padding: 5px 10px;
+    margin: 2px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.widget.disable {
+    border: 1px dashed #a3a3a3;
+    cursor: not-allowed;
+}
+
+.placeholder {
+    position: absolute;
+    z-index: -1;
+    font-size: 20px;
+    top: calc(50% - 15px);
+}
+
+.form > div > .placeholder {
+    left: calc(50% - 130px);
+}
+
+.right > .placeholder {
+    left: calc(50% - 50px);
+}
+
+#draggable {
+    position: fixed;
+}
+
+.indicator {
+    height: 5px;
+    background-color: lightpink;
+}
+
+.toolbar {
+    height: 50px;
+    text-align: right;
+    padding: 10px 20px;
+}
