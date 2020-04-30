@@ -29,6 +29,8 @@
 }
 
 .widget {
+    font-size: 14px;
+    box-sizing: border-box;
     width: 125px;
     display: inline-block;
     cursor: move;
@@ -39,6 +41,11 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.widget > * {
+    margin-right: 4px;
+    vertical-align: middle;
 }
 
 .widget.disable {
@@ -74,4 +81,16 @@
     height: 50px;
     text-align: right;
     padding: 10px 20px;
+}
+
+.toolbar > * {
+    margin-left: 4px;
+}
+
+.btn > * {
+    vertical-align: middle;
+}
+
+.btn {
+    padding: 4px 10px;
 }
