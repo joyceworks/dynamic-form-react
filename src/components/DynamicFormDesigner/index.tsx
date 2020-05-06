@@ -6,10 +6,9 @@ import {
     AiOutlineCheckSquare, AiOutlineCopy, AiOutlineDelete,
     AiOutlineDownSquare,
     AiOutlineEdit, AiOutlineEye, AiOutlineMinus,
-    AiOutlineOrderedList, AiOutlineSave, AiOutlineSplitCells,
+    AiOutlineOrderedList, AiOutlineSave,
     AiOutlineTable
 } from "react-icons/ai";
-
 
 export const DynamicFormDesigner = function () {
     const [basicWidgets] = useState<Widget[]>([

@@ -1,0 +1,32 @@
+.form-group {
+    table-layout: fixed;
+    width: 100%;
+    min-height: 42px;
+}
+
+.form-group.inline {
+    display: inline-block;
+}
+
+.form-group > tr > td.label {
+    padding: 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: right;
+    width: 100px;
+}
+
+.form-group.inline > tr > td.label {
+    text-align: left;
+    padding: 0;
+}
+
+.form-group > tr > td.label > .required {
+    color: red;
+}
+
+.form-group > tr > td.warning {
+    color: red;
+    margin: 0;
+}
