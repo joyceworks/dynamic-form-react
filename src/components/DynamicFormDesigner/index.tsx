@@ -9,6 +9,7 @@ import {
     AiOutlineOrderedList, AiOutlineSave,
     AiOutlineTable
 } from "react-icons/ai";
+import {DynamicForm} from "../DynamicForm";
 
 export const DynamicFormDesigner = function () {
     const [basicWidgets] = useState<Widget[]>([
@@ -30,12 +31,13 @@ export const DynamicFormDesigner = function () {
 
     return <>
         <table className={'layout'}>
+            <tbody>
             <tr>
                 <td className={'left'} rowSpan={2}>
                     <div>基础字段</div>
                     <ul className={'panel'}>
                         {
-                            basicWidgets.map(widget => <li className={'widget'}>
+                            basicWidgets.map(widget => <li key={widget.name} className={'widget'}>
                                 {widget.icon}
                                 <span>{widget.name}</span>
                             </li>)
@@ -44,13 +46,13 @@ export const DynamicFormDesigner = function () {
                     <div>高级字段</div>
                     <ul className={'panel'}>
                         {
-                            advancedWidgets.map(widget => <li className={'widget'}>
+                            advancedWidgets.map(widget => <li key={widget.name} className={'widget'}>
                                 {widget.icon}
                                 <span>{widget.name}</span>
                             </li>)
                         }
                     </ul>
-                    <div id={"draggable"}></div>
+                    <div id={"draggable"}/>
                 </td>
                 <td className={'toolbar'}>
                     <button type={'button'} className={'btn'}>
@@ -68,11 +70,15 @@ export const DynamicFormDesigner = function () {
                         <span>保存</span>
                     </button>
                 </td>
-                <td className={'right'} rowSpan={2}></td>
+                <td className={'right'} rowSpan={2}/>
             </tr>
             <tr>
-                <td className={'form'}></td>
+                <td className={'form'}>
+                    <DynamicForm/>
+                </td>
             </tr>
+            </tbody>
+
         </table>
     </>;
 }
