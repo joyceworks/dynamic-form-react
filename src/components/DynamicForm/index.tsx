@@ -1,5 +1,6 @@
 import React, {useReducer} from "react";
 import {Cell} from "../Cell";
+import {getData, setValue} from "./util";
 
 interface DynamicFormProps {
 }
@@ -10,13 +11,18 @@ const data = {
     current: null,
     data: {
         type: 'grid',
-        id: new Date().getTime(),
+        id: '1',
         swimlanes: [{
             span: 100, elements: [
                 {
                     type: 'input',
-                    id: new Date().getTime(),
-                    value: null
+                    id: '2',
+                    value: null,
+                    labeled: true,
+                    label: 'test',
+                    required: true,
+                    placeholder: 'test ph',
+                    warningable: true
                 }
             ]
         }]
@@ -29,8 +35,8 @@ export const DynamicForm = function (props: DynamicFormProps) {
             case 'SET_CURRENT':
                 return {...state, current: action.element};
             case 'SET_VALUE':
-                state.data.swimlanes[0].elements[0].value = action.value;
-                return {...state}
+                setValue(state.data, action.target, action.value);
+                return {...state};
             default:
                 return state;
         }
@@ -38,14 +44,8 @@ export const DynamicForm = function (props: DynamicFormProps) {
     return <DynamicFormContext.Provider value={dispatch}>
         <>
             <span>{JSON.stringify(state)}</span>
-            <Cell element={{
-                value: data.data.swimlanes[0].elements[0].value,
-                labeled: true,
-                label: 'test',
-                required: true,
-                placeholder: 'test ph',
-                warningable: true
-            }}/>
+            <span>{JSON.stringify(getData(data.data))}</span>
+            <Cell element={data.data.swimlanes[0].elements[0]}/>
         </>
     </DynamicFormContext.Provider>;
 }

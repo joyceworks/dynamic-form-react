@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import Element from '../../schemas/Element';
+import {Element} from '../../schemas/Element';
 import {DynamicFormContext} from "../DynamicForm";
 import {Input} from "antd";
 import {FormGroup} from "../FormGroup";
@@ -9,29 +9,26 @@ interface CellProps {
 }
 
 export const Cell = function ({element}: CellProps) {
+    const data = {...element, required: false, warningable: false};
     const dispatch = useContext(DynamicFormContext);
     return <>
-        <FormGroup required={element.required} warning={element.warning} layout={element.layout}
-                   warningable={element.warningable}
+        <FormGroup required={data.required} warning={data.warning} layout={data.layout}
+                   warningable={data.warningable}
                    label={
-                       element.labeled ?
-                           <label title={element.label}>{element.label}</label> : <></>
+                       data.labeled ?
+                           <label title={data.label}>{data.label}</label> : <></>
                    }
                    element={
-                       <Input value={element.value} placeholder={element.placeholder}
+                       <Input value={data.value} placeholder={data.placeholder}
                               onChange={(event) => {
                                   dispatch({
                                       type: 'SET_VALUE',
-                                      value: event.currentTarget.value
+                                      target: element,
+                                      value: event.target.value
                                   });
                               }}
                        />
                    }
         />
-        {/*<button onClick={() => dispatch({*/}
-        {/*    type: 'SET_CURRENT',*/}
-        {/*    element: 'Hi'*/}
-        {/*})}>Context test*/}
-        {/*</button>*/}
     </>;
 }
