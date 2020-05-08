@@ -94,7 +94,7 @@ export const DynamicFormDesigner = function () {
                                     },
                                     {
                                         type: 'input',
-                                        id: '2',
+                                        id: '3',
                                         value: null,
                                         labeled: true,
                                         label: 'test',

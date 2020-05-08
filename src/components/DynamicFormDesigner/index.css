@@ -3,7 +3,7 @@
     height: calc(100% - 1px);
 }
 
-.layout > tr > td {
+.layout > tbody > tr > td {
     border: 1px solid #e6e6e6;
     position: relative;
 }

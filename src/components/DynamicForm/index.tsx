@@ -29,11 +29,12 @@ export const DynamicForm = function ({direction = 'column', element}: DynamicFor
             {
                 direction === 'column' ? <tr>
                     {
-                        element.swimlanes?.map(swimlane => {
-                            return <td className={'swimlane column'}>
+                        element.swimlanes?.map((swimlane, index) => {
+                            return <td key={element.id + '-' + index} className={'swimlane column'}>
                                 {
-                                    swimlane.elements.map(element => {
-                                        return <Cell layout={'default'} element={element}/>;
+                                    swimlane.elements.map(child => {
+                                        return <Cell key={child.id} layout={'default'}
+                                                     element={child}/>;
                                     })
                                 }
                             </td>;
@@ -41,12 +42,13 @@ export const DynamicForm = function ({direction = 'column', element}: DynamicFor
                     }
                 </tr> : <>
                     {
-                        element.swimlanes?.map(swimlane => {
-                            return <tr>
+                        element.swimlanes?.map((swimlane, index) => {
+                            return <tr key={element.id + '-' + index}>
                                 <td className={'swimlane default'}>
                                     {
-                                        swimlane.elements.map(element => {
-                                            return <Cell layout={'inline'} element={element}/>;
+                                        swimlane.elements.map(child => {
+                                            return <Cell key={child.id} layout={'inline'}
+                                                         element={child}/>;
                                         })
                                     }
                                 </td>

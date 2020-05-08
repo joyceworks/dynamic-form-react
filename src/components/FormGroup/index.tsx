@@ -15,6 +15,7 @@ export const FormGroup = function ({
                                        warningable = true, label, element
                                    }: FormGroupProps) {
     return <table className={['form-group', layout].join(' ')}>
+        <tbody>
         {
             layout === 'default' ? <>
                 <tr>
@@ -59,5 +60,6 @@ export const FormGroup = function ({
                 }
             </>
         }
+        </tbody>
     </table>;
 }
