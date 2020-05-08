@@ -1,5 +1,6 @@
 export interface Swimlane {
     elements: Element[];
+    span: number;
 }
 
 export interface Element {
@@ -11,7 +12,6 @@ export interface Element {
     placeholder?: string;
     labeled?: boolean;
     warningable?: boolean;
-    layout?: 'inline' | 'default';
     warning?: string;
     required?: boolean;
 }

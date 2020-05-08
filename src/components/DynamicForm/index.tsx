@@ -1,35 +1,17 @@
 import React, {useReducer} from "react";
+import {Element} from "../../schemas/Element";
 import {Cell} from "../Cell";
 import {getData, setValue} from "./util";
+import './index.css';
 
 interface DynamicFormProps {
+    direction?: 'column' | 'row';
+    element: Element;
 }
 
 export const DynamicFormContext = React.createContext<any>(null);
 
-const data = {
-    current: null,
-    data: {
-        type: 'grid',
-        id: '1',
-        swimlanes: [{
-            span: 100, elements: [
-                {
-                    type: 'input',
-                    id: '2',
-                    value: null,
-                    labeled: true,
-                    label: 'test',
-                    required: true,
-                    placeholder: 'test ph',
-                    warningable: true
-                }
-            ]
-        }]
-    }
-};
-
-export const DynamicForm = function (props: DynamicFormProps) {
+export const DynamicForm = function ({direction = 'column', element}: DynamicFormProps) {
     const [state, dispatch] = useReducer(function (state: any, action: any) {
         switch (action.type) {
             case 'SET_CURRENT':
@@ -40,12 +22,40 @@ export const DynamicForm = function (props: DynamicFormProps) {
             default:
                 return state;
         }
-    }, data);
+    }, {current: null, data: element});
     return <DynamicFormContext.Provider value={dispatch}>
-        <>
-            <span>{JSON.stringify(state)}</span>
-            <span>{JSON.stringify(getData(data.data))}</span>
-            <Cell element={data.data.swimlanes[0].elements[0]}/>
-        </>
+        <table className={'swimlanes'}>
+            <tbody>
+            {
+                direction === 'column' ? <tr>
+                    {
+                        element.swimlanes?.map(swimlane => {
+                            return <td className={'swimlane column'}>
+                                {
+                                    swimlane.elements.map(element => {
+                                        return <Cell layout={'default'} element={element}/>;
+                                    })
+                                }
+                            </td>;
+                        })
+                    }
+                </tr> : <>
+                    {
+                        element.swimlanes?.map(swimlane => {
+                            return <tr>
+                                <td className={'swimlane default'}>
+                                    {
+                                        swimlane.elements.map(element => {
+                                            return <Cell layout={'inline'} element={element}/>;
+                                        })
+                                    }
+                                </td>
+                            </tr>;
+                        })
+                    }
+                </>
+            }
+            </tbody>
+        </table>
     </DynamicFormContext.Provider>;
 }

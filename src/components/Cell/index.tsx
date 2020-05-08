@@ -6,13 +6,14 @@ import {FormGroup} from "../FormGroup";
 
 interface CellProps {
     element: Element;
+    layout?: 'inline' | 'default';
 }
 
-export const Cell = function ({element}: CellProps) {
-    const data = {...element, required: false, warningable: false};
+export const Cell = function ({element, layout}: CellProps) {
+    const data = {...element, required: false, warningable: false, layout: 'default'};
     const dispatch = useContext(DynamicFormContext);
     return <>
-        <FormGroup required={data.required} warning={data.warning} layout={data.layout}
+        <FormGroup required={data.required} warning={data.warning} layout={layout}
                    warningable={data.warningable}
                    label={
                        data.labeled ?

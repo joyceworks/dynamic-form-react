@@ -46,7 +46,8 @@ export const DynamicFormDesigner = function () {
                     <div>高级字段</div>
                     <ul className={'panel'}>
                         {
-                            advancedWidgets.map(widget => <li key={widget.name} className={'widget'}>
+                            advancedWidgets.map(widget => <li key={widget.name}
+                                                              className={'widget'}>
                                 {widget.icon}
                                 <span>{widget.name}</span>
                             </li>)
@@ -74,11 +75,40 @@ export const DynamicFormDesigner = function () {
             </tr>
             <tr>
                 <td className={'form'}>
-                    <DynamicForm/>
+                    <div style={{height: '100%', overflowY: 'auto'}}>
+                        <DynamicForm element={{
+                            type: 'grid',
+                            id: '1',
+                            swimlanes: [{
+                                span: 100,
+                                elements: [
+                                    {
+                                        type: 'input',
+                                        id: '2',
+                                        value: null,
+                                        labeled: true,
+                                        label: 'test',
+                                        required: true,
+                                        placeholder: 'test ph',
+                                        warningable: true
+                                    },
+                                    {
+                                        type: 'input',
+                                        id: '2',
+                                        value: null,
+                                        labeled: true,
+                                        label: 'test',
+                                        required: true,
+                                        placeholder: 'test ph',
+                                        warningable: true
+                                    }
+                                ]
+                            }]
+                        }}/>
+                    </div>
                 </td>
             </tr>
             </tbody>
-
         </table>
     </>;
 }
