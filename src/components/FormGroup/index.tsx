@@ -2,9 +2,9 @@ import React from "react";
 import './index.css';
 
 interface FormGroupProps {
-    layout: 'inline' | 'default';
+    layout?: 'inline' | 'default';
     required: boolean;
-    warning: string | null;
+    warning?: string | null;
     warningable: boolean;
     label: JSX.Element | null;
     element: JSX.Element;
