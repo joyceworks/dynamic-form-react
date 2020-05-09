@@ -4,6 +4,7 @@ export interface Swimlane {
 }
 
 export interface Element {
+    options?: any[];
     value?: any;
     id: string;
     type: string;

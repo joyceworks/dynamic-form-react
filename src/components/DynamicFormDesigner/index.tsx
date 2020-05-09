@@ -1,5 +1,5 @@
 import './index.css';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {Widget} from "./schemas";
 import {Element} from "../../schemas/Element";
 
@@ -12,6 +12,7 @@ import {
     AiOutlineTable
 } from "react-icons/ai";
 import {DynamicForm} from "../DynamicForm";
+import {createWidgetInstance, findListOfIndicatorInside} from "./util";
 
 interface DraggingInfo {
     mode: 'move' | 'copy' | null;
@@ -65,51 +66,68 @@ export const DynamicFormDesigner = function () {
         }]
     });
 
+    function handleWidgetMouseDown(event: React.MouseEvent<HTMLLIElement>, widget: Widget) {
+        console.log('down');
+        setDraggingInfo({
+            offsetX: event.nativeEvent.offsetX,
+            offsetY: event.nativeEvent.offsetY,
+            target: widget,
+            x: event.nativeEvent.clientX - event.nativeEvent.offsetX,
+            y: event.nativeEvent.clientY - event.nativeEvent.offsetY,
+            mode: 'copy'
+        });
+        setData(prevState => {
+            const copy = JSON.parse(JSON.stringify(prevState));
+            copy.swimlanes![0].elements.push({
+                type: 'indicator',
+                id: 'indicator'
+            });
+            return copy;
+        });
+    }
+
+    function handleLayoutMouseMove(event: React.MouseEvent<HTMLTableElement>) {
+        event.persist();
+        if (draggingInfo.target) {
+            setDraggingInfo(prevState => {
+                return {
+                    ...prevState,
+                    // @ts-ignore
+                    x: event.nativeEvent.clientX - draggingInfo.offsetX,
+                    // @ts-ignore
+                    y: event.nativeEvent.clientY - draggingInfo.offsetY
+                }
+            })
+        }
+    }
+
+    function handleLayoutMouseUp(event: React.MouseEvent<HTMLTableElement>) {
+        const elements = findListOfIndicatorInside(data);
+        if (elements != null) {
+            const indicator = elements.filter(element => element.type === 'indicator')[0];
+            const index = elements.indexOf(indicator);
+            const element = createWidgetInstance(draggingInfo.target.type);
+            elements.splice(index, 1, element);
+            setDraggingInfo(prevState => ({...prevState, target: null}));
+        }
+    }
+
     return <>
         <DynamicFormDesignerContext.Provider value={draggingInfo}>
-            <table className={'layout'} onMouseMove={event => {
-                event.persist();
-                if (draggingInfo.target) {
-                    setDraggingInfo(prevState => {
-                        return {
-                            ...prevState,
-                            // @ts-ignore
-                            x: event.nativeEvent.clientX - draggingInfo.offsetX,
-                            // @ts-ignore
-                            y: event.nativeEvent.clientY - draggingInfo.offsetY
-                        }
-                    })
-                }
-            }}>
+            <table className={'layout'} onMouseMove={event => handleLayoutMouseMove(event)}
+                   onMouseUp={event => handleLayoutMouseUp(event)}>
                 <tbody>
                 <tr>
                     <td className={'left'} rowSpan={2}>
                         <div>基础字段</div>
                         <ul className={'panel'}>
                             {
-                                basicWidgets.map(widget => {
-                                    return <li key={widget.name} className={'widget'}
-                                               onMouseDown={event => {
-                                                   setDraggingInfo({
-                                                       offsetX: event.nativeEvent.offsetX,
-                                                       offsetY: event.nativeEvent.offsetY,
-                                                       target: widget,
-                                                       x: event.nativeEvent.clientX - event.nativeEvent.offsetX,
-                                                       y: event.nativeEvent.clientY - event.nativeEvent.offsetY,
-                                                       mode: 'copy'
-                                                   });
-                                                   setData(prevState => {
-                                                       prevState.swimlanes![0].elements.push({
-                                                           type: 'indicator',
-                                                           id: 'indicator'
-                                                       });
-                                                       return prevState;
-                                                   });
-                                               }}>
+                                basicWidgets.map(widget =>
+                                    <li key={widget.name} className={'widget'}
+                                        onMouseDown={event => handleWidgetMouseDown(event, widget)}>
                                         {widget.icon}
                                         <span>{widget.name}</span>
-                                    </li>;
-                                })
+                                    </li>)
                             }
                         </ul>
                         <div>高级字段</div>
@@ -138,9 +156,7 @@ export const DynamicFormDesigner = function () {
                     <td className={'toolbar'}>
                         <button type={'button'} className={'btn'}>
                             <AiOutlineDelete/>
-                            <span>
-            清空
-            </span>
+                            <span>清空</span>
                         </button>
                         <button type={'button'} className={'btn'}>
                             <AiOutlineEye/>

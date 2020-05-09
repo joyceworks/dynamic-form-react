@@ -9,7 +9,13 @@ interface CellProps {
 }
 
 export const Cell = function ({element, layout}: CellProps) {
-    const data = {...element, required: false, warningable: false, layout: 'default'};
+    const data = {
+        ...element,
+        required: false,
+        warningable: false,
+        layout: 'default',
+        labeled: true
+    };
     const dispatch = useContext(DynamicFormContext);
     if (element.type === 'input') {
         return <InputCell element={data} dispatch={dispatch} layout={layout}/>;
