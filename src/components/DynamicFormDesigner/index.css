@@ -69,6 +69,7 @@
 }
 
 #draggable {
+    z-index: 65535;
     position: fixed;
 }
 

@@ -1,6 +1,8 @@
 import './index.css';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Widget} from "./schemas";
+import {Element} from "../../schemas/Element";
+
 import {
     AiOutlineCalendar,
     AiOutlineCheckSquare, AiOutlineCopy, AiOutlineDelete,
@@ -19,6 +21,8 @@ interface DraggingInfo {
     x: number | null;
     y: number | null;
 }
+
+export const DynamicFormDesignerContext = React.createContext<any>(null);
 
 export const DynamicFormDesigner = function () {
     const [basicWidgets] = useState<Widget[]>([
@@ -41,115 +45,123 @@ export const DynamicFormDesigner = function () {
         mode: null, offsetX: null, offsetY: null, target: null, x: null, y: null
     });
 
+    const [data, setData] = useState<Element>({
+        type: 'grid',
+        id: '1',
+        swimlanes: [{
+            span: 100,
+            elements: [
+                {
+                    type: 'input',
+                    id: '2',
+                    value: null,
+                    labeled: true,
+                    label: 'test',
+                    required: true,
+                    placeholder: 'test ph',
+                    warningable: true
+                },
+            ]
+        }]
+    });
+
     return <>
-        <span>{
-            draggingInfo.x + ' ' + draggingInfo.y
-        }</span>
-        <table className={'layout'} onMouseMove={event => {
-            event.persist();
-            if (draggingInfo.target) {
-                setDraggingInfo(prevState => {
-                    return {
-                        ...prevState,
-                        // @ts-ignore
-                        x: event.nativeEvent.clientX - draggingInfo.offsetX,
-                        // @ts-ignore
-                        y: event.nativeEvent.clientY - draggingInfo.offsetY
-                    }
-                })
-            }
-        }}>
-            <tbody>
-            <tr>
-                <td className={'left'} rowSpan={2}>
-                    <div>基础字段</div>
-                    <ul className={'panel'}>
-                        {
-                            basicWidgets.map(widget => {
-                                return <li key={widget.name} className={'widget'}
-                                           onMouseDown={event => {
-                                               setDraggingInfo({
-                                                   offsetX: event.nativeEvent.offsetX,
-                                                   offsetY: event.nativeEvent.offsetY,
-                                                   target: widget,
-                                                   x: event.nativeEvent.clientX - event.nativeEvent.offsetX,
-                                                   y: event.nativeEvent.clientY - event.nativeEvent.offsetY,
-                                                   mode: 'copy'
-                                               });
-                                           }}>
-                                    {widget.icon}
-                                    <span>{widget.name}</span>
-                                </li>;
-                            })
+        <DynamicFormDesignerContext.Provider value={draggingInfo}>
+            <table className={'layout'} onMouseMove={event => {
+                event.persist();
+                if (draggingInfo.target) {
+                    setDraggingInfo(prevState => {
+                        return {
+                            ...prevState,
+                            // @ts-ignore
+                            x: event.nativeEvent.clientX - draggingInfo.offsetX,
+                            // @ts-ignore
+                            y: event.nativeEvent.clientY - draggingInfo.offsetY
                         }
-                    </ul>
-                    <div>高级字段</div>
-                    <ul className={'panel'}>
-                        {
-                            advancedWidgets.map(widget => {
-                                return <li key={widget.name} className={'widget'}>
-                                    {widget.icon}
-                                    <span>{widget.name}</span>
-                                </li>;
-                            })
-                        }
-                    </ul>
-                    <div id={"draggable"}
-                         style={{left: draggingInfo?.x + 'px', top: draggingInfo?.y + 'px'}}>
-                        {
-                            draggingInfo && draggingInfo.target !== null && <>
-                              <li key={draggingInfo.target.name} className={'widget'}>
-                                  {draggingInfo.target.icon}
-                                <span>{draggingInfo.target.name}</span>
-                              </li>
-                            </>
-                        }
-                    </div>
-                </td>
-                <td className={'toolbar'}>
-                    <button type={'button'} className={'btn'}>
-                        <AiOutlineDelete/>
-                        <span>
+                    })
+                }
+            }}>
+                <tbody>
+                <tr>
+                    <td className={'left'} rowSpan={2}>
+                        <div>基础字段</div>
+                        <ul className={'panel'}>
+                            {
+                                basicWidgets.map(widget => {
+                                    return <li key={widget.name} className={'widget'}
+                                               onMouseDown={event => {
+                                                   setDraggingInfo({
+                                                       offsetX: event.nativeEvent.offsetX,
+                                                       offsetY: event.nativeEvent.offsetY,
+                                                       target: widget,
+                                                       x: event.nativeEvent.clientX - event.nativeEvent.offsetX,
+                                                       y: event.nativeEvent.clientY - event.nativeEvent.offsetY,
+                                                       mode: 'copy'
+                                                   });
+                                                   setData(prevState => {
+                                                       prevState.swimlanes![0].elements.push({
+                                                           type: 'indicator',
+                                                           id: 'indicator'
+                                                       });
+                                                       return prevState;
+                                                   });
+                                               }}>
+                                        {widget.icon}
+                                        <span>{widget.name}</span>
+                                    </li>;
+                                })
+                            }
+                        </ul>
+                        <div>高级字段</div>
+                        <ul className={'panel'}>
+                            {
+                                advancedWidgets.map(widget => {
+                                    return <li key={widget.name} className={'widget'}>
+                                        {widget.icon}
+                                        <span>{widget.name}</span>
+                                    </li>;
+                                })
+                            }
+                        </ul>
+                        <div id={"draggable"}
+                             style={{left: draggingInfo?.x + 'px', top: draggingInfo?.y + 'px'}}>
+                            {
+                                draggingInfo && draggingInfo.target !== null && <>
+                                  <li key={draggingInfo.target.name} className={'widget'}>
+                                      {draggingInfo.target.icon}
+                                    <span>{draggingInfo.target.name}</span>
+                                  </li>
+                                </>
+                            }
+                        </div>
+                    </td>
+                    <td className={'toolbar'}>
+                        <button type={'button'} className={'btn'}>
+                            <AiOutlineDelete/>
+                            <span>
             清空
             </span>
-                    </button>
-                    <button type={'button'} className={'btn'}>
-                        <AiOutlineEye/>
-                        <span>预览</span>
-                    </button>
-                    <button type={'button'} className={'btn'}>
-                        <AiOutlineSave/>
-                        <span>保存</span>
-                    </button>
-                </td>
-                <td className={'right'} rowSpan={2}/>
-            </tr>
-            <tr>
-                <td className={'form'}>
-                    <div style={{height: '100%', overflowY: 'auto'}}>
-                        <DynamicForm element={{
-                            type: 'grid',
-                            id: '1',
-                            swimlanes: [{
-                                span: 100,
-                                elements: [
-                                    {
-                                        type: 'input',
-                                        id: '2',
-                                        value: null,
-                                        labeled: true,
-                                        label: 'test',
-                                        required: true,
-                                        placeholder: 'test ph',
-                                        warningable: true
-                                    },
-                                ]
-                            }]
-                        }}/>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                        </button>
+                        <button type={'button'} className={'btn'}>
+                            <AiOutlineEye/>
+                            <span>预览</span>
+                        </button>
+                        <button type={'button'} className={'btn'}>
+                            <AiOutlineSave/>
+                            <span>保存</span>
+                        </button>
+                    </td>
+                    <td className={'right'} rowSpan={2}/>
+                </tr>
+                <tr>
+                    <td className={'form'}>
+                        <div style={{height: '100%', overflowY: 'auto'}}>
+                            <DynamicForm element={data}/>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </DynamicFormDesignerContext.Provider>
     </>;
 }

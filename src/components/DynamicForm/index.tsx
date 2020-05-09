@@ -3,6 +3,7 @@ import {Element} from "../../schemas/Element";
 import {Cell} from "../Cell";
 import {getData, setValue} from "./util";
 import './index.css';
+import {Swimlane} from "./components/Swimlane";
 
 interface DynamicFormProps {
     direction?: 'column' | 'row';
@@ -30,28 +31,15 @@ export const DynamicForm = function ({direction = 'column', element}: DynamicFor
                 direction === 'column' ? <tr>
                     {
                         element.swimlanes?.map((swimlane, index) => {
-                            return <td key={element.id + '-' + index} className={'swimlane column'}>
-                                {
-                                    swimlane.elements.map(child => {
-                                        return <Cell key={child.id} layout={'default'}
-                                                     element={child}/>;
-                                    })
-                                }
-                            </td>;
+                            return <Swimlane key={element.id + '-' + index} direction={direction}
+                                             elements={swimlane.elements}/>;
                         })
                     }
                 </tr> : <>
                     {
                         element.swimlanes?.map((swimlane, index) => {
                             return <tr key={element.id + '-' + index}>
-                                <td className={'swimlane default'}>
-                                    {
-                                        swimlane.elements.map(child => {
-                                            return <Cell key={child.id} layout={'inline'}
-                                                         element={child}/>;
-                                        })
-                                    }
-                                </td>
+                                <Swimlane elements={swimlane.elements} direction={direction}/>
                             </tr>;
                         })
                     }
