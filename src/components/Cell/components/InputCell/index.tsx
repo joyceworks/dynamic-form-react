@@ -1,7 +1,7 @@
 import React from "react";
 import {Input} from "antd";
-import {FormGroup} from "../../FormGroup";
-import {Element} from "../../../schemas/Element";
+import {FormGroup} from "../../../FormGroup";
+import {Element} from "../../../../schemas/Element";
 
 
 interface InputCellProps {

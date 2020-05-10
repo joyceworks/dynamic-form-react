@@ -2,9 +2,8 @@
     height: calc(100% - 1px);
 }
 
-.layout > tbody > tr > td {
-    border: 1px solid #e6e6e6;
-    position: relative;
+.form {
+    height: 100%;
 }
 
 .left, .right, .form {
@@ -61,6 +60,7 @@
 #draggable {
     z-index: 65535;
     position: fixed;
+    pointer-events: none;
 }
 
 .indicator {
@@ -68,20 +68,3 @@
     background-color: lightpink;
 }
 
-.toolbar {
-    height: 50px;
-    text-align: right;
-    padding: 10px 20px;
-}
-
-.toolbar > * {
-    margin-left: 4px;
-}
-
-.btn > * {
-    vertical-align: middle;
-}
-
-.btn {
-    padding: 4px 10px;
-}

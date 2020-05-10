@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, Fragment, useReducer} from 'react';
 import {
     AiOutlineCalendar,
     AiOutlineCheckSquare,
@@ -58,7 +58,45 @@ export const DynamicFormDesigner = function () {
         mode: null, offsetX: null, offsetY: null, target: null, x: null, y: null
     });
 
-    const [data, setData] = useState<Element>({
+    const [data, dispatch] = useReducer(function (state: any, action: any) {
+        switch (action.type) {
+            case 'MOUSEOVER':
+                if (draggingInfo.target) {
+                    const indicators = action.elements.filter((element: Element) => element.type === 'indicator');
+                    if (indicators.length > 0) {
+                        const index = action.elements.indexOf(indicators[0]);
+                        action.elements.splice(index, 1);
+                        console.log('removed');
+                    }
+                    action.elements.push({
+                        type: 'indicator',
+                        id: 'indicator',
+                    });
+                    console.log('pushed');
+                }
+                return {...state};
+            case 'MOUSEOUT':
+                if (draggingInfo.target) {
+                    const indicators = action.elements.filter((element: Element) => element.type === 'indicator');
+                    if (indicators.length > 0) {
+                        const index = action.elements.indexOf(indicators[0]);
+                        action.elements.splice(index, 1);
+                        console.log('removed');
+                    }
+                }
+                return {...state};
+            default:
+                const elements = findListOfIndicatorInside(state);
+                if (elements != null) {
+                    const indicator = elements.filter(element => element.type === 'indicator')[0];
+                    const index = elements.indexOf(indicator);
+                    const element = createWidgetInstance(draggingInfo.target.type);
+                    elements.splice(index, 1, element);
+                }
+                setDraggingInfo(prevState => ({...prevState, target: null}));
+                return {...state};
+        }
+    }, {
         type: 'grid',
         id: '11270307',
         swimlanes: [{span: 100, elements: []}]
@@ -73,14 +111,14 @@ export const DynamicFormDesigner = function () {
             y: event.nativeEvent.clientY - event.nativeEvent.offsetY,
             mode: 'copy'
         });
-        setData(prevState => {
-            const copy = JSON.parse(JSON.stringify(prevState));
-            copy.swimlanes![0].elements.push({
-                type: 'indicator',
-                id: 'indicator'
-            });
-            return copy;
-        });
+        // setData(prevState => {
+        //     const copy = JSON.parse(JSON.stringify(prevState));
+        //     copy.swimlanes![0].elements.push({
+        //         type: 'indicator',
+        //         id: 'indicator'
+        //     });
+        //     return copy;
+        // });
     }
 
     function handleLayoutMouseMove(event: React.MouseEvent) {
@@ -99,25 +137,18 @@ export const DynamicFormDesigner = function () {
     }
 
     function handleLayoutMouseUp() {
-        const elements = findListOfIndicatorInside(data);
-        if (elements != null) {
-            const indicator = elements.filter(element => element.type === 'indicator')[0];
-            const index = elements.indexOf(indicator);
-            const element = createWidgetInstance(draggingInfo.target.type);
-            elements.splice(index, 1, element);
-            setDraggingInfo(prevState => ({...prevState, target: null}));
-        }
+        // setDraggingInfo(prevState => ({...prevState, target: null}));
     }
 
     const indicatorPositionStyle = {left: draggingInfo?.x + 'px', top: draggingInfo?.y + 'px'};
     return <>
-        <DynamicFormDesignerContext.Provider value={draggingInfo}>
+        <DynamicFormDesignerContext.Provider value={dispatch}>
             <Layout className={'layout'}
                     onMouseMove={event => handleLayoutMouseMove(event)}
                     onMouseUp={() => handleLayoutMouseUp()}>
                 <Sider width={280} className={'left'}>
                     {
-                        widgetGroup.map(group => <>
+                        widgetGroup.map(group => <Fragment key={group.name}>
                             <div style={{color: "white"}}>{group.name}</div>
                             <ul className={'panel'}>
                                 {
@@ -129,7 +160,7 @@ export const DynamicFormDesigner = function () {
                                         </li>)
                                 }
                             </ul>
-                        </>)
+                        </Fragment>)
                     }
                     <div id={"draggable"} style={indicatorPositionStyle}>
                         {
@@ -143,7 +174,7 @@ export const DynamicFormDesigner = function () {
                     </div>
                 </Sider>
                 <Content>
-                    <Layout>
+                    <Layout style={{height: '100%'}}>
                         <Header>
                             <Space>
                                 <Button>清空</Button>
@@ -151,8 +182,8 @@ export const DynamicFormDesigner = function () {
                                 <Button>保存</Button>
                             </Space>
                         </Header>
-                        <Content>
-                            <DynamicForm element={data}/>
+                        <Content className={'form'} style={{height: '100%'}}>
+                            <DynamicForm style={{height: '100%'}} element={data}/>
                         </Content>
                     </Layout>
                 </Content>

@@ -1,7 +1,8 @@
 import React, {useContext} from "react";
 import {Element} from '../../schemas/Element';
 import {DynamicFormContext} from "../DynamicForm";
-import {InputCell} from "./InputCell";
+import {InputCell} from "./components/InputCell";
+import {GridCell} from "./components/GridCell";
 
 interface CellProps {
     element: Element;
@@ -21,6 +22,8 @@ export const Cell = function ({element, layout}: CellProps) {
         return <InputCell element={data} dispatch={dispatch} layout={layout}/>;
     } else if (element.type === 'indicator') {
         return <div className={'indicator'}/>;
+    } else if (element.type === 'grid') {
+        return <GridCell element={data}/>
     } else {
         return <></>;
     }

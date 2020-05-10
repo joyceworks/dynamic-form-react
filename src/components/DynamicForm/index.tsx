@@ -1,4 +1,4 @@
-import React, {useReducer} from "react";
+import React, {CSSProperties, useReducer} from "react";
 import {Element} from "../../schemas/Element";
 import {Cell} from "../Cell";
 import {getData, setValue} from "./util";
@@ -8,11 +8,12 @@ import {Swimlane} from "./components/Swimlane";
 interface DynamicFormProps {
     direction?: 'column' | 'row';
     element: Element;
+    style?: CSSProperties;
 }
 
 export const DynamicFormContext = React.createContext<any>(null);
 
-export const DynamicForm = function ({direction = 'column', element}: DynamicFormProps) {
+export const DynamicForm = function ({direction = 'column', element, style}: DynamicFormProps) {
     const [state, dispatch] = useReducer(function (state: any, action: any) {
         switch (action.type) {
             case 'SET_CURRENT':
@@ -25,7 +26,7 @@ export const DynamicForm = function ({direction = 'column', element}: DynamicFor
         }
     }, {current: null, data: element});
     return <DynamicFormContext.Provider value={dispatch}>
-        <table className={'swimlanes'}>
+        <table className={'swimlanes'} style={style}>
             <tbody>
             {
                 direction === 'column' ? <tr>

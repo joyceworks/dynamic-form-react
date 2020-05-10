@@ -1,6 +1,7 @@
 import {Element} from "../../schemas/Element";
 
 export function findListOfIndicatorInside(rootElement: Element): Element[] | null {
+    let elements: Element[] | null = null;
     let func = function (data: Element) {
         if (data.swimlanes) {
             for (const swimlane of data.swimlanes) {
@@ -15,21 +16,21 @@ export function findListOfIndicatorInside(rootElement: Element): Element[] | nul
                                 for (let i = 0; i < row.elements.length; i++) {
                                     let listElement = row.elements[i];
                                     if (listElement.type === 'indicator') {
-                                        return row.elements;
+                                        elements = row.elements;
                                     }
                                 }
                             }
                             break;
                         default:
                             if (element.type === 'indicator') {
-                                return swimlane.elements;
+                                elements = swimlane.elements;
                             }
                             break;
                     }
                 }
             }
         }
-        return null;
+        return elements;
     };
     return func(rootElement);
 }
