@@ -1,8 +1,8 @@
-import {Element} from "../../schemas/Element";
+import {CellData} from "./schemas/CellData";
 
-export function findListOfIndicatorInside(rootElement: Element): Element[] | null {
-    let elements: Element[] | null = null;
-    let func = function (data: Element) {
+export function findListOfIndicatorInside(rootElement: CellData): CellData[] | null {
+    let elements: CellData[] | null = null;
+    let func = function (data: CellData) {
         if (data.swimlanes) {
             for (const swimlane of data.swimlanes) {
                 for (const element of swimlane.elements) {
@@ -36,7 +36,7 @@ export function findListOfIndicatorInside(rootElement: Element): Element[] | nul
 }
 
 export function createWidgetInstance(widgetType: string) {
-    let element: Element = {type: widgetType, id: widgetType + new Date().getTime()};
+    let element: CellData = {type: widgetType, id: widgetType + new Date().getTime()};
     if (element.type === 'grid') {
         element.swimlanes = [{span: 50, elements: []}, {span: 50, elements: []}];
     } else if (element.type === 'input') {

@@ -1,11 +1,11 @@
 import React from "react";
 import {Input} from "antd";
-import {FormGroup} from "../../../FormGroup";
-import {Element} from "../../../../schemas/Element";
+import {FormGroup} from "../FormGroup";
+import {CellData} from "../../../../../../../../schemas/CellData";
 
 
 interface InputCellProps {
-    element: Element;
+    element: CellData;
     layout?: 'inline' | 'default';
     dispatch: any;
 }

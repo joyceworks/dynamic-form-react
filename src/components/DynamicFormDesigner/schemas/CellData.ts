@@ -1,14 +1,11 @@
-export interface Swimlane {
-    elements: Element[];
-    span: number;
-}
+import {SwimlaneData} from "./SwimlaneData";
 
-export interface Element {
+export interface CellData {
     options?: any[];
     value?: any;
     id: string;
     type: string;
-    swimlanes?: Swimlane[];
+    swimlanes?: SwimlaneData[];
     label?: string;
     placeholder?: string;
     labeled?: boolean;

@@ -1,8 +1,8 @@
-import {Element} from "../../schemas/Element";
+import {CellData} from "../../schemas/CellData";
 
-export function getData(cell: Element) {
+export function getData(cell: CellData) {
     let result = {};
-    let func = function (data: Element, result: { [key: string]: any }) {
+    let func = function (data: CellData, result: { [key: string]: any }) {
         if (data.swimlanes) {
             data.swimlanes.forEach(swimlane => {
                 swimlane.elements.forEach(element => {
@@ -16,7 +16,7 @@ export function getData(cell: Element) {
                             element.swimlanes.forEach((row, index) => {
                                 if (index > 0) {
                                     let rowResult: { [key: string]: any } = {};
-                                    row.elements.forEach(listElement => {
+                                    row.elements.forEach((listElement: CellData) => {
                                         rowResult[listElement.id] = listElement.value;
                                     });
                                     result[element.id].push(rowResult);
@@ -35,8 +35,8 @@ export function getData(cell: Element) {
     return result;
 }
 
-export function setValue(cell: Element, target: Element, value: any) {
-    let func = function (data: Element) {
+export function setValue(cell: CellData, target: CellData, value: any) {
+    let func = function (data: CellData) {
         if (data.swimlanes) {
             for (const swimlane of data.swimlanes) {
                 for (const element of swimlane.elements) {

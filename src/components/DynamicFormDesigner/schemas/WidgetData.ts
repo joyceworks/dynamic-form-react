@@ -1,4 +1,4 @@
-export class Widget {
+export class WidgetData {
     type: string;
     icon: any;
     name: string;
@@ -11,3 +11,6 @@ export class Widget {
         this.enable = enable;
     }
 }
+
+
+

@@ -1,10 +1,10 @@
 import React from "react";
-import {Element} from "../../../../schemas/Element";
-import {DynamicForm} from "../../../DynamicForm";
+import {DynamicForm} from "../../../../../../index";
+import {CellData} from "../../../../../../../../schemas/CellData";
 
 
 interface GridCellProps {
-    element: Element;
+    element: CellData;
 }
 
 export const GridCell = function ({element}: GridCellProps) {

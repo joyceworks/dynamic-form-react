@@ -1,13 +1,12 @@
 import React, {CSSProperties, useReducer} from "react";
-import {Element} from "../../schemas/Element";
-import {Cell} from "../Cell";
 import {getData, setValue} from "./util";
 import './index.css';
 import {Swimlane} from "./components/Swimlane";
+import {CellData} from "../../schemas/CellData";
 
 interface DynamicFormProps {
     direction?: 'column' | 'row';
-    element: Element;
+    element: CellData;
     style?: CSSProperties;
 }
 

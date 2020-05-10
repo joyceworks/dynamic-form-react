@@ -1,11 +1,11 @@
 import React, {useContext} from "react";
-import {Element} from '../../schemas/Element';
-import {DynamicFormContext} from "../DynamicForm";
+import {DynamicFormContext} from "../../../../index";
 import {InputCell} from "./components/InputCell";
 import {GridCell} from "./components/GridCell";
+import {CellData} from "../../../../../../schemas/CellData";
 
 interface CellProps {
-    element: Element;
+    element: CellData;
     layout?: 'inline' | 'default';
 }
 
