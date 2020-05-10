@@ -1,5 +1,4 @@
 .layout {
-    width: 100%;
     height: calc(100% - 1px);
 }
 
@@ -10,16 +9,6 @@
 
 .left, .right, .form {
     padding: 10px;
-}
-
-.left {
-    width: 280px;
-    vertical-align: top;
-}
-
-.right {
-    width: 280px;
-    vertical-align: top;
 }
 
 .panel {
@@ -41,6 +30,7 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    background-color: white;
 }
 
 .widget > * {
