@@ -1,5 +1,5 @@
 import React, {CSSProperties, forwardRef, useReducer} from "react";
-import {getData, setValue} from "./util";
+import {setValue} from "./util";
 import './index.css';
 import {Swimlane} from "./components/Swimlane";
 import {CellData} from "../../schemas/CellData";

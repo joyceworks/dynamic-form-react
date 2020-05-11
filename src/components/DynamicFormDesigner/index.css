@@ -37,11 +37,6 @@
     vertical-align: middle;
 }
 
-.widget.disable {
-    border: 1px dashed #a3a3a3;
-    cursor: not-allowed;
-}
-
 .placeholder {
     position: absolute;
     z-index: -1;
@@ -55,16 +50,5 @@
 
 .right > .placeholder {
     left: calc(50% - 50px);
-}
-
-#draggable {
-    z-index: 65535;
-    position: fixed;
-    pointer-events: none;
-}
-
-.indicator {
-    height: 5px;
-    background-color: lightpink;
 }
 

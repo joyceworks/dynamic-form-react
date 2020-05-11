@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useReducer, useState} from 'react';
+import React, {Fragment, useReducer} from 'react';
 import {Layout, Button, Space} from 'antd';
 import {DndProvider} from "react-dnd";
 import Backend from "react-dnd-html5-backend";
@@ -16,7 +16,7 @@ import {DynamicForm} from "./components/DynamicForm";
 import {WidgetData} from "./schemas/WidgetData";
 import './index.css';
 import {Widget} from "./components/Widget";
-import {locate, findCellDataList, locateByRef, createWidgetInstance} from "./util";
+import {locateById, get, locateByRef} from "./util";
 import {CellData} from "./schemas/CellData";
 
 const {Sider, Content, Header} = Layout;
@@ -56,10 +56,10 @@ export const DynamicFormDesignerContext = React.createContext<any>(null);
 export const DynamicFormDesigner = function () {
     const [data, dispatch] = useReducer(function (state: any, action: any) {
         if (action.type === 'MOVE') {
-            const [id, swimlaneIndex] = locate(state, action.id);
+            const [id, swimlaneIndex] = locateById(state, action.id);
             if (id) {
                 const copy = JSON.parse(JSON.stringify(state));
-                const cells = findCellDataList(copy, id, swimlaneIndex);
+                const cells = get(copy, id, swimlaneIndex);
                 if (cells) {
                     const splice = cells.splice(action.dragIndex, 1);
                     if (splice.length > 0) {
@@ -73,7 +73,7 @@ export const DynamicFormDesigner = function () {
             const [id, swimlaneIndex] = locateByRef(state, action.cellDataList);
             if (id) {
                 const copy = JSON.parse(JSON.stringify(state));
-                const cells = findCellDataList(copy, id, swimlaneIndex);
+                const cells = get(copy, id, swimlaneIndex);
                 cells?.push(action.cellData);
                 return copy;
             }
@@ -82,11 +82,6 @@ export const DynamicFormDesigner = function () {
             return state;
         }
     }, rootCellData);
-
-    useEffect(function () {
-        console.log(data);
-    }, [data]);
-
 
     return <>
         <DynamicFormDesignerContext.Provider value={dispatch}>

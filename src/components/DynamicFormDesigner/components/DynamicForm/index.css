@@ -53,6 +53,11 @@
     height: 42px;
     vertical-align: top;
     position: relative;
+    background-color: white;
+}
+
+.swimlane.hovered {
+    background-color: lightpink;
 }
 
 .edit .swimlane, .edit.swimlanes, .edit .instance {

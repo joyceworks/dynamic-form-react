@@ -1,10 +1,10 @@
 import React, {useContext, useRef} from "react";
+import {useDrag, useDrop, XYCoord} from "react-dnd";
+import {CellData} from "../../../../../../schemas/CellData";
+import {DynamicFormDesignerContext} from "../../../../../../index";
 import {DynamicFormContext} from "../../../../index";
 import {InputCell} from "./components/InputCell";
 import {GridCell} from "./components/GridCell";
-import {CellData} from "../../../../../../schemas/CellData";
-import {useDrag, useDrop, XYCoord} from "react-dnd";
-import {DynamicFormDesignerContext} from "../../../../../../index";
 
 interface CellProps {
     cellData: CellData;
@@ -30,7 +30,7 @@ export const Cell = function ({cellData, index, layout}: CellProps) {
     const designerDispatch = useContext(DynamicFormDesignerContext);
     const [, drop] = useDrop({
         accept: ['instance'],
-        drop(item: DragItem, monitor) {
+        hover(item: DragItem, monitor) {
             if (!ref.current) {
                 return;
             }
@@ -45,6 +45,9 @@ export const Cell = function ({cellData, index, layout}: CellProps) {
             const hoverBoundingRect = ref.current!.getBoundingClientRect();
             const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
             const clientOffset = monitor.getClientOffset();
+            if (!clientOffset) {
+                return;
+            }
             const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
             if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
                 return;
@@ -58,6 +61,7 @@ export const Cell = function ({cellData, index, layout}: CellProps) {
                 hoverIndex: hoverIndex,
                 id: item.id
             });
+            item.index = hoverIndex;
         },
     });
 
@@ -71,13 +75,13 @@ export const Cell = function ({cellData, index, layout}: CellProps) {
 
     const dispatch = useContext(DynamicFormContext);
     if (cellData.type === 'input') {
-        return <div ref={ref}>
-            <span>{data.id}</span>
+        return <div ref={ref} className={'instance'}>
+            <span className={'id'}>{data.id}</span>
             <InputCell element={data} dispatch={dispatch} layout={layout}/>
         </div>;
     } else if (cellData.type === 'grid') {
-        return <div ref={ref}>
-            <span>{data.id}</span>
+        return <div ref={ref} className={'instance'}>
+            <span className={'id'}>{data.id}</span>
             <GridCell element={data}/>
         </div>
     } else {
