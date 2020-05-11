@@ -1,4 +1,4 @@
-import React, {Fragment, useReducer} from 'react';
+import React, {Fragment, useEffect, useReducer, useState} from 'react';
 import {Layout, Button, Space} from 'antd';
 import {DndProvider} from "react-dnd";
 import Backend from "react-dnd-html5-backend";
@@ -16,13 +16,15 @@ import {DynamicForm} from "./components/DynamicForm";
 import {WidgetData} from "./schemas/WidgetData";
 import './index.css';
 import {Widget} from "./components/Widget";
+import {locate, findCellDataList, locateByRef, createWidgetInstance} from "./util";
+import {CellData} from "./schemas/CellData";
 
 const {Sider, Content, Header} = Layout;
 
-const rootElement = {
+const rootCellData: CellData = {
     type: 'grid',
     id: '11270307',
-    swimlanes: [{span: 100, elements: []}]
+    swimlanes: [{span: 100, cellDataList: []}]
 };
 
 const widgetGroup: { name: string, widgets: WidgetData[] }[] = [
@@ -53,11 +55,37 @@ export const DynamicFormDesignerContext = React.createContext<any>(null);
 
 export const DynamicFormDesigner = function () {
     const [data, dispatch] = useReducer(function (state: any, action: any) {
-        switch (action.type) {
-            default:
-                return state;
+        if (action.type === 'MOVE') {
+            const [id, swimlaneIndex] = locate(state, action.id);
+            if (id) {
+                const copy = JSON.parse(JSON.stringify(state));
+                const cells = findCellDataList(copy, id, swimlaneIndex);
+                if (cells) {
+                    const splice = cells.splice(action.dragIndex, 1);
+                    if (splice.length > 0) {
+                        cells.splice(action.hoverIndex, 0, splice[0]);
+                    }
+                }
+                return copy;
+            }
+            return state;
+        } else if (action.type === 'ADD') {
+            const [id, swimlaneIndex] = locateByRef(state, action.cellDataList);
+            if (id) {
+                const copy = JSON.parse(JSON.stringify(state));
+                const cells = findCellDataList(copy, id, swimlaneIndex);
+                cells?.push(action.cellData);
+                return copy;
+            }
+            return state;
+        } else {
+            return state;
         }
-    }, rootElement);
+    }, rootCellData);
+
+    useEffect(function () {
+        console.log(data);
+    }, [data]);
 
 
     return <>

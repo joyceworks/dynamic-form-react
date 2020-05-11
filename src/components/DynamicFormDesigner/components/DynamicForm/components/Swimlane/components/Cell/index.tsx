@@ -1,29 +1,85 @@
-import React, {useContext} from "react";
+import React, {useContext, useRef} from "react";
 import {DynamicFormContext} from "../../../../index";
 import {InputCell} from "./components/InputCell";
 import {GridCell} from "./components/GridCell";
 import {CellData} from "../../../../../../schemas/CellData";
+import {useDrag, useDrop, XYCoord} from "react-dnd";
+import {DynamicFormDesignerContext} from "../../../../../../index";
 
 interface CellProps {
-    element: CellData;
+    cellData: CellData;
     layout?: 'inline' | 'default';
+    index: number;
 }
 
-export const Cell = function ({element, layout}: CellProps) {
+interface DragItem {
+    index: number;
+    id: string;
+    type: string;
+}
+
+export const Cell = function ({cellData, index, layout}: CellProps) {
     const data = {
-        ...element,
+        ...cellData,
         required: false,
         warningable: false,
         layout: 'default',
         labeled: true
     };
+    const ref = useRef<any>(null);
+    const designerDispatch = useContext(DynamicFormDesignerContext);
+    const [, drop] = useDrop({
+        accept: ['instance'],
+        drop(item: DragItem, monitor) {
+            if (!ref.current) {
+                return;
+            }
+
+            const dragIndex = item.index;
+            const hoverIndex = index;
+
+            if (dragIndex === hoverIndex) {
+                return;
+            }
+
+            const hoverBoundingRect = ref.current!.getBoundingClientRect();
+            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+            const clientOffset = monitor.getClientOffset();
+            const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+                return;
+            }
+            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+                return;
+            }
+            designerDispatch({
+                type: 'MOVE',
+                dragIndex: dragIndex,
+                hoverIndex: hoverIndex,
+                id: item.id
+            });
+        },
+    });
+
+    const [, drag] = useDrag({
+        item: {type: 'instance', id: cellData.id, index},
+        collect: (monitor: any) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    });
+    drag(drop(ref));
+
     const dispatch = useContext(DynamicFormContext);
-    if (element.type === 'input') {
-        return <InputCell element={data} dispatch={dispatch} layout={layout}/>;
-    } else if (element.type === 'indicator') {
-        return <div className={'indicator'}/>;
-    } else if (element.type === 'grid') {
-        return <GridCell element={data}/>
+    if (cellData.type === 'input') {
+        return <div ref={ref}>
+            <span>{data.id}</span>
+            <InputCell element={data} dispatch={dispatch} layout={layout}/>
+        </div>;
+    } else if (cellData.type === 'grid') {
+        return <div ref={ref}>
+            <span>{data.id}</span>
+            <GridCell element={data}/>
+        </div>
     } else {
         return <></>;
     }

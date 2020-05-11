@@ -1,8 +1,9 @@
 import {Cell} from "./components/Cell";
-import React from "react";
+import React, {useContext} from "react";
 import {CellData} from "../../../../schemas/CellData";
 import {useDrop} from "react-dnd";
 import {createWidgetInstance} from "../../../../util";
+import {DynamicFormDesignerContext} from "../../../../index";
 
 interface SwimlaneProps {
     elements: CellData[];
@@ -10,11 +11,16 @@ interface SwimlaneProps {
 }
 
 export const Swimlane = function ({elements, direction}: SwimlaneProps) {
+    const dispatch = useContext(DynamicFormDesignerContext);
     const [{isOver}, drop] = useDrop({
         accept: ['input', 'grid'],
         drop: item => {
             if (isOver) {
-                elements.push(createWidgetInstance(item.type as string));
+                dispatch({
+                    type: 'ADD',
+                    cellData: createWidgetInstance(item.type as string),
+                    cellDataList: elements,
+                });
             }
         },
         collect: monitor => ({isOver: !!monitor.isOver()})
@@ -23,7 +29,8 @@ export const Swimlane = function ({elements, direction}: SwimlaneProps) {
     const layout = direction === 'column' ? 'default' : 'inline';
     return <td className={'swimlane ' + direction} ref={drop}>
         {
-            elements.map(child => <Cell key={child.id} layout={layout} element={child}/>)
+            elements.map((child, index) =>
+                <Cell key={child.id} layout={layout} cellData={child} index={index}/>)
         }
     </td>;
 }

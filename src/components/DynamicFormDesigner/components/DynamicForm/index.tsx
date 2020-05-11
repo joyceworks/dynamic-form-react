@@ -1,4 +1,4 @@
-import React, {CSSProperties, useReducer} from "react";
+import React, {CSSProperties, forwardRef, useReducer} from "react";
 import {getData, setValue} from "./util";
 import './index.css';
 import {Swimlane} from "./components/Swimlane";
@@ -12,8 +12,8 @@ interface DynamicFormProps {
 
 export const DynamicFormContext = React.createContext<any>(null);
 
-export const DynamicForm = function ({direction = 'column', element, style}: DynamicFormProps) {
-    const [state, dispatch] = useReducer(function (state: any, action: any) {
+export const DynamicForm = forwardRef(({direction = 'column', element, style}: DynamicFormProps, ref: any) => {
+    const [, dispatch] = useReducer(function (state: any, action: any) {
         switch (action.type) {
             case 'SET_CURRENT':
                 return {...state, current: action.element};
@@ -25,21 +25,21 @@ export const DynamicForm = function ({direction = 'column', element, style}: Dyn
         }
     }, {current: null, data: element});
     return <DynamicFormContext.Provider value={dispatch}>
-        <table className={'swimlanes'} style={style}>
+        <table ref={ref} className={'swimlanes'} style={style}>
             <tbody>
             {
                 direction === 'column' ? <tr>
                     {
                         element.swimlanes?.map((swimlane, index) => {
                             return <Swimlane key={element.id + '-' + index} direction={direction}
-                                             elements={swimlane.elements}/>;
+                                             elements={swimlane.cellDataList}/>;
                         })
                     }
                 </tr> : <>
                     {
                         element.swimlanes?.map((swimlane, index) => {
                             return <tr key={element.id + '-' + index}>
-                                <Swimlane elements={swimlane.elements} direction={direction}/>
+                                <Swimlane elements={swimlane.cellDataList} direction={direction}/>
                             </tr>;
                         })
                     }
@@ -48,4 +48,4 @@ export const DynamicForm = function ({direction = 'column', element, style}: Dyn
             </tbody>
         </table>
     </DynamicFormContext.Provider>;
-}
+})

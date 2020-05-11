@@ -1,4 +1,4 @@
-import React from "react";
+import React, {forwardRef} from "react";
 import './index.css';
 
 interface FormGroupProps {
@@ -10,11 +10,11 @@ interface FormGroupProps {
     element: JSX.Element;
 }
 
-export const FormGroup = function ({
-                                       layout = 'default', required = false, warning = null,
-                                       warningable = true, label, element
-                                   }: FormGroupProps) {
-    return <table className={['form-group', layout].join(' ')}>
+export const FormGroup = forwardRef(({
+                                         layout = 'default', required = false, warning = null,
+                                         warningable = true, label, element
+                                     }: FormGroupProps, ref: any) => {
+    return <table ref={ref} className={['form-group', layout].join(' ')}>
         <tbody>
         {
             layout === 'default' ? <>
@@ -62,4 +62,4 @@ export const FormGroup = function ({
         }
         </tbody>
     </table>;
-}
+})

@@ -5,7 +5,7 @@ export function getData(cell: CellData) {
     let func = function (data: CellData, result: { [key: string]: any }) {
         if (data.swimlanes) {
             data.swimlanes.forEach(swimlane => {
-                swimlane.elements.forEach(element => {
+                swimlane.cellDataList.forEach(element => {
                     switch (element.type) {
                         case 'grid':
                             func(element, result);
@@ -16,7 +16,7 @@ export function getData(cell: CellData) {
                             element.swimlanes.forEach((row, index) => {
                                 if (index > 0) {
                                     let rowResult: { [key: string]: any } = {};
-                                    row.elements.forEach((listElement: CellData) => {
+                                    row.cellDataList.forEach((listElement: CellData) => {
                                         rowResult[listElement.id] = listElement.value;
                                     });
                                     result[element.id].push(rowResult);
@@ -39,7 +39,7 @@ export function setValue(cell: CellData, target: CellData, value: any) {
     let func = function (data: CellData) {
         if (data.swimlanes) {
             for (const swimlane of data.swimlanes) {
-                for (const element of swimlane.elements) {
+                for (const element of swimlane.cellDataList) {
                     switch (element.type) {
                         case 'grid':
                             func(element);
@@ -47,8 +47,8 @@ export function setValue(cell: CellData, target: CellData, value: any) {
                         case 'list':
                             // @ts-ignore
                             for (const row of element.swimlanes) {
-                                for (let i = 0; i < row.elements.length; i++) {
-                                    let listElement = row.elements[i];
+                                for (let i = 0; i < row.cellDataList.length; i++) {
+                                    let listElement = row.cellDataList[i];
                                     if (listElement === target) {
                                         listElement.value = value;
                                         return true;
