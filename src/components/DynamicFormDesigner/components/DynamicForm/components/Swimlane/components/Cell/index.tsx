@@ -1,4 +1,4 @@
-import React, {useContext, useRef} from "react";
+import React, {forwardRef, useContext, useRef} from "react";
 import {useDrag, useDrop, XYCoord} from "react-dnd";
 import {CellData} from "../../../../../../schemas/CellData";
 import {DynamicFormDesignerContext} from "../../../../../../index";
@@ -18,7 +18,7 @@ interface DragItem {
     type: string;
 }
 
-export const Cell = function ({cellData, index, layout}: CellProps) {
+export const Cell = forwardRef(({cellData, index, layout}: CellProps) => {
     const data = {
         ...cellData,
         required: false,
@@ -73,17 +73,21 @@ export const Cell = function ({cellData, index, layout}: CellProps) {
     drag(drop(ref));
 
     const dispatch = useContext(DynamicFormContext);
-    if (cellData.type === 'input') {
-        return <div ref={ref} className={'instance'}>
+    return <div ref={ref} className={'instance' + (cellData.active ? ' active' : '')} onClick={(event) => {
+        event.stopPropagation();
+        designerDispatch({
+            type: 'ACTIVE',
+            id: cellData.id,
+        });
+    }}>{
+        cellData.type === 'input' ? <>
             <span className={'id'}>{data.id}</span>
             <InputCell element={data} dispatch={dispatch} layout={layout}/>
-        </div>;
-    } else if (cellData.type === 'grid') {
-        return <div ref={ref} className={'instance'}>
-            <span className={'id'}>{data.id}</span>
-            <GridCell element={data}/>
-        </div>
-    } else {
-        return <></>;
-    }
-}
+        </> : (
+            cellData.type === 'grid' ? <>
+                <span className={'id'}>{data.id}</span>
+                <GridCell element={data}/>
+            </> : <></>
+        )
+    }</div>;
+});

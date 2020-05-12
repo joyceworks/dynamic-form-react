@@ -1,6 +1,7 @@
 import {SwimlaneData} from "./SwimlaneData";
 
 export interface CellData {
+    active: boolean;
     options?: any[];
     value?: any;
     id: string;

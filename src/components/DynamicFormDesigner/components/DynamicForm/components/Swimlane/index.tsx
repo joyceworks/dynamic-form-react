@@ -13,7 +13,11 @@ interface SwimlaneProps {
 }
 
 function createWidgetInstance(widgetType: string) {
-    let element: CellData = {type: widgetType, id: widgetType + new Date().getTime()};
+    let element: CellData = {
+        type: widgetType,
+        id: widgetType + new Date().getTime(),
+        active: false
+    };
     if (element.type === 'grid') {
         element.swimlanes = [{span: 50, cellDataList: []}, {span: 50, cellDataList: []}];
     } else if (element.type === 'input') {
@@ -52,8 +56,12 @@ export const Swimlane = function ({elements, direction, location}: SwimlaneProps
     const dispatch = useContext(DynamicFormDesignerContext);
     const [{isOver}, drop] = useDrop({
         accept: ['input', 'grid', 'instance'],
-        drop: (item: any) => {
+        drop: (item: any, monitor) => {
             if (isOver) {
+                const clientOffset = monitor.getClientOffset();
+                if (!clientOffset) {
+                    return;
+                }
                 if (item.type === 'instance') {
                     dispatch({
                         type: 'JUMP',
@@ -76,10 +84,10 @@ export const Swimlane = function ({elements, direction, location}: SwimlaneProps
     });
 
     const layout = direction === 'column' ? 'default' : 'inline';
+    const cells = elements.map((child, index) => <Cell key={child.id} layout={layout}
+                                                       cellData={child} index={index}/>);
+
     return <td className={'swimlane ' + direction + (isOver ? ' hovered' : '')} ref={drop}>
-        {
-            elements.map((child, index) =>
-                <Cell key={child.id} layout={layout} cellData={child} index={index}/>)
-        }
+        {cells}
     </td>;
 }

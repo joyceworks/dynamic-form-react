@@ -35,6 +35,34 @@ export function getData(cell: CellData) {
     return result;
 }
 
+export function active(root: CellData, id: string) {
+    let func = function (data: CellData) {
+        data.active = data.id === id;
+        if (data.swimlanes) {
+            data.swimlanes.forEach(swimlane => {
+                swimlane.cellDataList.forEach(element => {
+                    switch (element.type) {
+                        case 'grid':
+                            func(element);
+                            break;
+                        case 'list':
+                            element.swimlanes!.forEach(row => {
+                                row.cellDataList.forEach((listElement: CellData) => {
+                                    listElement.active = listElement.id === id;
+                                });
+                            });
+                            break;
+                        default:
+                            element.active = element.id === id;
+                            break;
+                    }
+                });
+            });
+        }
+    };
+    func(root);
+}
+
 export function setValue(cell: CellData, target: CellData, value: any) {
     let func = function (data: CellData) {
         if (data.swimlanes) {

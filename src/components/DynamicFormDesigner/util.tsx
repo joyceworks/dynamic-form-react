@@ -1,5 +1,6 @@
 import {CellData} from "./schemas/CellData";
 import SwimlaneLocation from "./schemas/SwimlaneLocation";
+import {active} from "./components/DynamicForm/util";
 
 export function locateById(rootCellData: CellData, cellDataId: string): SwimlaneLocation | null {
     let location: SwimlaneLocation | null = null;
@@ -98,6 +99,10 @@ export function reducer(state: any, action: any) {
         const [copy, , cell] = copyAndSplice(state, action.id);
         const dest = get(copy, action.dropLocation.cellId, action.dropLocation.swimlaneIndex)!;
         dest.push(cell);
+        return copy;
+    } else if (action.type === 'ACTIVE') {
+        const copy = JSON.parse(JSON.stringify(state));
+        active(copy, action.id);
         return copy;
     } else {
         return state;
