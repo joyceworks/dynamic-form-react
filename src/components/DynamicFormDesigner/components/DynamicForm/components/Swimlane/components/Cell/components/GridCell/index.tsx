@@ -9,6 +9,6 @@ interface GridCellProps {
 
 export const GridCell = forwardRef(({element}: GridCellProps, ref: any) => {
     return <>
-        <DynamicForm ref={ref} element={element}/>
+        <DynamicForm ref={ref} cellData={element}/>
     </>;
 })

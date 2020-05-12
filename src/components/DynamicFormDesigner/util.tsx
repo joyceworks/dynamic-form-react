@@ -1,15 +1,17 @@
 import {CellData} from "./schemas/CellData";
+import SwimlaneLocation from "./schemas/SwimlaneLocation";
 
-export function locateById(rootCellData: CellData, cellDataId: string): [string | null, number] {
-    let id: string | null = null;
-    let swimlaneIndex: number = -1;
-    let func = function (data: CellData): [string | null, number] {
+export function locateById(rootCellData: CellData, cellDataId: string): SwimlaneLocation | null {
+    let location: SwimlaneLocation | null = null;
+    let func = function (data: CellData): SwimlaneLocation | null {
         if (data.swimlanes) {
             for (const swimlane of data.swimlanes) {
                 for (const cellData of swimlane.cellDataList) {
                     if (cellData.id === cellDataId) {
-                        id = data.id;
-                        swimlaneIndex = data.swimlanes.indexOf(swimlane);
+                        location = {
+                            cellId: data.id,
+                            swimlaneIndex: data.swimlanes?.indexOf(swimlane)
+                        }
                         break;
                     }
                     if (cellData.type === 'grid') {
@@ -18,7 +20,7 @@ export function locateById(rootCellData: CellData, cellDataId: string): [string 
                 }
             }
         }
-        return [id, swimlaneIndex];
+        return location;
     };
     return func(rootCellData);
 }
@@ -47,15 +49,16 @@ export function get(rootCellData: CellData, parentId: string, swimlaneIndex: num
     return func(rootCellData);
 }
 
-export function locateByRef(rootCellData: CellData, cellDataList: CellData[]) {
-    let id: string | null = null;
-    let swimlaneIndex: number = -1;
-    let func = function (data: CellData): [string | null, number] {
+export function locateByCellDataListRef(rootCellData: CellData, cellDataList: CellData[]): SwimlaneLocation | null {
+    let location: SwimlaneLocation | null = null;
+    let func = function (data: CellData): SwimlaneLocation | null {
         if (data.swimlanes) {
             for (const swimlane of data.swimlanes) {
                 if (swimlane.cellDataList === cellDataList) {
-                    id = data.id;
-                    swimlaneIndex = data.swimlanes.indexOf(swimlane);
+                    location = {
+                        cellId: data.id,
+                        swimlaneIndex: data.swimlanes.indexOf(swimlane),
+                    }
                     break;
                 } else {
                     for (const cellData of swimlane.cellDataList) {
@@ -66,7 +69,7 @@ export function locateByRef(rootCellData: CellData, cellDataList: CellData[]) {
                 }
             }
         }
-        return [id, swimlaneIndex];
+        return location;
     };
     return func(rootCellData);
 }

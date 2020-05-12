@@ -16,7 +16,7 @@ import {DynamicForm} from "./components/DynamicForm";
 import {WidgetData} from "./schemas/WidgetData";
 import './index.css';
 import {Widget} from "./components/Widget";
-import {locateById, get, locateByRef} from "./util";
+import {locateById, get, locateByCellDataListRef} from "./util";
 import {CellData} from "./schemas/CellData";
 
 const {Sider, Content, Header} = Layout;
@@ -56,25 +56,36 @@ export const DynamicFormDesignerContext = React.createContext<any>(null);
 export const DynamicFormDesigner = function () {
     const [data, dispatch] = useReducer(function (state: any, action: any) {
         if (action.type === 'MOVE') {
-            const [id, swimlaneIndex] = locateById(state, action.id);
-            if (id) {
+            const location = locateById(state, action.id);
+            if (location) {
                 const copy = JSON.parse(JSON.stringify(state));
-                const cells = get(copy, id, swimlaneIndex);
-                if (cells) {
-                    const splice = cells.splice(action.dragIndex, 1);
-                    if (splice.length > 0) {
-                        cells.splice(action.hoverIndex, 0, splice[0]);
-                    }
+                const cells = get(copy, location.cellId, location.swimlaneIndex);
+                const cell = cells!.find(cell => cell.id === action.id);
+                const splice = cells!.splice(cells!.indexOf(cell!), 1);
+                if (splice.length > 0) {
+                    cells!.splice(action.hoverIndex, 0, splice[0]);
                 }
                 return copy;
             }
             return state;
         } else if (action.type === 'ADD') {
-            const [id, swimlaneIndex] = locateByRef(state, action.cellDataList);
-            if (id) {
+            const location = locateByCellDataListRef(state, action.cellDataList);
+            if (location) {
                 const copy = JSON.parse(JSON.stringify(state));
-                const cells = get(copy, id, swimlaneIndex);
+                const cells = get(copy, location.cellId, location.swimlaneIndex);
                 cells?.push(action.cellData);
+                return copy;
+            }
+            return state;
+        } else if (action.type === 'JUMP') {
+            const location = locateById(state, action.id);
+            if (location) {
+                const copy = JSON.parse(JSON.stringify(state));
+                const src = get(copy, location.cellId, location.swimlaneIndex);
+                const cell = src!.find(cell => cell.id === action.id);
+                src!.splice(src!.indexOf(cell!), 1);
+                const dest = get(copy, action.dropLocation.cellId, action.dropLocation.swimlaneIndex);
+                dest?.push(cell!);
                 return copy;
             }
             return state;
@@ -109,7 +120,7 @@ export const DynamicFormDesigner = function () {
                                 </Space>
                             </Header>
                             <Content className={'form'} style={{height: '100%'}}>
-                                <DynamicForm style={{height: '100%'}} element={data}/>
+                                <DynamicForm style={{height: '100%'}} cellData={data}/>
                             </Content>
                         </Layout>
                     </Content>

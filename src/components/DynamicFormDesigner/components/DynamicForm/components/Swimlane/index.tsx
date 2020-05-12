@@ -3,10 +3,13 @@ import React, {useContext} from "react";
 import {CellData} from "../../../../schemas/CellData";
 import {useDrop} from "react-dnd";
 import {DynamicFormDesignerContext} from "../../../../index";
+import SwimlaneLocation from "../../../../schemas/SwimlaneLocation";
+
 
 interface SwimlaneProps {
     elements: CellData[];
     direction: 'column' | 'row';
+    location: SwimlaneLocation;
 }
 
 function createWidgetInstance(widgetType: string) {
@@ -45,20 +48,34 @@ function createWidgetInstance(widgetType: string) {
     return element;
 }
 
-export const Swimlane = function ({elements, direction}: SwimlaneProps) {
+export const Swimlane = function ({elements, direction, location}: SwimlaneProps) {
     const dispatch = useContext(DynamicFormDesignerContext);
     const [{isOver}, drop] = useDrop({
-        accept: ['input', 'grid'],
-        drop: item => {
+        accept: ['input', 'grid', 'instance'],
+        drop: (item: any) => {
             if (isOver) {
-                dispatch({
-                    type: 'ADD',
-                    cellData: createWidgetInstance(item.type as string),
-                    cellDataList: elements,
-                });
+                if (item.type === 'instance') {
+                    dispatch({
+                        type: 'JUMP',
+                        dropLocation: location,
+                        id: item.id,
+                    });
+                } else {
+                    dispatch({
+                        type: 'ADD',
+                        cellData: createWidgetInstance(item.type as string),
+                        cellDataList: elements,
+                    });
+                }
             }
         },
-        collect: monitor => ({isOver: monitor.isOver({shallow: true})})
+        collect: monitor => {
+            let isOver = monitor.isOver({shallow: true});
+            if (monitor.getItem() && monitor.getItem().type === 'instance' && monitor.getItem().id === location.cellId) {
+                isOver = false;
+            }
+            return {isOver: isOver};
+        }
     });
 
     const layout = direction === 'column' ? 'default' : 'inline';

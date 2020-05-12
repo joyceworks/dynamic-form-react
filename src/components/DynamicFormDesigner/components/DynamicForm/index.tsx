@@ -6,13 +6,13 @@ import {CellData} from "../../schemas/CellData";
 
 interface DynamicFormProps {
     direction?: 'column' | 'row';
-    element: CellData;
+    cellData: CellData;
     style?: CSSProperties;
 }
 
 export const DynamicFormContext = React.createContext<any>(null);
 
-export const DynamicForm = forwardRef(({direction = 'column', element, style}: DynamicFormProps, ref: any) => {
+export const DynamicForm = forwardRef(({direction = 'column', cellData, style}: DynamicFormProps, ref: any) => {
     const [, dispatch] = useReducer(function (state: any, action: any) {
         switch (action.type) {
             case 'SET_CURRENT':
@@ -23,24 +23,30 @@ export const DynamicForm = forwardRef(({direction = 'column', element, style}: D
             default:
                 return state;
         }
-    }, {current: null, data: element});
+    }, {current: null, data: cellData});
     return <DynamicFormContext.Provider value={dispatch}>
         <table ref={ref} className={'swimlanes'} style={style}>
             <tbody>
             {
                 direction === 'column' ? <tr>
                     {
-                        element.swimlanes?.map((swimlane, index) => {
-                            return <Swimlane key={element.id + '-' + index} direction={direction}
-                                             elements={swimlane.cellDataList}/>;
+                        cellData.swimlanes?.map((swimlane, index) => {
+                            return (
+                                <Swimlane key={cellData.id + '-' + index} direction={direction}
+                                          elements={swimlane.cellDataList}
+                                          location={{cellId: cellData.id, swimlaneIndex: index}}/>
+                            );
                         })
                     }
                 </tr> : <>
                     {
-                        element.swimlanes?.map((swimlane, index) => {
-                            return <tr key={element.id + '-' + index}>
-                                <Swimlane elements={swimlane.cellDataList} direction={direction}/>
-                            </tr>;
+                        cellData.swimlanes?.map((swimlane, index) => {
+                            return (
+                                <tr key={cellData.id + '-' + index}>
+                                    <Swimlane elements={swimlane.cellDataList} direction={direction}
+                                              location={{cellId: cellData.id, swimlaneIndex: index}}/>
+                                </tr>
+                            );
                         })
                     }
                 </>

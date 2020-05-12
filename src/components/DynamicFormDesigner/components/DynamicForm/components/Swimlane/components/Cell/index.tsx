@@ -57,7 +57,6 @@ export const Cell = function ({cellData, index, layout}: CellProps) {
             }
             designerDispatch({
                 type: 'MOVE',
-                dragIndex: dragIndex,
                 hoverIndex: hoverIndex,
                 id: item.id
             });
