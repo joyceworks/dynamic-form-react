@@ -71,9 +71,6 @@ export const Swimlane = function ({elements, direction, location}: SwimlaneProps
         },
         collect: monitor => {
             let isOver = monitor.isOver({shallow: true});
-            if (monitor.getItem() && monitor.getItem().type === 'instance' && monitor.getItem().id === location.cellId) {
-                isOver = false;
-            }
             return {isOver: isOver};
         }
     });

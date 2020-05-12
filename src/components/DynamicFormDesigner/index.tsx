@@ -12,12 +12,12 @@ import {
     AiOutlineOrderedList,
     AiOutlineTable
 } from "react-icons/ai";
-import {DynamicForm} from "./components/DynamicForm";
 import {WidgetData} from "./schemas/WidgetData";
 import './index.css';
 import {Widget} from "./components/Widget";
-import {locateById, get, locateByCellDataListRef} from "./util";
+import {reducer} from "./util";
 import {CellData} from "./schemas/CellData";
+import {Cell} from "./components/DynamicForm/components/Swimlane/components/Cell";
 
 const {Sider, Content, Header} = Layout;
 
@@ -54,45 +54,7 @@ const widgetGroup: { name: string, widgets: WidgetData[] }[] = [
 export const DynamicFormDesignerContext = React.createContext<any>(null);
 
 export const DynamicFormDesigner = function () {
-    const [data, dispatch] = useReducer(function (state: any, action: any) {
-        if (action.type === 'MOVE') {
-            const location = locateById(state, action.id);
-            if (location) {
-                const copy = JSON.parse(JSON.stringify(state));
-                const cells = get(copy, location.cellId, location.swimlaneIndex);
-                const cell = cells!.find(cell => cell.id === action.id);
-                const splice = cells!.splice(cells!.indexOf(cell!), 1);
-                if (splice.length > 0) {
-                    cells!.splice(action.hoverIndex, 0, splice[0]);
-                }
-                return copy;
-            }
-            return state;
-        } else if (action.type === 'ADD') {
-            const location = locateByCellDataListRef(state, action.cellDataList);
-            if (location) {
-                const copy = JSON.parse(JSON.stringify(state));
-                const cells = get(copy, location.cellId, location.swimlaneIndex);
-                cells?.push(action.cellData);
-                return copy;
-            }
-            return state;
-        } else if (action.type === 'JUMP') {
-            const location = locateById(state, action.id);
-            if (location) {
-                const copy = JSON.parse(JSON.stringify(state));
-                const src = get(copy, location.cellId, location.swimlaneIndex);
-                const cell = src!.find(cell => cell.id === action.id);
-                src!.splice(src!.indexOf(cell!), 1);
-                const dest = get(copy, action.dropLocation.cellId, action.dropLocation.swimlaneIndex);
-                dest?.push(cell!);
-                return copy;
-            }
-            return state;
-        } else {
-            return state;
-        }
-    }, rootCellData);
+    const [data, dispatch] = useReducer(reducer, rootCellData);
 
     return <>
         <DynamicFormDesignerContext.Provider value={dispatch}>
@@ -120,7 +82,7 @@ export const DynamicFormDesigner = function () {
                                 </Space>
                             </Header>
                             <Content className={'form'} style={{height: '100%'}}>
-                                <DynamicForm style={{height: '100%'}} cellData={data}/>
+                                <Cell cellData={data} index={0}/>
                             </Content>
                         </Layout>
                     </Content>

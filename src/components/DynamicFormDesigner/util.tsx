@@ -73,3 +73,33 @@ export function locateByCellDataListRef(rootCellData: CellData, cellDataList: Ce
     };
     return func(rootCellData);
 }
+
+export function copyAndSplice(originData: CellData, id: string): [CellData, CellData[], CellData] {
+    const location = locateById(originData, id)!;
+    const copy = JSON.parse(JSON.stringify(originData));
+    const src = get(copy, location.cellId, location.swimlaneIndex)!;
+    const cell = src.find(cell => cell.id === id)!;
+    src.splice(src.indexOf(cell), 1);
+    return [copy, src, cell];
+}
+
+export function reducer(state: any, action: any) {
+    if (action.type === 'MOVE') {
+        const [copy, src, cell] = copyAndSplice(state, action.id);
+        src.splice(action.hoverIndex, 0, cell);
+        return copy;
+    } else if (action.type === 'ADD') {
+        const location = locateByCellDataListRef(state, action.cellDataList)!;
+        const copy = JSON.parse(JSON.stringify(state));
+        const cells = get(copy, location.cellId, location.swimlaneIndex)!;
+        cells.push(action.cellData);
+        return copy;
+    } else if (action.type === 'JUMP') {
+        const [copy, , cell] = copyAndSplice(state, action.id);
+        const dest = get(copy, action.dropLocation.cellId, action.dropLocation.swimlaneIndex)!;
+        dest.push(cell);
+        return copy;
+    } else {
+        return state;
+    }
+}
