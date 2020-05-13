@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
-import { DynamicForm } from "../../../../../../index";
-import { CellData } from "../../../../../../../../schemas/CellData";
+import { Grid } from "../../../Grid/index";
+import { CellData } from "../../../../schemas/CellData";
 
 interface GridCellProps {
   element: CellData;
@@ -9,7 +9,7 @@ interface GridCellProps {
 export const GridCell = forwardRef(({ element }: GridCellProps, ref: any) => {
   return (
     <>
-      <DynamicForm ref={ref} cellData={element} />
+      <Grid ref={ref} cellData={element} />
     </>
   );
 });

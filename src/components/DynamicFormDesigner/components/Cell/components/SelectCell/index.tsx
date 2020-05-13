@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { CellData } from "../../../../../../../../schemas/CellData";
+import { CellData } from "../../../../schemas/CellData";
 import { FormGroup } from "../FormGroup";
 import { Select } from "antd";
 
@@ -32,7 +32,7 @@ export const SelectCell = forwardRef(
           required={cellData.required!}
           warning={cellData.warning}
           layout={layout}
-          warningable={cellData.warningable!}
+          warnable={cellData.warningable!}
           label={
             cellData.labeled ? (
               <label title={cellData.label}>{cellData.label}</label>

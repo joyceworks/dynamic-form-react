@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import { Input } from "antd";
 import { FormGroup } from "../FormGroup";
-import { CellData } from "../../../../../../../../schemas/CellData";
+import { CellData } from "../../../../schemas/CellData";
 
 interface InputCellProps {
   element: CellData;
@@ -17,7 +17,7 @@ export const InputCell = forwardRef(
         required={element.required!}
         warning={element.warning}
         layout={layout}
-        warningable={element.warningable!}
+        warnable={element.warningable!}
         label={
           element.labeled ? (
             <label title={element.label}>{element.label}</label>

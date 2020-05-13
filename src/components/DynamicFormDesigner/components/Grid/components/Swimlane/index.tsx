@@ -1,4 +1,4 @@
-import { Cell } from "./components/Cell";
+import { Cell } from "../../../Cell";
 import React, { useContext } from "react";
 import { CellData } from "../../../../schemas/CellData";
 import { useDrop } from "react-dnd";

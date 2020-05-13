@@ -5,7 +5,7 @@ interface FormGroupProps {
   layout?: "inline" | "default";
   required: boolean;
   warning?: string | null;
-  warningable: boolean;
+  warnable: boolean;
   label: JSX.Element | null;
   element: JSX.Element;
 }
@@ -16,7 +16,7 @@ export const FormGroup = forwardRef(
       layout = "default",
       required = false,
       warning = null,
-      warningable = true,
+      warnable = true,
       label,
       element,
     }: FormGroupProps,
@@ -34,7 +34,7 @@ export const FormGroup = forwardRef(
                 </td>
                 <td>{element}</td>
               </tr>
-              {warningable ? (
+              {warnable ? (
                 <tr>
                   <td />
                   <td className={"warning"}>
@@ -56,7 +56,7 @@ export const FormGroup = forwardRef(
               <tr>
                 <td>{element}</td>
               </tr>
-              {warningable ? (
+              {warnable ? (
                 <tr>
                   <td className={"warning"}>
                     {warning ? <span>{warning}</span> : <span>&nbsp;</span>}
