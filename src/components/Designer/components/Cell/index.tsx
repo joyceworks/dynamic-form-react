@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import { useDrag, useDrop, XYCoord } from 'react-dnd';
 import { CellData } from '../../schemas/CellData';
-import { DynamicFormDesignerContext } from '../../index';
+import { DesignerContext } from '../../index';
 import { FormContext } from '../Grid/index';
 import { InputCell } from './components/InputCell';
 import { GridCell } from './components/GridCell';
@@ -28,7 +28,7 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
         labeled: true,
     };
     const ref = useRef<any>(null);
-    const designerDispatch = useContext(DynamicFormDesignerContext);
+    const designerDispatch = useContext(DesignerContext);
     const [, drop] = useDrop({
         accept: ['instance'],
         hover(item: DragItem, monitor) {

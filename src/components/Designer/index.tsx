@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useReducer } from 'react';
-import { Layout, Button, Space, Form } from 'antd';
+import { Layout, Button, Space } from 'antd';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
 import {
@@ -97,9 +97,9 @@ const widgetGroup: { name: string; widgets: WidgetData[] }[] = [
     },
 ];
 
-export const DynamicFormDesignerContext = React.createContext<any>(null);
+export const DesignerContext = React.createContext<any>(null);
 
-export const DynamicFormDesigner = function () {
+export const Designer = function () {
     const [data, dispatch] = useReducer(reducer, rootCellData);
     const delFunction = useCallback((event) => {
         if (event.keyCode === 46) {
@@ -117,7 +117,7 @@ export const DynamicFormDesigner = function () {
 
     return (
         <>
-            <DynamicFormDesignerContext.Provider value={dispatch}>
+            <DesignerContext.Provider value={dispatch}>
                 <DndProvider backend={Backend}>
                     <Layout className={'layout'}>
                         <Sider width={280} className={'left'}>
@@ -149,7 +149,7 @@ export const DynamicFormDesigner = function () {
                         <Sider width={280} className={'right'} />
                     </Layout>
                 </DndProvider>
-            </DynamicFormDesignerContext.Provider>
+            </DesignerContext.Provider>
         </>
     );
 };

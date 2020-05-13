@@ -2,7 +2,7 @@ import { Cell } from "../../../Cell";
 import React, { useContext } from "react";
 import { CellData } from "../../../../schemas/CellData";
 import { useDrop } from "react-dnd";
-import { DynamicFormDesignerContext } from "../../../../index";
+import { DesignerContext } from "../../../../index";
 import SwimlaneLocation from "../../../../schemas/SwimlaneLocation";
 
 interface SwimlaneProps {
@@ -59,7 +59,7 @@ export const Swimlane = function ({
   direction,
   location,
 }: SwimlaneProps) {
-  const dispatch = useContext(DynamicFormDesignerContext);
+  const dispatch = useContext(DesignerContext);
   const [{ isOver }, drop] = useDrop({
     accept: ["input", "grid", "dropdown", "instance"],
     drop: (item: any, monitor) => {

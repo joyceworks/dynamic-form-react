@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
-import {DynamicFormDesigner} from './components/DynamicFormDesigner';
+import {Designer} from './components/Designer';
 
 function App() {
   return (
-      <DynamicFormDesigner/>
+      <Designer/>
   );
 }
 
