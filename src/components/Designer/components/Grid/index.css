@@ -1,86 +1,72 @@
 .instance.active {
-    border: 1px solid #1890ff;
+  border: 1px solid #1890ff;
 }
 
 .instance {
-    margin-top: -1px;
-    position: relative;
-}
-
-.id {
-    position: absolute;
-    top: 6px;
-    right: 10px;
-    color: #a3a3a3;
-    z-index: 1;
-    font-size: small;
+  position: relative;
 }
 
 .swimlanes {
-    table-layout: fixed;
-    width: 100%;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  table-layout: fixed;
+  width: 100%;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .swimlanes:not(:first-of-type):not(:last-of-type) {
-    margin: 10px 0;
+  margin: 10px 0;
 }
 
 .swimlane {
-    padding: 10px;
-    border: 1px solid #a3a3a3;
-    height: 62px;
-    vertical-align: top;
-    position: relative;
+  padding: 10px;
+  border: 1px solid #a3a3a3;
+  height: 62px;
+  vertical-align: top;
+  position: relative;
 }
 
 .swimlane.hovered {
-    background-color: lightpink;
+  background-color: lightpink;
 }
 
 .edit .swimlane,
 .edit.swimlanes,
 .edit .instance {
-    border-style: none;
+  border-style: none;
 }
 
 .swimlanes.edit > tr:first-of-type > .swimlane.row {
-    height: inherit;
+  height: inherit;
 }
 
 .swimlanes.edit > tr:first-of-type > .swimlane.row > .instance > .form-group {
-    min-height: inherit;
-}
-
-.edit .id {
-    display: none;
+  min-height: inherit;
 }
 
 .list {
-    width: 100%;
+  width: 100%;
 }
 
 .swimlane.row {
-    width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .swimlane.row .instance {
-    width: 200px;
-    vertical-align: top;
-    display: inline-flex;
+  width: 200px;
+  vertical-align: top;
+  display: inline-flex;
 }
 
 .swimlane.row .form-group > tr > td.label {
-    text-align: left;
+  text-align: left;
 }
 
 .swimlane.row .indicator {
-    display: inline-block;
-    height: 100%;
-    width: 5px;
+  display: inline-block;
+  height: 100%;
+  width: 5px;
 }

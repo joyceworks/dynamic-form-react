@@ -32,7 +32,7 @@ export const FormGroup = forwardRef(
                   {required ? <span className={"required"}>*</span> : <></>}
                   {label}
                 </td>
-                <td>{element}</td>
+                <td className={"element"}>{element}</td>
               </tr>
               {warnable ? (
                 <tr>
@@ -54,7 +54,7 @@ export const FormGroup = forwardRef(
                 </td>
               </tr>
               <tr>
-                <td>{element}</td>
+                <td className={"element"}>{element}</td>
               </tr>
               {warnable ? (
                 <tr>

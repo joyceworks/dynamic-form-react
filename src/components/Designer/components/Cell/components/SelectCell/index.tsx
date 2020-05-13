@@ -32,7 +32,7 @@ export const SelectCell = forwardRef(
           required={cellData.required!}
           warning={cellData.warning}
           layout={layout}
-          warnable={cellData.warningable!}
+          warnable={cellData.warnable!}
           label={
             cellData.labeled ? (
               <label title={cellData.label}>{cellData.label}</label>

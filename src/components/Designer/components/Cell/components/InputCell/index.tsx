@@ -17,7 +17,7 @@ export const InputCell = forwardRef(
         required={element.required!}
         warning={element.warning}
         layout={layout}
-        warnable={element.warningable!}
+        warnable={element.warnable!}
         label={
           element.labeled ? (
             <label title={element.label}>{element.label}</label>

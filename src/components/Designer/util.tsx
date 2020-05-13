@@ -1,6 +1,5 @@
 import { CellData } from "./schemas/CellData";
 import SwimlaneLocation from "./schemas/SwimlaneLocation";
-import { active } from "./components/Grid/util";
 
 export function locateById(
   rootCellData: CellData,
@@ -54,7 +53,7 @@ export function deleteActive(rootCellData: CellData) {
   }
 }
 
-export function get(
+export function getCellDataList(
   rootCellData: CellData,
   parentId: string,
   swimlaneIndex: number
@@ -116,7 +115,7 @@ export function copyAndSplice(
 ): [CellData, CellData[], CellData] {
   const location = locateById(originData, id)!;
   const copy = JSON.parse(JSON.stringify(originData));
-  const src = get(copy, location.cellId, location.swimlaneIndex)!;
+  const src = getCellDataList(copy, location.cellId, location.swimlaneIndex)!;
   const cell = src.find((cell) => cell.id === id)!;
   src.splice(src.indexOf(cell), 1);
   return [copy, src, cell];
@@ -130,13 +129,17 @@ export function reducer(state: any, action: any) {
   } else if (action.type === "ADD") {
     const location = locateByCellDataListRef(state, action.cellDataList)!;
     const copy = JSON.parse(JSON.stringify(state));
-    const cells = get(copy, location.cellId, location.swimlaneIndex)!;
+    const cells = getCellDataList(
+      copy,
+      location.cellId,
+      location.swimlaneIndex
+    )!;
     cells.push(action.cellData);
     active(copy, action.cellData.id);
     return copy;
   } else if (action.type === "JUMP") {
     const [copy, , cell] = copyAndSplice(state, action.id);
-    const dest = get(
+    const dest = getCellDataList(
       copy,
       action.dropLocation.cellId,
       action.dropLocation.swimlaneIndex
@@ -154,4 +157,54 @@ export function reducer(state: any, action: any) {
   } else {
     return state;
   }
+}
+
+export function getActive(root: CellData): CellData | null {
+  let active: CellData | null = null;
+  let func = function (data: CellData) {
+    if (data.swimlanes) {
+      data.swimlanes.forEach((swimlane) => {
+        swimlane.cellDataList.forEach((element) => {
+          if (element.active) {
+            active = element;
+          } else {
+            if (element.type === "grid") {
+              func(element);
+            }
+          }
+        });
+      });
+    }
+  };
+
+  func(root);
+  return active;
+}
+
+export function active(root: CellData, id: string) {
+  let func = function (data: CellData) {
+    data.active = data.id === id;
+    if (data.swimlanes) {
+      data.swimlanes.forEach((swimlane) => {
+        swimlane.cellDataList.forEach((element) => {
+          switch (element.type) {
+            case "grid":
+              func(element);
+              break;
+            case "list":
+              element.swimlanes!.forEach((row) => {
+                row.cellDataList.forEach((listElement: CellData) => {
+                  listElement.active = listElement.id === id;
+                });
+              });
+              break;
+            default:
+              element.active = element.id === id;
+              break;
+          }
+        });
+      });
+    }
+  };
+  func(root);
 }

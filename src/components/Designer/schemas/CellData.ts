@@ -10,7 +10,7 @@ export interface CellData {
   label?: string;
   placeholder?: string;
   labeled?: boolean;
-  warningable?: boolean;
+  warnable?: boolean;
   warning?: string;
   required?: boolean;
 }

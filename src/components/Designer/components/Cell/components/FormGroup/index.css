@@ -30,3 +30,7 @@
   color: red;
   margin: 0;
 }
+
+.form-group > tbody > tr > td.element {
+  padding: 0 4px;
+}
