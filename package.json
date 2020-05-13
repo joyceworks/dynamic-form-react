@@ -26,7 +26,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "onchange 'src/**/*.ts' 'src/**/*.tsx' 'src/**/*.css' -- prettier --write {{changed}}"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -44,7 +45,8 @@
     ]
   },
   "devDependencies": {
-    "cz-conventional-changelog": "3.1.0"
+    "cz-conventional-changelog": "3.1.0",
+    "prettier": "2.0.5"
   },
   "config": {
     "commitizen": {

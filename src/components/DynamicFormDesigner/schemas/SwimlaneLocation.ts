@@ -1,4 +1,4 @@
 export default interface SwimlaneLocation {
-    cellId: string;
-    swimlaneIndex: number;
+  cellId: string;
+  swimlaneIndex: number;
 }

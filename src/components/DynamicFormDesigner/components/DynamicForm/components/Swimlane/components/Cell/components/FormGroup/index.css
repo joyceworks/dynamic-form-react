@@ -1,32 +1,32 @@
 .form-group {
-    table-layout: fixed;
-    width: 100%;
-    min-height: 42px;
+  table-layout: fixed;
+  width: 100%;
+  min-height: 42px;
 }
 
 .form-group.inline {
-    display: inline-block;
+  display: inline-block;
 }
 
 .form-group > tbody > tr > td.label {
-    padding: 0 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: right;
-    width: 100px;
+  padding: 0 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+  width: 100px;
 }
 
 .form-group.inline > tbody > tr > td.label {
-    text-align: left;
-    padding: 0;
+  text-align: left;
+  padding: 0;
 }
 
 .form-group > tbody > tr > td.label > .required {
-    color: red;
+  color: red;
 }
 
 .form-group > tbody > tr > td.warning {
-    color: red;
-    margin: 0;
+  color: red;
+  margin: 0;
 }

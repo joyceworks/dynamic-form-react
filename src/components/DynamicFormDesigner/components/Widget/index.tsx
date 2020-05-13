@@ -1,21 +1,23 @@
 import React from "react";
-import {WidgetData} from "../../schemas/WidgetData";
-import {useDrag} from "react-dnd";
+import { WidgetData } from "../../schemas/WidgetData";
+import { useDrag } from "react-dnd";
 
 interface WidgetProps {
-    widget: WidgetData;
+  widget: WidgetData;
 }
 
-export function Widget({widget}: WidgetProps) {
-    const [{isDragging}, drag] = useDrag({
-        item: {type: widget.type},
-        collect: monitor => ({
-            isDragging: !!monitor.isDragging()
-        })
-    });
+export function Widget({ widget }: WidgetProps) {
+  const [{ isDragging }, drag] = useDrag({
+    item: { type: widget.type },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
 
-    return <li key={widget.name} className={'widget'} ref={drag}>
-        {widget.icon}
-        <span>{widget.name}</span>
-    </li>;
+  return (
+    <li key={widget.name} className={"widget"} ref={drag}>
+      {widget.icon}
+      <span>{widget.name}</span>
+    </li>
+  );
 }

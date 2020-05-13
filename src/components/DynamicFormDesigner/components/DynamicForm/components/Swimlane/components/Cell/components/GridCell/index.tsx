@@ -1,14 +1,15 @@
-import React, {forwardRef} from "react";
-import {DynamicForm} from "../../../../../../index";
-import {CellData} from "../../../../../../../../schemas/CellData";
-
+import React, { forwardRef } from "react";
+import { DynamicForm } from "../../../../../../index";
+import { CellData } from "../../../../../../../../schemas/CellData";
 
 interface GridCellProps {
-    element: CellData;
+  element: CellData;
 }
 
-export const GridCell = forwardRef(({element}: GridCellProps, ref: any) => {
-    return <>
-        <DynamicForm ref={ref} cellData={element}/>
-    </>;
-})
+export const GridCell = forwardRef(({ element }: GridCellProps, ref: any) => {
+  return (
+    <>
+      <DynamicForm ref={ref} cellData={element} />
+    </>
+  );
+});

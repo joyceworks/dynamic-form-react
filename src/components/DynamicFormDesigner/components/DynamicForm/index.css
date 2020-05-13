@@ -1,108 +1,110 @@
 .instance.active {
-    border: 1px solid #1890ff;
+  border: 1px solid #1890ff;
 }
 
 .instance.active > .dragger {
-    background-color: #1890ff;
-    display: block;
-    color: white;
-    z-index: 1;
+  background-color: #1890ff;
+  display: block;
+  color: white;
+  z-index: 1;
 }
 
 .instance .dragger {
-    display: none;
+  display: none;
 }
 
 .dragger {
-    padding: 4px;
-    cursor: move;
-    position: absolute;
-    top: 0;
-    left: 0;
+  padding: 4px;
+  cursor: move;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .instance {
-    border: 1px solid #a3a3a3;
-    position: relative;
+  border: 1px solid #a3a3a3;
+  position: relative;
 }
 
 .id {
-    position: absolute;
-    top: 6px;
-    right: 10px;
-    color: #a3a3a3;
-    z-index: 1;
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  color: #a3a3a3;
+  z-index: 1;
 }
 
 .swimlanes {
-    table-layout: fixed;
-    border: 1px dashed #a3a3a3;
-    width: 100%;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  table-layout: fixed;
+  border: 1px dashed #a3a3a3;
+  width: 100%;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .swimlanes:not(:first-of-type):not(:last-of-type) {
-    margin: 10px 0;
+  margin: 10px 0;
 }
 
 .swimlane {
-    border: 1px dashed #a3a3a3;
-    height: 42px;
-    vertical-align: top;
-    position: relative;
-    background-color: white;
+  border: 1px dashed #a3a3a3;
+  height: 42px;
+  vertical-align: top;
+  position: relative;
+  background-color: white;
 }
 
 .swimlane.hovered {
-    background-color: lightpink;
+  background-color: lightpink;
 }
 
-.edit .swimlane, .edit.swimlanes, .edit .instance {
-    border-style: none;
+.edit .swimlane,
+.edit.swimlanes,
+.edit .instance {
+  border-style: none;
 }
 
 .swimlanes.edit > tr:first-of-type > .swimlane.row {
-    height: inherit;
+  height: inherit;
 }
 
 .swimlanes.edit > tr:first-of-type > .swimlane.row > .instance > .form-group {
-    min-height: inherit;
+  min-height: inherit;
 }
 
 .edit .id {
-    display: none;
+  display: none;
 }
 
 .list {
-    width: 100%;
+  width: 100%;
 }
 
 .swimlane.row {
-    width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .swimlane.row .instance {
-    width: 200px;
-    vertical-align: top;
-    display: inline-flex;
+  width: 200px;
+  vertical-align: top;
+  display: inline-flex;
 }
 
 .swimlane.row .form-group > tr > td.label {
-    text-align: left;
+  text-align: left;
 }
 
 .swimlane.row .indicator {
-    display: inline-block;
-    height: 100%;
-    width: 5px;
+  display: inline-block;
+  height: 100%;
+  width: 5px;
 }
 
 .swimlane.row .delete {
-    line-height: 42px;
-    margin: 0 10px 0 0;
+  line-height: 42px;
+  margin: 0 10px 0 0;
 }

@@ -26,6 +26,31 @@ export function locateById(rootCellData: CellData, cellDataId: string): Swimlane
     return func(rootCellData);
 }
 
+export function deleteActive(rootCellData: CellData) {
+    let cells: CellData[] | null = null;
+    let index: number | null = null;
+    let func = function (data: CellData) {
+        if (data.swimlanes) {
+            for (let swimlane of data.swimlanes) {
+                for (let i = 0; i < swimlane.cellDataList.length; i++) {
+                    let cell = swimlane.cellDataList[i];
+                    if (cell.active) {
+                        cells = swimlane.cellDataList;
+                        index = i;
+                    }
+                    if (cell.type === 'grid') {
+                        func(cell);
+                    }
+                }
+            }
+        }
+    };
+    func(rootCellData);
+    if (cells) {
+        cells!.splice(index!, 1);
+    }
+}
+
 export function get(rootCellData: CellData, parentId: string, swimlaneIndex: number): CellData[] | null {
     let list: CellData[] | null = null;
     let func = function (data: CellData) {
@@ -103,6 +128,10 @@ export function reducer(state: any, action: any) {
     } else if (action.type === 'ACTIVE') {
         const copy = JSON.parse(JSON.stringify(state));
         active(copy, action.id);
+        return copy;
+    } else if (action.type === 'DELETE_ACTIVE') {
+        const copy = JSON.parse(JSON.stringify(state));
+        deleteActive(copy);
         return copy;
     } else {
         return state;
