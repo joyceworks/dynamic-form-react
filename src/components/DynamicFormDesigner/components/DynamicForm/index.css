@@ -1,5 +1,5 @@
 .instance.active {
-  border: 1px solid #1890ff;
+  box-shadow: 0 0 0 1px #1890ff;
 }
 
 .instance.active > .dragger {
@@ -22,7 +22,6 @@
 }
 
 .instance {
-  border: 1px solid #a3a3a3;
   position: relative;
 }
 
@@ -32,11 +31,11 @@
   right: 10px;
   color: #a3a3a3;
   z-index: 1;
+  font-size: small;
 }
 
 .swimlanes {
   table-layout: fixed;
-  border: 1px dashed #a3a3a3;
   width: 100%;
   -moz-user-select: none;
   -webkit-user-select: none;
@@ -49,7 +48,8 @@
 }
 
 .swimlane {
-  border: 1px dashed #a3a3a3;
+  padding: 0;
+  box-shadow: 0 0 0 1px #a3a3a3;
   height: 42px;
   vertical-align: top;
   position: relative;

@@ -134,7 +134,7 @@ export const DynamicFormDesigner = function () {
             </Sider>
             <Content>
               <Layout style={{ height: "100%" }}>
-                <Header>
+                <Header className={"toolbar"}>
                   <Space>
                     <Button>清空</Button>
                     <Button>预览</Button>
