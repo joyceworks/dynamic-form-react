@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { Grid } from "../../../Grid/index";
+import { Grid } from "../../../Grid";
 import { CellData } from "../../../../schemas/CellData";
 
 interface GridCellProps {
