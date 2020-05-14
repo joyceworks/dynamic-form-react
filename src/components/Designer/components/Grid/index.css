@@ -3,6 +3,7 @@
 }
 
 .instance {
+  border: 1px solid transparent;
   position: relative;
 }
 
@@ -69,4 +70,12 @@
   display: inline-block;
   height: 100%;
   width: 5px;
+}
+
+.drop-over-downward {
+  border-bottom: 1px dashed #1890ff;
+}
+
+.drop-over-upward {
+  border-top: 1px dashed #1890ff;
 }

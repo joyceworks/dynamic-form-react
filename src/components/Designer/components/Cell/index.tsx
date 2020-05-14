@@ -1,8 +1,8 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { useDrag, useDrop, XYCoord } from "react-dnd";
 import { CellData } from "../../schemas/CellData";
 import { DesignerContext } from "../../index";
-import { FormContext } from "../Grid/index";
+import { FormContext } from "../Grid";
 import { InputCell } from "./components/InputCell";
 import { GridCell } from "./components/GridCell";
 import { SelectCell } from "./components/SelectCell";
@@ -29,20 +29,48 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
   };
   const ref = useRef<any>(null);
   const designerDispatch = useContext(DesignerContext);
-  const [, drop] = useDrop({
+  const [dropClassName, setDropClassName] = useState<string>("");
+  const [{ isOver }, drop] = useDrop({
     accept: ["instance"],
-    hover(item: DragItem, monitor) {
+    hover: (item: DragItem, monitor) => {
+      if (!ref.current) {
+        setDropClassName("");
+      }
+      if (!monitor.isOver({ shallow: true })) {
+        setDropClassName("");
+      }
+      if (monitor.getItem().id === cellData.id) {
+        setDropClassName("");
+      }
+      const hoverBoundingRect = ref.current!.getBoundingClientRect();
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      if (!clientOffset) {
+        setDropClassName("");
+      }
+      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+      setDropClassName(
+        hoverClientY > hoverMiddleY
+          ? " drop-over-downward"
+          : " drop-over-upward"
+      );
+    },
+    collect: (monitor) => {
+      console.log(cellData.id);
+      return {
+        isOver: monitor.isOver({ shallow: true }),
+      };
+    },
+    drop(item: DragItem, monitor) {
       if (!ref.current) {
         return;
       }
-
-      const dragIndex = item.index;
-      const hoverIndex = index;
-
-      if (dragIndex === hoverIndex) {
+      if (!monitor.isOver({ shallow: true })) {
         return;
       }
 
+      let hoverIndex = index;
       const hoverBoundingRect = ref.current!.getBoundingClientRect();
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
@@ -51,11 +79,8 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
         return;
       }
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        return;
-      }
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return;
+      if (hoverClientY > hoverMiddleY) {
+        hoverIndex += 1;
       }
       designerDispatch({
         type: "MOVE",
@@ -86,7 +111,11 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
     <div
       ref={ref}
       style={{ opacity: isDragging ? "0.5" : 1 }}
-      className={"instance" + (cellData.active ? " active" : "")}
+      className={
+        "instance" +
+        (cellData.active ? " active" : "") +
+        (isOver ? dropClassName : "")
+      }
       onClick={(event) => {
         event.stopPropagation();
         designerDispatch({
