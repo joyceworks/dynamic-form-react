@@ -80,7 +80,7 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
       }
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
       if (hoverClientY > hoverMiddleY) {
-        hoverIndex += 1;
+        hoverIndex = index;
       }
       designerDispatch({
         type: "MOVE",
