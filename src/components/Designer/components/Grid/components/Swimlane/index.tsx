@@ -68,24 +68,19 @@ export const Swimlane = function ({
         if (!clientOffset) {
           return;
         }
-        if (item.type === "instance") {
-          dispatch({
-            type: "JUMP",
-            dropLocation: location,
-            id: item.id,
-          });
-        } else {
-          dispatch({
-            type: "ADD",
-            cellData: createWidgetInstance(item.type as string),
-            cellDataList: cellDataList,
-          });
-        }
+
+        dispatch({
+          type: "ADD",
+          cellData: createWidgetInstance(item.type as string),
+          location: Object.assign({}, location, {
+            index: cellDataList.length,
+          }),
+        });
       }
     },
     collect: (monitor) => {
       let isOver = monitor.isOver({ shallow: true });
-      if (isOver && monitor.getItem().id === location.cellId) {
+      if (isOver && monitor.getItem().id === location.parentId) {
         isOver = false;
       }
       return { isOver: isOver };

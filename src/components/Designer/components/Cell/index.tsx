@@ -70,7 +70,7 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
         return;
       }
 
-      let hoverIndex = index;
+      let position = null;
       const hoverBoundingRect = ref.current!.getBoundingClientRect();
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
@@ -80,14 +80,16 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
       }
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
       if (hoverClientY > hoverMiddleY) {
-        hoverIndex = index;
+        position = "down";
+      } else {
+        position = "up";
       }
       designerDispatch({
         type: "MOVE",
-        hoverIndex: hoverIndex,
-        id: item.id,
+        dragItemId: monitor.getItem().id,
+        position: position,
+        dropItemId: item.id,
       });
-      item.index = hoverIndex;
     },
   });
 

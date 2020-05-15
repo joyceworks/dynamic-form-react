@@ -40,7 +40,10 @@ export const Grid = forwardRef(
                       key={cellData.id + "-" + index}
                       direction={direction}
                       cellDataList={swimlane.cellDataList}
-                      location={{ cellId: cellData.id, swimlaneIndex: index }}
+                      location={{
+                        parentId: cellData.id,
+                        swimlaneIndex: index,
+                      }}
                     />
                   );
                 })}
@@ -54,7 +57,7 @@ export const Grid = forwardRef(
                         cellDataList={swimlane.cellDataList}
                         direction={direction}
                         location={{
-                          cellId: cellData.id,
+                          parentId: cellData.id,
                           swimlaneIndex: index,
                         }}
                       />

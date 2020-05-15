@@ -1,20 +1,28 @@
 import { CellData } from "./schemas/CellData";
-import SwimlaneLocation from "./schemas/SwimlaneLocation";
+import CellLocation from "./schemas/CellLocation";
 
-export function locateById(
-  rootCellData: CellData,
-  cellDataId: string
-): SwimlaneLocation | null {
-  let location: SwimlaneLocation | null = null;
-  let func = function (data: CellData): SwimlaneLocation | null {
+export function locate(
+  root: CellData,
+  matchFunc: (value: CellData, index: number, array: CellData[]) => boolean
+): [CellLocation, CellData[], CellData] | null {
+  let location: [CellLocation, CellData[], CellData] | null = null;
+  let func = function (
+    data: CellData
+  ): [CellLocation, CellData[], CellData] | null {
     if (data.swimlanes) {
       for (const swimlane of data.swimlanes) {
-        for (const cellData of swimlane.cellDataList) {
-          if (cellData.id === cellDataId) {
-            location = {
-              cellId: data.id,
-              swimlaneIndex: data.swimlanes?.indexOf(swimlane),
-            };
+        for (let i = 0; i < swimlane.cellDataList.length; i++) {
+          let cellData = swimlane.cellDataList[i];
+          if (matchFunc(cellData, i, swimlane.cellDataList)) {
+            location = [
+              {
+                parentId: data.id,
+                swimlaneIndex: data.swimlanes?.indexOf(swimlane),
+                index: i,
+              },
+              swimlane.cellDataList,
+              cellData,
+            ];
             break;
           }
           if (cellData.type === "grid") {
@@ -25,36 +33,19 @@ export function locateById(
     }
     return location;
   };
-  return func(rootCellData);
+  return func(root);
 }
 
 export function deleteActive(rootCellData: CellData) {
-  let cells: CellData[] | null = null;
-  let index: number | null = null;
-  let func = function (data: CellData) {
-    if (data.swimlanes) {
-      for (let swimlane of data.swimlanes) {
-        for (let i = 0; i < swimlane.cellDataList.length; i++) {
-          let cell = swimlane.cellDataList[i];
-          if (cell.active) {
-            cells = swimlane.cellDataList;
-            index = i;
-          }
-          if (cell.type === "grid") {
-            func(cell);
-          }
-        }
-      }
-    }
-  };
-  func(rootCellData);
-  if (cells) {
-    cells!.splice(index!, 1);
+  const location = locate(rootCellData, (item) => item.active);
+  if (location) {
+    const [cellLocation, list] = location;
+    list.splice(cellLocation.index, 1);
   }
 }
 
 export function getCellDataList(
-  rootCellData: CellData,
+  root: CellData,
   parentId: string,
   swimlaneIndex: number
 ): CellData[] | null {
@@ -78,73 +69,39 @@ export function getCellDataList(
     }
     return list;
   };
-  return func(rootCellData);
-}
-
-export function locateByCellDataListRef(
-  rootCellData: CellData,
-  cellDataList: CellData[]
-): SwimlaneLocation | null {
-  let location: SwimlaneLocation | null = null;
-  let func = function (data: CellData): SwimlaneLocation | null {
-    if (data.swimlanes) {
-      for (const swimlane of data.swimlanes) {
-        if (swimlane.cellDataList === cellDataList) {
-          location = {
-            cellId: data.id,
-            swimlaneIndex: data.swimlanes.indexOf(swimlane),
-          };
-          break;
-        } else {
-          for (const cellData of swimlane.cellDataList) {
-            if (cellData.type === "grid") {
-              func(cellData);
-            }
-          }
-        }
-      }
-    }
-    return location;
-  };
-  return func(rootCellData);
-}
-
-export function copyAndSplice(
-  originData: CellData,
-  id: string
-): [CellData, CellData[], CellData] {
-  const location = locateById(originData, id)!;
-  const copy = JSON.parse(JSON.stringify(originData));
-  const src = getCellDataList(copy, location.cellId, location.swimlaneIndex)!;
-  const cell = src.find((cell) => cell.id === id)!;
-  src.splice(src.indexOf(cell), 1);
-  return [copy, src, cell];
+  return func(root);
 }
 
 export function reducer(state: any, action: any) {
+  if (!action.type) {
+    return state;
+  }
   if (action.type === "MOVE") {
-    const [copy, src, cell] = copyAndSplice(state, action.id);
-    src.splice(action.hoverIndex, 0, cell);
+    const copy = JSON.parse(JSON.stringify(state));
+    const [dropLocation, dropList] = locate(copy, action.dropItemId)!;
+    const [dragLocation, dragList, dragCell] = locate(copy, action.dragItemId)!;
+    if (action.position === "up") {
+      dropList.splice(dropLocation.index, 0, dragCell);
+    } else {
+      dropList.splice(dropLocation.index + 1, 0, dragCell);
+    }
+    let dragIndex: number;
+    if (dragList === dropList) {
+      dragIndex = dragList.indexOf(dragCell);
+    } else {
+      dragIndex = dragLocation.index;
+    }
+    dragList.splice(dragIndex, 1);
     return copy;
   } else if (action.type === "ADD") {
-    const location = locateByCellDataListRef(state, action.cellDataList)!;
     const copy = JSON.parse(JSON.stringify(state));
     const cells = getCellDataList(
       copy,
-      location.cellId,
-      location.swimlaneIndex
+      action.location.parentId,
+      action.location.swimlaneIndex
     )!;
     cells.push(action.cellData);
     active(copy, action.cellData.id);
-    return copy;
-  } else if (action.type === "JUMP") {
-    const [copy, , cell] = copyAndSplice(state, action.id);
-    const dest = getCellDataList(
-      copy,
-      action.dropLocation.cellId,
-      action.dropLocation.swimlaneIndex
-    )!;
-    dest.push(cell);
     return copy;
   } else if (action.type === "ACTIVE") {
     const copy = JSON.parse(JSON.stringify(state));
@@ -154,57 +111,21 @@ export function reducer(state: any, action: any) {
     const copy = JSON.parse(JSON.stringify(state));
     deleteActive(copy);
     return copy;
-  } else {
-    return state;
   }
 }
 
 export function getActive(root: CellData): CellData | null {
-  let active: CellData | null = null;
-  let func = function (data: CellData) {
-    if (data.swimlanes) {
-      data.swimlanes.forEach((swimlane) => {
-        swimlane.cellDataList.forEach((element) => {
-          if (element.active) {
-            active = element;
-          } else {
-            if (element.type === "grid") {
-              func(element);
-            }
-          }
-        });
-      });
-    }
-  };
-
-  func(root);
-  return active;
+  const location = locate(root, (item) => item.active);
+  return location ? location[2] : null;
 }
 
 export function active(root: CellData, id: string) {
-  let func = function (data: CellData) {
-    data.active = data.id === id;
-    if (data.swimlanes) {
-      data.swimlanes.forEach((swimlane) => {
-        swimlane.cellDataList.forEach((element) => {
-          switch (element.type) {
-            case "grid":
-              func(element);
-              break;
-            case "list":
-              element.swimlanes!.forEach((row) => {
-                row.cellDataList.forEach((listElement: CellData) => {
-                  listElement.active = listElement.id === id;
-                });
-              });
-              break;
-            default:
-              element.active = element.id === id;
-              break;
-          }
-        });
-      });
-    }
-  };
-  func(root);
+  const prevLocation = locate(root, (item) => item.active);
+  if (prevLocation) {
+    prevLocation[2].active = false;
+  }
+  const currentLocation = locate(root, (item) => item.id === id);
+  if (currentLocation) {
+    currentLocation[2].active = true;
+  }
 }
