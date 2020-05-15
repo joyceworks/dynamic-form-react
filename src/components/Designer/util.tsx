@@ -72,29 +72,39 @@ export function getCellDataList(
   return func(root);
 }
 
-export function reducer(state: any, action: any) {
+function drop(
+  root: CellData,
+  cell: CellData,
+  dropItemId: string,
+  position: string
+) {
+  const [dropLocation, dropList] = locate(
+    root,
+    (item) => item.id === dropItemId
+  )!;
+  if (position === "up") {
+    dropList.splice(dropLocation.index, 0, cell);
+  } else {
+    dropList.splice(dropLocation.index + 1, 0, cell);
+  }
+  active(root, cell.id);
+}
+
+export function reducer(state: any, action: any): CellData {
   if (!action.type) {
     return state;
   }
+  const copy = JSON.parse(JSON.stringify(state));
   if (action.type === "MOVE") {
-    const copy = JSON.parse(JSON.stringify(state));
-    const [dropLocation, dropList] = locate(copy, action.dropItemId)!;
-    const [dragLocation, dragList, dragCell] = locate(copy, action.dragItemId)!;
-    if (action.position === "up") {
-      dropList.splice(dropLocation.index, 0, dragCell);
-    } else {
-      dropList.splice(dropLocation.index + 1, 0, dragCell);
-    }
-    let dragIndex: number;
-    if (dragList === dropList) {
-      dragIndex = dragList.indexOf(dragCell);
-    } else {
-      dragIndex = dragLocation.index;
-    }
-    dragList.splice(dragIndex, 1);
-    return copy;
+    const [dragLocation, dragList, dragCell] = locate(
+      copy,
+      (item) => item.id === action.dragItemId
+    )!;
+    dragList.splice(dragLocation.index, 1);
+    drop(copy, dragCell, action.dropItemId, action.position);
+  } else if (action.type === "NOOB") {
+    drop(copy, action.dragItem, action.dropItemId, action.position);
   } else if (action.type === "ADD") {
-    const copy = JSON.parse(JSON.stringify(state));
     const cells = getCellDataList(
       copy,
       action.location.parentId,
@@ -102,16 +112,25 @@ export function reducer(state: any, action: any) {
     )!;
     cells.push(action.cellData);
     active(copy, action.cellData.id);
-    return copy;
+  } else if (action.type === "FARM") {
+    const [location, list, cell] = locate(
+      copy,
+      (item) => item.id === action.cellDataId
+    )!;
+    list.splice(location.index, 1);
+    const cellDataList = getCellDataList(
+      copy,
+      action.location.parentId,
+      action.location.swimlaneIndex
+    );
+    cellDataList?.push(cell);
+    active(copy, cell.id);
   } else if (action.type === "ACTIVE") {
-    const copy = JSON.parse(JSON.stringify(state));
     active(copy, action.id);
-    return copy;
   } else if (action.type === "DELETE_ACTIVE") {
-    const copy = JSON.parse(JSON.stringify(state));
     deleteActive(copy);
-    return copy;
   }
+  return copy;
 }
 
 export function getActive(root: CellData): CellData | null {
@@ -128,4 +147,47 @@ export function active(root: CellData, id: string) {
   if (currentLocation) {
     currentLocation[2].active = true;
   }
+}
+
+export function createWidgetInstance(widgetType: string) {
+  let cellData: CellData = {
+    type: widgetType,
+    id: widgetType + new Date().getTime(),
+    active: false,
+  };
+  if (cellData.type === "grid") {
+    cellData.swimlanes = [
+      { span: 50, cellDataList: [] },
+      { span: 50, cellDataList: [] },
+    ];
+  } else if (cellData.type === "input") {
+    cellData.label = "单行文本";
+    cellData.placeholder = "请填写";
+    cellData.required = false;
+  } else if (cellData.type === "textarea") {
+    cellData.label = "多行文本";
+    cellData.placeholder = "请填写";
+    cellData.required = false;
+  } else if (cellData.type === "select") {
+    cellData.label = "下拉选择";
+    cellData.placeholder = "请选择";
+    cellData.options = [];
+    cellData.required = false;
+  } else if (cellData.type === "list") {
+    cellData.label = "列表";
+    cellData.swimlanes = [{ cellDataList: [], span: 100 }];
+  } else if (cellData.type === "datetime") {
+    cellData.label = "日期时间";
+    cellData.placeholder = "请选择";
+    cellData.required = false;
+  } else if (cellData.type === "checkbox") {
+    cellData.label = "多选";
+    cellData.options = [];
+    cellData.required = false;
+  } else if (cellData.type === "radio") {
+    cellData.label = "单选";
+    cellData.options = [];
+    cellData.required = false;
+  }
+  return cellData;
 }

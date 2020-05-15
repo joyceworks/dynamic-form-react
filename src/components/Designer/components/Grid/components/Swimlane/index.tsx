@@ -4,54 +4,12 @@ import { Cell } from "../../../Cell";
 import { CellData } from "../../../../schemas/CellData";
 import { DesignerContext } from "../../../../index";
 import SwimlaneLocation from "../../../../schemas/SwimlaneLocation";
+import { createWidgetInstance } from "../../../../util";
 
 interface SwimlaneProps {
   cellDataList: CellData[];
   direction: "column" | "row";
   location: SwimlaneLocation;
-}
-
-function createWidgetInstance(widgetType: string) {
-  let cellData: CellData = {
-    type: widgetType,
-    id: widgetType + new Date().getTime(),
-    active: false,
-  };
-  if (cellData.type === "grid") {
-    cellData.swimlanes = [
-      { span: 50, cellDataList: [] },
-      { span: 50, cellDataList: [] },
-    ];
-  } else if (cellData.type === "input") {
-    cellData.label = "单行文本";
-    cellData.placeholder = "请填写";
-    cellData.required = false;
-  } else if (cellData.type === "textarea") {
-    cellData.label = "多行文本";
-    cellData.placeholder = "请填写";
-    cellData.required = false;
-  } else if (cellData.type === "select") {
-    cellData.label = "下拉选择";
-    cellData.placeholder = "请选择";
-    cellData.options = [];
-    cellData.required = false;
-  } else if (cellData.type === "list") {
-    cellData.label = "列表";
-    cellData.swimlanes = [{ cellDataList: [], span: 100 }];
-  } else if (cellData.type === "datetime") {
-    cellData.label = "日期时间";
-    cellData.placeholder = "请选择";
-    cellData.required = false;
-  } else if (cellData.type === "checkbox") {
-    cellData.label = "多选";
-    cellData.options = [];
-    cellData.required = false;
-  } else if (cellData.type === "radio") {
-    cellData.label = "单选";
-    cellData.options = [];
-    cellData.required = false;
-  }
-  return cellData;
 }
 
 export const Swimlane = function ({
@@ -69,13 +27,21 @@ export const Swimlane = function ({
           return;
         }
 
-        dispatch({
-          type: "ADD",
-          cellData: createWidgetInstance(item.type as string),
-          location: Object.assign({}, location, {
-            index: cellDataList.length,
-          }),
-        });
+        if (item.type === "instance") {
+          dispatch({
+            type: "FARM",
+            cellDataId: item.id,
+            location: location,
+          });
+        } else {
+          dispatch({
+            type: "ADD",
+            cellData: createWidgetInstance(item.type as string),
+            location: Object.assign({}, location, {
+              index: cellDataList.length,
+            }),
+          });
+        }
       }
     },
     collect: (monitor) => {

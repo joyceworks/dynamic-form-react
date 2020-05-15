@@ -6,6 +6,7 @@ import { FormContext } from "../Grid";
 import { InputCell } from "./components/InputCell";
 import { GridCell } from "./components/GridCell";
 import { SelectCell } from "./components/SelectCell";
+import { createWidgetInstance } from "../../util";
 
 interface CellProps {
   cellData: CellData;
@@ -31,7 +32,7 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
   const designerDispatch = useContext(DesignerContext);
   const [dropClassName, setDropClassName] = useState<string>("");
   const [{ isOver }, drop] = useDrop({
-    accept: ["instance"],
+    accept: ["instance", "input", "select", "grid"],
     hover: (item: DragItem, monitor) => {
       if (!ref.current) {
         setDropClassName("");
@@ -84,12 +85,21 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
       } else {
         position = "up";
       }
-      designerDispatch({
-        type: "MOVE",
-        dragItemId: monitor.getItem().id,
-        position: position,
-        dropItemId: item.id,
-      });
+      if (item.type === "instance") {
+        designerDispatch({
+          type: "MOVE",
+          dragItemId: monitor.getItem().id,
+          position: position,
+          dropItemId: cellData.id,
+        });
+      } else {
+        designerDispatch({
+          type: "NOOB",
+          position: position,
+          dropItemId: cellData.id,
+          dragItem: createWidgetInstance(item.type),
+        });
+      }
     },
   });
 
