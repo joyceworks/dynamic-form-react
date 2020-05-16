@@ -1,0 +1,88 @@
+@background_color_1: lightpink;
+
+.instance.active {
+  border: 1px solid #1890ff;
+}
+.instance {
+  border: 1px solid transparent;
+  position: relative;
+}
+.lanes {
+  table-layout: fixed;
+  width: 100%;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  &:not(:first-of-type) {
+    &:not(:last-of-type) {
+      margin: 10px 0;
+    }
+  }
+}
+.lane {
+  padding: 10px;
+  border: 1px solid #a3a3a3;
+  height: 62px;
+  vertical-align: top;
+  position: relative;
+}
+.lane.hovered {
+  background-color: @background_color_1;
+}
+.edit {
+  .lane {
+    border-style: none;
+  }
+  .instance {
+    border-style: none;
+  }
+}
+.edit.lanes {
+  border-style: none;
+}
+.lanes.edit {
+  > tr {
+    &:first-of-type {
+      > .lane.row {
+        height: inherit;
+        > .instance {
+          > .form-group {
+            min-height: inherit;
+          }
+        }
+      }
+    }
+  }
+}
+.list {
+  width: 100%;
+}
+.lane.row {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  .instance {
+    width: 200px;
+    vertical-align: top;
+    display: inline-flex;
+  }
+  .form-group {
+    > tr {
+      > td.label {
+        text-align: left;
+      }
+    }
+  }
+  .indicator {
+    display: inline-block;
+    height: 100%;
+    width: 5px;
+  }
+}
+.drop-over-downward {
+  border-bottom: 1px dashed #1890ff;
+}
+.drop-over-upward {
+  border-top: 1px dashed #1890ff;
+}

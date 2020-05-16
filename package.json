@@ -39,13 +39,13 @@
     ]
   },
   "devDependencies": {
-    "cz-conventional-changelog": "3.1.0",
-    "prettier": "2.0.5",
     "@types/antd": "^1.0.0",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.4",
     "@types/react": "^16.9.34",
-    "@types/react-dom": "^16.9.7"
+    "@types/react-dom": "^16.9.7",
+    "cz-conventional-changelog": "3.1.0",
+    "prettier": "2.0.5"
   },
   "config": {
     "commitizen": {
