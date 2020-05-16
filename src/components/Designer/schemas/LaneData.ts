@@ -1,6 +1,6 @@
 import { CellData } from "./CellData";
 
-export interface SwimlaneData {
+export interface LaneData {
   cellDataList: CellData[];
   span: number;
 }

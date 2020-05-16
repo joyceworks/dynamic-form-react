@@ -1,10 +1,10 @@
 import React, { CSSProperties, forwardRef, useReducer } from "react";
 import { setValue } from "./util";
 import "./index.css";
-import { Swimlane } from "./components/Swimlane";
-import { CellData } from "../../schemas/CellData";
+import { Lane } from "./components/Lane";
+import { CellData } from "../../../../../../schemas/CellData";
 
-interface FormProps {
+interface PoolProps {
   direction?: "column" | "row";
   cellData: CellData;
   style?: CSSProperties;
@@ -12,8 +12,8 @@ interface FormProps {
 
 export const FormContext = React.createContext<any>(null);
 
-export const Grid = forwardRef(
-  ({ direction = "column", cellData, style }: FormProps, ref: any) => {
+export const Pool = forwardRef(
+  ({ direction = "column", cellData, style }: PoolProps, ref: any) => {
     const [, dispatch] = useReducer(
       function (state: any, action: any) {
         switch (action.type) {
@@ -30,19 +30,19 @@ export const Grid = forwardRef(
     );
     return (
       <FormContext.Provider value={dispatch}>
-        <table ref={ref} className={"swimlanes"} style={style}>
+        <table ref={ref} className={"lanes"} style={style}>
           <tbody>
             {direction === "column" ? (
               <tr>
-                {cellData.swimlanes?.map((swimlane, index) => {
+                {cellData.lanes?.map((lane, index) => {
                   return (
-                    <Swimlane
+                    <Lane
                       key={cellData.id + "-" + index}
                       direction={direction}
-                      cellDataList={swimlane.cellDataList}
+                      cellDataList={lane.cellDataList}
                       location={{
                         parentId: cellData.id,
-                        swimlaneIndex: index,
+                        laneIndex: index,
                       }}
                     />
                   );
@@ -50,15 +50,15 @@ export const Grid = forwardRef(
               </tr>
             ) : (
               <>
-                {cellData.swimlanes?.map((swimlane, index) => {
+                {cellData.lanes?.map((lane, index) => {
                   return (
                     <tr key={cellData.id + "-" + index}>
-                      <Swimlane
-                        cellDataList={swimlane.cellDataList}
+                      <Lane
+                        cellDataList={lane.cellDataList}
                         direction={direction}
                         location={{
                           parentId: cellData.id,
-                          swimlaneIndex: index,
+                          laneIndex: index,
                         }}
                       />
                     </tr>

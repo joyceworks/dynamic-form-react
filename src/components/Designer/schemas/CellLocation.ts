@@ -1,5 +1,5 @@
 export default interface CellLocation {
   parentId: string;
-  swimlaneIndex: number;
+  laneIndex: number;
   index: number;
 }

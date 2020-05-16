@@ -15,7 +15,7 @@ const { Sider, Content, Header } = Layout;
 const rootCellData: CellData = {
   type: "grid",
   id: "11270307",
-  swimlanes: [{ span: 100, cellDataList: [] }],
+  lanes: [{ span: 100, cellDataList: [] }],
   active: false,
 };
 

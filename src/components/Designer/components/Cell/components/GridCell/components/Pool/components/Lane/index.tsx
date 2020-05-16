@@ -1,22 +1,22 @@
 import React, { useContext } from "react";
 import { useDrop } from "react-dnd";
-import { Cell } from "../../../Cell";
-import { CellData } from "../../../../schemas/CellData";
-import { DesignerContext } from "../../../../index";
-import SwimlaneLocation from "../../../../schemas/SwimlaneLocation";
-import { createWidgetInstance } from "../../../../util";
+import { Cell } from "../../../../../../index";
+import { CellData } from "../../../../../../../../schemas/CellData";
+import { DesignerContext } from "../../../../../../../../index";
+import SwimlaneLocation from "../../../../../../../../schemas/SwimlaneLocation";
+import { createWidgetInstance } from "../../../../../../../../util";
 
-interface SwimlaneProps {
+interface LaneProps {
   cellDataList: CellData[];
   direction: "column" | "row";
   location: SwimlaneLocation;
 }
 
-export const Swimlane = function ({
+export const Lane = function ({
   cellDataList,
   direction,
   location,
-}: SwimlaneProps) {
+}: LaneProps) {
   const dispatch = useContext(DesignerContext);
   const [{ isOver }, drop] = useDrop({
     accept: ["input", "grid", "select", "instance"],
@@ -59,10 +59,7 @@ export const Swimlane = function ({
   ));
 
   return (
-    <td
-      className={"swimlane " + direction + (isOver ? " hovered" : "")}
-      ref={drop}
-    >
+    <td className={"lane " + direction + (isOver ? " hovered" : "")} ref={drop}>
       {cells}
     </td>
   );

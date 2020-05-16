@@ -1,4 +1,4 @@
-import { SwimlaneData } from "./SwimlaneData";
+import { LaneData } from "./LaneData";
 
 export interface CellData {
   active: boolean;
@@ -6,7 +6,7 @@ export interface CellData {
   value?: any;
   id: string;
   type: string;
-  swimlanes?: SwimlaneData[];
+  lanes?: LaneData[];
   label?: string;
   placeholder?: string;
   labeled?: boolean;

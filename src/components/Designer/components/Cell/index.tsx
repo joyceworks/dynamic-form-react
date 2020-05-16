@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from "react";
 import { useDrag, useDrop, XYCoord } from "react-dnd";
 import { CellData } from "../../schemas/CellData";
 import { DesignerContext } from "../../index";
-import { FormContext } from "../Grid";
+import { FormContext } from "./components/GridCell/components/Pool";
 import { InputCell } from "./components/InputCell";
 import { GridCell } from "./components/GridCell";
 import { SelectCell } from "./components/SelectCell";

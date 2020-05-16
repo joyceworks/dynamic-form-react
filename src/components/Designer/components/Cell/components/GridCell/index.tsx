@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { Grid } from "../../../Grid";
+import { Pool } from "./components/Pool";
 import { CellData } from "../../../../schemas/CellData";
 
 interface GridCellProps {
@@ -9,7 +9,7 @@ interface GridCellProps {
 export const GridCell = forwardRef(({ element }: GridCellProps, ref: any) => {
   return (
     <>
-      <Grid ref={ref} cellData={element} />
+      <Pool ref={ref} cellData={element} />
     </>
   );
 });

@@ -9,18 +9,18 @@ export function locate(
   let func = function (
     data: CellData
   ): [CellLocation, CellData[], CellData] | null {
-    if (data.swimlanes) {
-      for (const swimlane of data.swimlanes) {
-        for (let i = 0; i < swimlane.cellDataList.length; i++) {
-          let cellData = swimlane.cellDataList[i];
-          if (matchFunc(cellData, i, swimlane.cellDataList)) {
+    if (data.lanes) {
+      for (const lane of data.lanes) {
+        for (let i = 0; i < lane.cellDataList.length; i++) {
+          let cellData = lane.cellDataList[i];
+          if (matchFunc(cellData, i, lane.cellDataList)) {
             location = [
               {
                 parentId: data.id,
-                swimlaneIndex: data.swimlanes?.indexOf(swimlane),
+                laneIndex: data.lanes?.indexOf(lane),
                 index: i,
               },
-              swimlane.cellDataList,
+              lane.cellDataList,
               cellData,
             ];
             break;
@@ -47,19 +47,19 @@ export function deleteActive(rootCellData: CellData) {
 export function getCellDataList(
   root: CellData,
   parentId: string,
-  swimlaneIndex: number
+  laneIndex: number
 ): CellData[] | null {
   let list: CellData[] | null = null;
   let func = function (data: CellData) {
     if (data.id === parentId) {
-      return data.swimlanes![swimlaneIndex].cellDataList;
+      return data.lanes![laneIndex].cellDataList;
     }
-    if (data.swimlanes) {
-      for (const swimlane of data.swimlanes) {
-        for (const cellData of swimlane.cellDataList) {
+    if (data.lanes) {
+      for (const lane of data.lanes) {
+        for (const cellData of lane.cellDataList) {
           if (cellData.type === "grid") {
             if (cellData.id === parentId) {
-              list = cellData.swimlanes![swimlaneIndex].cellDataList;
+              list = cellData.lanes![laneIndex].cellDataList;
             } else {
               func(cellData);
             }
@@ -108,7 +108,7 @@ export function reducer(state: any, action: any): CellData {
     const cells = getCellDataList(
       copy,
       action.location.parentId,
-      action.location.swimlaneIndex
+      action.location.laneIndex
     )!;
     cells.push(action.cellData);
     active(copy, action.cellData.id);
@@ -121,7 +121,7 @@ export function reducer(state: any, action: any): CellData {
     const cellDataList = getCellDataList(
       copy,
       action.location.parentId,
-      action.location.swimlaneIndex
+      action.location.laneIndex
     );
     cellDataList?.push(cell);
     active(copy, cell.id);
@@ -156,7 +156,7 @@ export function createWidgetInstance(widgetType: string) {
     active: false,
   };
   if (cellData.type === "grid") {
-    cellData.swimlanes = [
+    cellData.lanes = [
       { span: 50, cellDataList: [] },
       { span: 50, cellDataList: [] },
     ];
@@ -175,7 +175,7 @@ export function createWidgetInstance(widgetType: string) {
     cellData.required = false;
   } else if (cellData.type === "list") {
     cellData.label = "列表";
-    cellData.swimlanes = [{ cellDataList: [], span: 100 }];
+    cellData.lanes = [{ cellDataList: [], span: 100 }];
   } else if (cellData.type === "datetime") {
     cellData.label = "日期时间";
     cellData.placeholder = "请选择";

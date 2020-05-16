@@ -1,11 +1,11 @@
-import { CellData } from "../../schemas/CellData";
+import { CellData } from "../../../../../../schemas/CellData";
 
 export function getData(cell: CellData) {
   let result = {};
   let func = function (data: CellData, result: { [key: string]: any }) {
-    if (data.swimlanes) {
-      data.swimlanes.forEach((swimlane) => {
-        swimlane.cellDataList.forEach((element) => {
+    if (data.lanes) {
+      data.lanes.forEach((lane) => {
+        lane.cellDataList.forEach((element) => {
           switch (element.type) {
             case "grid":
               func(element, result);
@@ -13,7 +13,7 @@ export function getData(cell: CellData) {
             case "list":
               result[element.id] = [];
               // @ts-ignore
-              element.swimlanes.forEach((row, index) => {
+              element.lanes.forEach((row, index) => {
                 if (index > 0) {
                   let rowResult: { [key: string]: any } = {};
                   row.cellDataList.forEach((listElement: CellData) => {
@@ -37,16 +37,16 @@ export function getData(cell: CellData) {
 
 export function setValue(cell: CellData, target: CellData, value: any) {
   let func = function (data: CellData) {
-    if (data.swimlanes) {
-      for (const swimlane of data.swimlanes) {
-        for (const element of swimlane.cellDataList) {
+    if (data.lanes) {
+      for (const lane of data.lanes) {
+        for (const element of lane.cellDataList) {
           switch (element.type) {
             case "grid":
               func(element);
               break;
             case "list":
               // @ts-ignore
-              for (const row of element.swimlanes) {
+              for (const row of element.lanes) {
                 for (let i = 0; i < row.cellDataList.length; i++) {
                   let listElement = row.cellDataList[i];
                   if (listElement === target) {

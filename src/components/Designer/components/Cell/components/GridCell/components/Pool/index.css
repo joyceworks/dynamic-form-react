@@ -7,7 +7,7 @@
   position: relative;
 }
 
-.swimlanes {
+.lanes {
   table-layout: fixed;
   width: 100%;
   -moz-user-select: none;
@@ -16,11 +16,11 @@
   user-select: none;
 }
 
-.swimlanes:not(:first-of-type):not(:last-of-type) {
+.lanes:not(:first-of-type):not(:last-of-type) {
   margin: 10px 0;
 }
 
-.swimlane {
+.lane {
   padding: 10px;
   border: 1px solid #a3a3a3;
   height: 62px;
@@ -28,21 +28,21 @@
   position: relative;
 }
 
-.swimlane.hovered {
+.lane.hovered {
   background-color: lightpink;
 }
 
-.edit .swimlane,
-.edit.swimlanes,
+.edit .lane,
+.edit.lanes,
 .edit .instance {
   border-style: none;
 }
 
-.swimlanes.edit > tr:first-of-type > .swimlane.row {
+.lanes.edit > tr:first-of-type > .lane.row {
   height: inherit;
 }
 
-.swimlanes.edit > tr:first-of-type > .swimlane.row > .instance > .form-group {
+.lanes.edit > tr:first-of-type > .lane.row > .instance > .form-group {
   min-height: inherit;
 }
 
@@ -50,23 +50,23 @@
   width: 100%;
 }
 
-.swimlane.row {
+.lane.row {
   width: 100%;
   overflow-x: auto;
   white-space: nowrap;
 }
 
-.swimlane.row .instance {
+.lane.row .instance {
   width: 200px;
   vertical-align: top;
   display: inline-flex;
 }
 
-.swimlane.row .form-group > tr > td.label {
+.lane.row .form-group > tr > td.label {
   text-align: left;
 }
 
-.swimlane.row .indicator {
+.lane.row .indicator {
   display: inline-block;
   height: 100%;
   width: 5px;
