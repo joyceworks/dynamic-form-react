@@ -7,6 +7,7 @@ import { InputCell } from "./components/InputCell";
 import { GridCell } from "./components/GridCell";
 import { SelectCell } from "./components/SelectCell";
 import { createWidgetInstance } from "../../util";
+import { DateCell } from "./components/DateCell";
 
 interface CellProps {
   cellData: CellData;
@@ -32,7 +33,7 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
   const designerDispatch = useContext(DesignerContext);
   const [dropClassName, setDropClassName] = useState<string>("");
   const [{ isOver }, drop] = useDrop({
-    accept: ["instance", "input", "select", "grid"],
+    accept: ["instance", "input", "select", "datetime", "grid"],
     hover: (item: DragItem, monitor) => {
       if (!ref.current) {
         setDropClassName("");
@@ -152,6 +153,8 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
         <>
           <SelectCell cellData={data} dispatch={dispatch} />
         </>
+      ) : cellData.type === "datetime" ? (
+        <DateCell data={data} dispatch={dispatch} />
       ) : (
         <></>
       )}

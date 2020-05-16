@@ -19,7 +19,7 @@ export const Lane = function ({
 }: LaneProps) {
   const dispatch = useContext(DesignerContext);
   const [{ isOver }, drop] = useDrop({
-    accept: ["input", "grid", "select", "instance"],
+    accept: ["input", "grid", "select", "datetime", "instance"],
     drop: (item: any, monitor) => {
       if (isOver) {
         const clientOffset = monitor.getClientOffset();
