@@ -106,36 +106,12 @@ code {
 .instance.active {
   border: 1px solid #1890ff;
 }
-.instance.active > .dragger {
-  background-color: #1890ff;
-  display: block;
-  color: #fff;
-  z-index: 1;
-}
-.instance .dragger {
-  display: none;
-}
-.dragger {
-  padding: 4px;
-  cursor: move;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
 .instance {
-  border: 1px solid #a3a3a3;
+  border: 1px solid transparent;
   position: relative;
-}
-.id {
-  position: absolute;
-  top: 6px;
-  right: 10px;
-  color: #a3a3a3;
-  z-index: 1;
 }
 .lanes {
   table-layout: fixed;
-  border: 1px dashed #a3a3a3;
   width: 100%;
   -moz-user-select: none;
   -webkit-user-select: none;
@@ -145,54 +121,53 @@ code {
 .lanes:not(:first-of-type):not(:last-of-type) {
   margin: 10px 0;
 }
-.swimlane {
-  border: 1px dashed #a3a3a3;
-  height: 42px;
+.lane {
+  padding: 10px;
+  border: 1px solid #a3a3a3;
+  height: 62px;
   vertical-align: top;
   position: relative;
-  background-color: #fff;
 }
-.swimlane.hovered {
+.lane.hovered {
   background-color: #ffb6c1;
 }
 .edit .instance,
-.edit .swimlane,
+.edit .lane,
 .edit.lanes {
   border-style: none;
 }
-.lanes.edit > tr:first-of-type > .swimlane.row {
+.lanes.edit > tr:first-of-type > .lane.row {
   height: inherit;
 }
-.lanes.edit > tr:first-of-type > .swimlane.row > .instance > .form-group {
+.lanes.edit > tr:first-of-type > .lane.row > .instance > .form-group {
   min-height: inherit;
 }
-.edit .id {
-  display: none;
-}
+.lane.row,
 .list {
   width: 100%;
 }
-.swimlane.row {
-  width: 100%;
+.lane.row {
   overflow-x: auto;
   white-space: nowrap;
 }
-.swimlane.row .instance {
+.lane.row .instance {
   width: 200px;
   vertical-align: top;
   display: inline-flex;
 }
-.swimlane.row .form-group > tr > td.label {
+.lane.row .form-group > tr > td.label {
   text-align: left;
 }
-.swimlane.row .indicator {
+.lane.row .indicator {
   display: inline-block;
   height: 100%;
   width: 5px;
 }
-.swimlane.row .delete {
-  line-height: 42px;
-  margin: 0 10px 0 0;
+.drop-over-downward {
+  border-bottom: 1px dashed #1890ff;
+}
+.drop-over-upward {
+  border-top: 1px dashed #1890ff;
 }
 .form-group {
   table-layout: fixed;
@@ -221,4 +196,7 @@ code {
   color: red;
   margin: 0;
 }
-/*# sourceMappingURL=main.0103e70d.chunk.css.map */
+.form-group > tbody > tr > td.element {
+  padding: 0 4px;
+}
+/*# sourceMappingURL=main.a46264cc.chunk.css.map */
