@@ -34,7 +34,15 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
   const designerDispatch = useContext(DesignerContext);
   const [dropClassName, setDropClassName] = useState<string>("");
   const [{ isOver }, drop] = useDrop({
-    accept: ["instance", "input", "textarea", "select", "datetime", "grid"],
+    accept: [
+      "instance",
+      "input",
+      "textarea",
+      "select",
+      "datetime",
+      "grid",
+      "list",
+    ],
     hover: (item: DragItem, monitor) => {
       if (!ref.current) {
         setDropClassName("");
@@ -99,7 +107,7 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
           type: "NOOB",
           position: position,
           dropItemId: cellData.id,
-          dragItem: createWidgetInstance(item.type),
+          dragItem: createWidgetInstance(item.type as string),
         });
       }
     },
@@ -153,6 +161,10 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
       ) : cellData.type === "grid" ? (
         <>
           <GridCell element={data} />
+        </>
+      ) : cellData.type === "list" ? (
+        <>
+          <GridCell element={data} direction={"row"} />
         </>
       ) : cellData.type === "select" ? (
         <>

@@ -25,7 +25,7 @@ export function locate(
             ];
             break;
           }
-          if (cellData.type === "grid") {
+          if (cellData.type === "grid" || cellData.type === "list") {
             func(cellData);
           }
         }
@@ -57,7 +57,7 @@ export function getCellDataList(
     if (data.lanes) {
       for (const lane of data.lanes) {
         for (const cellData of lane.cellDataList) {
-          if (cellData.type === "grid") {
+          if (cellData.type === "grid" || cellData.type === "list") {
             if (cellData.id === parentId) {
               list = cellData.lanes![laneIndex].cellDataList;
             } else {
@@ -149,10 +149,10 @@ export function active(root: CellData, id: string) {
   }
 }
 
-export function createWidgetInstance(widgetType: string) {
+export function createWidgetInstance(type: string) {
   let cellData: CellData = {
-    type: widgetType,
-    id: widgetType + new Date().getTime(),
+    type: type,
+    id: type + new Date().getTime(),
     active: false,
   };
   if (cellData.type === "grid") {

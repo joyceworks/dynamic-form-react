@@ -19,7 +19,15 @@ export const Lane = function ({
 }: LaneProps) {
   const dispatch = useContext(DesignerContext);
   const [{ isOver }, drop] = useDrop({
-    accept: ["input", "textarea", "grid", "select", "datetime", "instance"],
+    accept: [
+      "input",
+      "textarea",
+      "grid",
+      "select",
+      "datetime",
+      "list",
+      "instance",
+    ],
     drop: (item: any, monitor) => {
       if (isOver) {
         const clientOffset = monitor.getClientOffset();
@@ -36,7 +44,7 @@ export const Lane = function ({
         } else {
           dispatch({
             type: "ADD",
-            cellData: createWidgetInstance(item.type as string),
+            cellData: createWidgetInstance(item.type),
             location: Object.assign({}, location, {
               index: cellDataList.length,
             }),
