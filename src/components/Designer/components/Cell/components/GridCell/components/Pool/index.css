@@ -68,4 +68,10 @@
 .drop-over-upward {
   border-top: 1px dashed #1890ff;
 }
+.drop-over-leftward {
+  border-left: 1px dashed #1890ff;
+}
+.drop-over-rightward {
+  border-right: 1px dashed #1890ff;
+}
 /*# sourceMappingURL=index.css.map */

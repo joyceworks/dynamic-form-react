@@ -22,7 +22,11 @@ interface DragItem {
   type: string;
 }
 
-export const Cell = function ({ cellData, index, layout }: CellProps) {
+export const Cell = function ({
+  cellData,
+  index,
+  layout = "default",
+}: CellProps) {
   const data = {
     ...cellData,
     required: false,
@@ -32,7 +36,13 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
   };
   const ref = useRef<any>(null);
   const designerDispatch = useContext(DesignerContext);
-  const [dropClassName, setDropClassName] = useState<string>("");
+  const [dropClassName, setDropClassName] = useState<
+    | ""
+    | " drop-over-leftward"
+    | " drop-over-rightward"
+    | " drop-over-upward"
+    | " drop-over-downward"
+  >("");
   const [{ isOver }, drop] = useDrop({
     accept: [
       "instance",
@@ -44,28 +54,37 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
       "list",
     ],
     hover: (item: DragItem, monitor) => {
-      if (!ref.current) {
+      if (
+        !ref.current ||
+        !monitor.isOver({ shallow: true }) ||
+        monitor.getItem().id === cellData.id ||
+        !monitor.getClientOffset()
+      ) {
         setDropClassName("");
-      }
-      if (!monitor.isOver({ shallow: true })) {
-        setDropClassName("");
-      }
-      if (monitor.getItem().id === cellData.id) {
-        setDropClassName("");
+        return;
       }
       const hoverBoundingRect = ref.current!.getBoundingClientRect();
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
-      if (!clientOffset) {
-        setDropClassName("");
+      const coord = clientOffset as XYCoord;
+      if (layout === "default") {
+        const hoverMiddleY =
+          (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+        const hoverClientY = coord.y - hoverBoundingRect.top;
+        setDropClassName(
+          hoverClientY > hoverMiddleY
+            ? " drop-over-downward"
+            : " drop-over-upward"
+        );
+      } else {
+        const hoverMiddleX =
+          (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
+        const hoverClientX = coord.x - hoverBoundingRect.left;
+        setDropClassName(
+          hoverClientX > hoverMiddleX
+            ? " drop-over-rightward"
+            : " drop-over-leftward"
+        );
       }
-      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-      setDropClassName(
-        hoverClientY > hoverMiddleY
-          ? " drop-over-downward"
-          : " drop-over-upward"
-      );
     },
     collect: (monitor) => {
       console.log(cellData.id);
@@ -81,20 +100,26 @@ export const Cell = function ({ cellData, index, layout }: CellProps) {
         return;
       }
 
-      let position = null;
+      let position: "up" | "down";
       const hoverBoundingRect = ref.current!.getBoundingClientRect();
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
       if (!clientOffset) {
         return;
       }
-      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-      if (hoverClientY > hoverMiddleY) {
-        position = "down";
+      if (layout === "default") {
+        const hoverMiddleY =
+          (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+        const hoverClientY =
+          (clientOffset as XYCoord).y - hoverBoundingRect.top;
+        position = hoverClientY > hoverMiddleY ? "down" : "up";
       } else {
-        position = "up";
+        const hoverMiddleX =
+          (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
+        const hoverClientX =
+          (clientOffset as XYCoord).x - hoverBoundingRect.left;
+        position = hoverClientX > hoverMiddleX ? "down" : "up";
       }
+
       if (item.type === "instance") {
         designerDispatch({
           type: "MOVE",

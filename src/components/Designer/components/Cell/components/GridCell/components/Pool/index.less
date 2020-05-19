@@ -80,9 +80,16 @@
     width: 5px;
   }
 }
+@border_1px_dashed_blue: 1px dashed #1890ff;
 .drop-over-downward {
-  border-bottom: 1px dashed #1890ff;
+  border-bottom: @border_1px_dashed_blue;
 }
 .drop-over-upward {
-  border-top: 1px dashed #1890ff;
+  border-top: @border_1px_dashed_blue;
+}
+.drop-over-leftward {
+  border-left: @border_1px_dashed_blue;
+}
+.drop-over-rightward {
+  border-right: @border_1px_dashed_blue;
 }
