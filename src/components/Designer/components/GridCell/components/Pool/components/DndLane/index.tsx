@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { useDrop } from "react-dnd";
-import { Cell } from "../../../../../../index";
-import { CellData } from "../../../../../../../../schemas/CellData";
-import { DesignerContext } from "../../../../../../../../index";
-import SwimlaneLocation from "../../../../../../../../schemas/SwimlaneLocation";
-import { createWidgetInstance } from "../../../../../../../../util";
+import { Lane } from "../Lane";
+import { CellData } from "../../../../../../schemas/CellData";
+import SwimlaneLocation from "../../../../../../schemas/SwimlaneLocation";
+import { DesignerContext } from "../../../../../../index";
+import { createWidgetInstance } from "../../../../../../util";
 
 interface LaneProps {
   cellDataList: CellData[];
@@ -12,7 +12,7 @@ interface LaneProps {
   location: SwimlaneLocation;
 }
 
-export const Lane = function ({
+export const DndLane = function ({
   cellDataList,
   direction,
   location,
@@ -60,15 +60,12 @@ export const Lane = function ({
       return { isOver: isOver };
     },
   });
-
-  const layout = direction === "column" ? "default" : "inline";
-  const cells = cellDataList.map((child, index) => (
-    <Cell key={child.id} layout={layout} cellData={child} index={index} />
-  ));
-
   return (
-    <td className={"lane " + direction + (isOver ? " hovered" : "")} ref={drop}>
-      {cells}
-    </td>
+    <Lane
+      cellDataList={cellDataList}
+      className={isOver ? " hovered" : ""}
+      ref={drop}
+      direction={direction}
+    />
   );
 };

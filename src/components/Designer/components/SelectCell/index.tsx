@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
-import { CellData } from "../../../../schemas/CellData";
-import { FormGroup } from "../FormGroup";
+import { CellData } from "../../schemas/CellData";
 import { Select } from "antd";
+import { FormGroup } from "../FormGroup";
 
 const { Option } = Select;
 

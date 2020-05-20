@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
-import { Input, DatePicker } from "antd";
+import { DatePicker } from "antd";
 import { FormGroup } from "../FormGroup";
-import { CellData } from "../../../../schemas/CellData";
+import { CellData } from "../../schemas/CellData";
 
 interface DateCellProps {
   data: CellData;

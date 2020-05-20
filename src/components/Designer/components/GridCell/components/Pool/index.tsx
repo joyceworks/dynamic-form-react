@@ -1,8 +1,15 @@
-import React, { CSSProperties, forwardRef, useReducer } from "react";
+import React, {
+  CSSProperties,
+  forwardRef,
+  useContext,
+  useReducer,
+} from "react";
 import { setValue } from "./util";
 import "./index.css";
+import { DndLane } from "./components/DndLane";
 import { Lane } from "./components/Lane";
-import { CellData } from "../../../../../../schemas/CellData";
+import { CellData } from "../../../../schemas/CellData";
+import { DesignerContext } from "../../../../index";
 
 interface PoolProps {
   direction?: "column" | "row";
@@ -28,6 +35,7 @@ export const Pool = forwardRef(
       },
       { current: null, data: cellData }
     );
+    const designerDispatch = useContext(DesignerContext);
     return (
       <FormContext.Provider value={dispatch}>
         <table ref={ref} className={"lanes"} style={style}>
@@ -35,8 +43,8 @@ export const Pool = forwardRef(
             {direction === "column" ? (
               <tr>
                 {cellData.lanes?.map((lane, index) => {
-                  return (
-                    <Lane
+                  return designerDispatch ? (
+                    <DndLane
                       key={cellData.id + "-" + index}
                       direction={direction}
                       cellDataList={lane.cellDataList}
@@ -44,6 +52,12 @@ export const Pool = forwardRef(
                         parentId: cellData.id,
                         laneIndex: index,
                       }}
+                    />
+                  ) : (
+                    <Lane
+                      key={cellData.id + "-" + index}
+                      cellDataList={lane.cellDataList}
+                      direction={direction}
                     />
                   );
                 })}
@@ -53,7 +67,7 @@ export const Pool = forwardRef(
                 {cellData.lanes?.map((lane, index) => {
                   return (
                     <tr key={cellData.id + "-" + index}>
-                      <Lane
+                      <DndLane
                         cellDataList={lane.cellDataList}
                         direction={direction}
                         location={{

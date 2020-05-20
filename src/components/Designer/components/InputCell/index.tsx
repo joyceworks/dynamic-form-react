@@ -1,18 +1,16 @@
 import React, { forwardRef } from "react";
 import { Input } from "antd";
+import { CellData } from "../../schemas/CellData";
 import { FormGroup } from "../FormGroup";
-import { CellData } from "../../../../schemas/CellData";
 
-interface TextAreaCellProps {
+interface InputCellProps {
   element: CellData;
   layout?: "inline" | "default";
   dispatch: any;
 }
 
-const { TextArea } = Input;
-
-export const TextAreaCell = forwardRef(
-  ({ element, layout, dispatch }: TextAreaCellProps, ref: any) => (
+export const InputCell = forwardRef(
+  ({ element, layout, dispatch }: InputCellProps, ref: any) => (
     <>
       <FormGroup
         ref={ref}
@@ -28,8 +26,7 @@ export const TextAreaCell = forwardRef(
           )
         }
         element={
-          <TextArea
-            rows={4}
+          <Input
             value={element.value}
             placeholder={element.placeholder}
             onChange={(event) => {

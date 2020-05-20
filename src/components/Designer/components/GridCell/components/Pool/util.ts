@@ -1,4 +1,4 @@
-import { CellData } from "../../../../../../schemas/CellData";
+import { CellData } from "../../../../schemas/CellData";
 
 export function getData(cell: CellData) {
   let result = {};

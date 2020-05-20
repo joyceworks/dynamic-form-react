@@ -6,9 +6,6 @@
 .form-group > tbody > tr > td.element {
   padding: 0 4px;
 }
-.form-group > tbody > tr > td.element > input {
-  width: 190px;
-}
 .form-group > tbody > tr > td.warning {
   color: red;
   margin: 0;
@@ -30,5 +27,11 @@
 }
 .form-group.inline > tbody > tr > td.label {
   text-align: left;
+}
+.form-group.inline > tbody > tr > td.element {
+  padding: 0 4px;
+}
+.form-group.inline > tbody > tr > td.element > input {
+  width: 190px;
 }
 /*# sourceMappingURL=index.css.map */

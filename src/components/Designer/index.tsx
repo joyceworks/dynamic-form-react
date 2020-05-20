@@ -1,5 +1,11 @@
-import React, { Fragment, useCallback, useEffect, useReducer } from "react";
-import { Layout, Button, Space } from "antd";
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
+import { Layout, Button, Space, Modal } from "antd";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import { WidgetData } from "./schemas/WidgetData";
@@ -7,8 +13,9 @@ import "./index.css";
 import { Widget } from "./components/Widget";
 import { getActive, reducer } from "./util";
 import { CellData } from "./schemas/CellData";
-import { Cell } from "./components/Cell";
 import { WidgetGroups } from "../../constants/WidgetGroups";
+import { DnDCell } from "./components/DnDCell";
+import { Cell } from "./components/Cell";
 
 const { Sider, Content, Header } = Layout;
 
@@ -23,6 +30,7 @@ export const DesignerContext = React.createContext<any>(null);
 
 export const Designer = function () {
   const [data, dispatch] = useReducer(reducer, rootCellData);
+  const [previewDialogVisible, setPreviewDialogVisible] = useState(false);
   const delFunction = useCallback((event) => {
     if (event.keyCode === 46) {
       dispatch({
@@ -59,12 +67,14 @@ export const Designer = function () {
                 <Header style={{ padding: 0, textAlign: "right" }}>
                   <Space>
                     <Button>清空</Button>
-                    <Button>预览</Button>
+                    <Button onClick={() => setPreviewDialogVisible(true)}>
+                      预览
+                    </Button>
                     <Button>保存</Button>
                   </Space>
                 </Header>
                 <Content className={"form"} style={{ height: "100%" }}>
-                  <Cell cellData={data} index={0} />
+                  <DnDCell cellData={data} index={0} />
                 </Content>
               </Layout>
             </Content>
@@ -74,6 +84,9 @@ export const Designer = function () {
           </Layout>
         </DndProvider>
       </DesignerContext.Provider>
+      <Modal title={"Preview"} visible={previewDialogVisible}>
+        <Cell cellData={data} />
+      </Modal>
     </>
   );
 };
