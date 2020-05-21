@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useState,
 } from "react";
-import { Layout, Button, Space, Modal } from "antd";
+import { Layout, Button, Space, Modal, PageHeader } from "antd";
 import update from "immutability-helper";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
@@ -52,84 +52,108 @@ export const Designer = function () {
     <>
       <DesignerContext.Provider value={designerDispatch}>
         <DndProvider backend={Backend}>
-          <Layout className={"layout"}>
-            <Sider width={280} className={"left"}>
-              {WidgetGroups.map((g) => (
-                <Fragment key={g.name}>
-                  <div style={{ color: "white" }}>{g.name}</div>
-                  <ul className={"panel"}>
-                    {g.widgets.map((w: WidgetData) => {
-                      return <Widget key={w.name} widget={w} />;
-                    })}
-                  </ul>
-                </Fragment>
-              ))}
-            </Sider>
+          <Layout style={{ height: "100%" }}>
+            <Header style={{ padding: "0 20px" }}>
+              <h1>Dynamic Form Designer</h1>
+            </Header>
             <Content>
-              <Layout style={{ height: "100%" }}>
-                <Header style={{ padding: 0, textAlign: "right" }}>
-                  <Space>
-                    <Button>清空</Button>
-                    <Button onClick={() => setPreviewDialogVisible(true)}>
-                      预览
-                    </Button>
-                    <Button>保存</Button>
-                  </Space>
-                </Header>
-                <Content className={"form"} style={{ height: "100%" }}>
-                  <DnDCell cellData={data} index={0} />
+              <Layout
+                className={"layout"}
+                style={{ borderTop: "1px solid #a3a3a3" }}
+              >
+                <Sider
+                  width={280}
+                  className={"left"}
+                  style={{ borderRight: "1px solid #a3a3a3" }}
+                >
+                  {WidgetGroups.map((g) => (
+                    <Fragment key={g.name}>
+                      <div>{g.name}</div>
+                      <ul className={"panel"}>
+                        {g.widgets.map((w: WidgetData) => {
+                          return <Widget key={w.name} widget={w} />;
+                        })}
+                      </ul>
+                    </Fragment>
+                  ))}
+                </Sider>
+                <Content>
+                  <Layout style={{ height: "100%" }}>
+                    <Header
+                      style={{
+                        padding: "0 10px",
+                        textAlign: "right",
+                        borderBottom: "1px solid #a3a3a3",
+                      }}
+                    >
+                      <Space>
+                        <Button>清空</Button>
+                        <Button onClick={() => setPreviewDialogVisible(true)}>
+                          预览
+                        </Button>
+                        <Button>保存</Button>
+                      </Space>
+                    </Header>
+                    <Content className={"form"} style={{ height: "100%" }}>
+                      <DnDCell cellData={data} index={0} />
+                    </Content>
+                  </Layout>
                 </Content>
-              </Layout>
-            </Content>
-            <Sider width={280} className={"right"}>
-              {active ? (
-                active.type === "grid" ? (
-                  <>
-                    列配置项
-                    {active &&
-                      active.lanes &&
-                      active.lanes.map((lane, index) => (
-                        <LaneConfig
-                          key={"lane-config-" + index}
-                          index={index}
-                          move={(from, to) => {
-                            const dragItem = active.lanes?.[from]!;
-                            const lanes = update(active.lanes, {
-                              $splice: [
-                                [from, 1],
-                                [to, 0, dragItem],
-                              ],
-                            });
+                <Sider
+                  width={280}
+                  className={"right"}
+                  style={{ borderLeft: "1px solid #a3a3a3" }}
+                >
+                  {active ? (
+                    active.type === "grid" ? (
+                      <>
+                        列配置项
+                        {active &&
+                          active.lanes &&
+                          active.lanes.map((lane, index) => (
+                            <LaneConfig
+                              key={"lane-config-" + index}
+                              index={index}
+                              move={(from, to) => {
+                                const dragItem = active.lanes?.[from]!;
+                                const lanes = update(active.lanes, {
+                                  $splice: [
+                                    [from, 1],
+                                    [to, 0, dragItem],
+                                  ],
+                                });
+                                const copy = { ...active };
+                                copy.lanes = lanes;
+                                designerDispatch({
+                                  type: "UPDATE",
+                                  data: copy,
+                                });
+                              }}
+                            />
+                          ))}
+                        <Button
+                          type={"link"}
+                          onClick={() => {
                             const copy = { ...active };
-                            copy.lanes = lanes;
+                            copy.lanes!.push({ cellDataList: [], span: 50 });
                             designerDispatch({
                               type: "UPDATE",
                               data: copy,
                             });
                           }}
-                        />
-                      ))}
-                    <Button
-                      type={"link"}
-                      onClick={() => {
-                        const copy = { ...active };
-                        copy.lanes!.push({ cellDataList: [], span: 50 });
-                        designerDispatch({
-                          type: "UPDATE",
-                          data: copy,
-                        });
-                      }}
-                    >
-                      添加列
-                    </Button>
-                  </>
-                ) : (
-                  <></>
-                )
-              ) : (
-                <></>
-              )}
-            </Sider>
+                        >
+                          添加列
+                        </Button>
+                      </>
+                    ) : (
+                      <></>
+                    )
+                  ) : (
+                    <></>
+                  )}
+                </Sider>
+              </Layout>
+            </Content>
           </Layout>
         </DndProvider>
       </DesignerContext.Provider>
