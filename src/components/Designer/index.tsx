@@ -27,7 +27,7 @@ const rootCellData: CellData = {
 };
 
 export const DesignerContext = React.createContext<any>(null);
-
+export const PreviewContext = React.createContext<any>(null);
 export const Designer = function () {
   const [data, dispatch] = useReducer(reducer, rootCellData);
   const [previewDialogVisible, setPreviewDialogVisible] = useState(false);
@@ -84,8 +84,15 @@ export const Designer = function () {
           </Layout>
         </DndProvider>
       </DesignerContext.Provider>
-      <Modal title={"Preview"} visible={previewDialogVisible}>
-        <Cell cellData={data} />
+      <Modal
+        title={"Preview"}
+        visible={previewDialogVisible}
+        onOk={() => setPreviewDialogVisible(false)}
+        onCancel={() => setPreviewDialogVisible(false)}
+      >
+        <PreviewContext.Provider value={true}>
+          <Cell cellData={data} />
+        </PreviewContext.Provider>
       </Modal>
     </>
   );

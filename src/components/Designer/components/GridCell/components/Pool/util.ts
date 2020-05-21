@@ -70,3 +70,13 @@ export function setValue(cell: CellData, target: CellData, value: any) {
   };
   return func(cell);
 }
+
+export function formReducer(state: any, action: any) {
+  switch (action.type) {
+    case "SET_VALUE":
+      setValue(state.data, action.target, action.value);
+      return { ...state };
+    default:
+      return state;
+  }
+}

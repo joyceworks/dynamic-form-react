@@ -17,9 +17,9 @@
   margin: 10px 0;
 }
 .lane {
-  padding: 10px;
+  padding: 4px;
   border: 1px solid #a3a3a3;
-  height: 62px;
+  height: 50px;
   vertical-align: top;
   position: relative;
 }

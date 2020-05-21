@@ -6,6 +6,7 @@ import { TextAreaCell } from "../TextAreaCell";
 import { GridCell } from "../GridCell";
 import { SelectCell } from "../SelectCell";
 import { DateCell } from "../DateCell";
+import { PreviewContext } from "../../index";
 
 interface CellProps {
   cellData: CellData;
@@ -20,6 +21,7 @@ export const Cell = forwardRef(
     ref: any
   ) => {
     const dispatch = useContext(FormContext);
+    const preview = useContext<boolean>(PreviewContext);
     const data = {
       ...cellData,
       required: false,
@@ -33,7 +35,9 @@ export const Cell = forwardRef(
           ref={ref}
           style={style}
           className={
-            "instance" + (cellData.active ? " active" : "") + (className || "")
+            "instance" +
+            (!preview && cellData.active ? " active" : "") +
+            (className || "")
           }
           onClick={onClick}
         >
