@@ -112,6 +112,12 @@ export function reducer(state: any, action: any): CellData {
     )!;
     cells.push(action.cellData);
     active(copy, action.cellData.id);
+  } else if (action.type === "UPDATE") {
+    const [location, list] = locate(
+      copy,
+      (data) => data.id === action.data.id
+    )!;
+    list.splice(location.index, 1, action.data);
   } else if (action.type === "FARM") {
     const [location, list, cell] = locate(
       copy,

@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import { Layout, Button, Space, Modal } from "antd";
+import update from "immutability-helper";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import { WidgetData } from "./schemas/WidgetData";
@@ -16,6 +17,7 @@ import { CellData } from "./schemas/CellData";
 import { WidgetGroups } from "../../constants/WidgetGroups";
 import { DnDCell } from "./components/DnDCell";
 import { Cell } from "./components/Cell";
+import LaneConfig from "./components/LaneConfig";
 
 const { Sider, Content, Header } = Layout;
 
@@ -29,11 +31,11 @@ const rootCellData: CellData = {
 export const DesignerContext = React.createContext<any>(null);
 export const PreviewContext = React.createContext<any>(null);
 export const Designer = function () {
-  const [data, dispatch] = useReducer(reducer, rootCellData);
+  const [data, designerDispatch] = useReducer(reducer, rootCellData);
   const [previewDialogVisible, setPreviewDialogVisible] = useState(false);
   const delFunction = useCallback((event) => {
     if (event.keyCode === 46) {
-      dispatch({
+      designerDispatch({
         type: "DELETE_ACTIVE",
       });
     }
@@ -44,10 +46,11 @@ export const Designer = function () {
       document.removeEventListener("keyup", delFunction, false);
     };
   }, [delFunction]);
+  const active = getActive(data);
 
   return (
     <>
-      <DesignerContext.Provider value={dispatch}>
+      <DesignerContext.Provider value={designerDispatch}>
         <DndProvider backend={Backend}>
           <Layout className={"layout"}>
             <Sider width={280} className={"left"}>
@@ -79,7 +82,53 @@ export const Designer = function () {
               </Layout>
             </Content>
             <Sider width={280} className={"right"}>
-              {getActive(data)?.id}
+              {active ? (
+                active.type === "grid" ? (
+                  <>
+                    列配置项
+                    {active &&
+                      active.lanes &&
+                      active.lanes.map((lane, index) => (
+                        <LaneConfig
+                          key={"lane-config-" + index}
+                          index={index}
+                          move={(from, to) => {
+                            const dragItem = active.lanes?.[from]!;
+                            const lanes = update(active.lanes, {
+                              $splice: [
+                                [from, 1],
+                                [to, 0, dragItem],
+                              ],
+                            });
+                            const copy = { ...active };
+                            copy.lanes = lanes;
+                            designerDispatch({
+                              type: "UPDATE",
+                              data: copy,
+                            });
+                          }}
+                        />
+                      ))}
+                    <Button
+                      type={"link"}
+                      onClick={() => {
+                        const copy = { ...active };
+                        copy.lanes!.push({ cellDataList: [], span: 50 });
+                        designerDispatch({
+                          type: "UPDATE",
+                          data: copy,
+                        });
+                      }}
+                    >
+                      添加列
+                    </Button>
+                  </>
+                ) : (
+                  <></>
+                )
+              ) : (
+                <></>
+              )}
             </Sider>
           </Layout>
         </DndProvider>

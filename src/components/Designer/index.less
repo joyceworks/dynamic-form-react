@@ -1,19 +1,23 @@
 .layout {
   height: calc(100% - 1px);
 }
+
 .form {
   height: 100%;
 }
+
 .left,
 .right,
 .form {
   padding: 10px;
 }
+
 .panel {
   width: 100%;
   list-style: none;
   padding: 0;
 }
+
 .widget {
   font-size: 14px;
   box-sizing: border-box;
@@ -29,32 +33,36 @@
   user-select: none;
   background-color: white;
 }
+
 .widget > * {
   margin-right: 4px;
   vertical-align: middle;
 }
+
 .placeholder {
   position: absolute;
   z-index: -1;
   font-size: 20px;
   top: calc(50% - 15px);
 }
+
 .form > div > .placeholder {
   left: calc(50% - 130px);
 }
+
 .right > .placeholder {
   left: calc(50% - 50px);
 }
+@background-color-white: white;
 .ant-layout {
-  background-color: white;
+  background-color: @background-color-white;
 }
 .ant-layout-header {
-  background-color: white;
+  background-color: @background-color-white;
 }
 .ant-layout-sider {
-  background-color: white;
+  background-color: @background-color-white;
 }
 .ant-layout-content {
-  background-color: white;
+  background-color: @background-color-white;
 }
-/*# sourceMappingURL=index.css.map */

@@ -17,9 +17,9 @@
   margin: 10px 0;
 }
 .lane {
-  padding: 4px;
+  padding: 10px;
   border: 1px solid #a3a3a3;
-  height: 50px;
+  height: 62px;
   vertical-align: top;
   position: relative;
 }
@@ -35,10 +35,10 @@
 .edit.lanes {
   border-style: none;
 }
-.lanes.edit > tr:first-of-type > .lane.row {
+.edit.lanes > tr:first-of-type > .lane.row {
   height: inherit;
 }
-.lanes.edit > tr:first-of-type > .lane.row > .instance > .form-group {
+.edit.lanes > tr:first-of-type > .lane.row > .instance > .form-group {
   min-height: inherit;
 }
 .list {
