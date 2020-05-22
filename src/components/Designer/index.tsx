@@ -5,8 +5,7 @@ import React, {
   useReducer,
   useState,
 } from "react";
-import { Layout, Button, Space, Modal, PageHeader } from "antd";
-import update from "immutability-helper";
+import { Layout, Button, Space, Modal } from "antd";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import { WidgetData } from "./schemas/WidgetData";
@@ -17,7 +16,7 @@ import { CellData } from "./schemas/CellData";
 import { WidgetGroups } from "../../constants/WidgetGroups";
 import { DnDCell } from "./components/DnDCell";
 import { Cell } from "./components/Cell";
-import LaneConfig from "./components/LaneConfig";
+import GridCellConfig from "./components/GridCellConfig";
 
 const { Sider, Content, Header } = Layout;
 
@@ -106,45 +105,7 @@ export const Designer = function () {
                 >
                   {active ? (
                     active.type === "grid" ? (
-                      <>
-                        列配置项
-                        {active &&
-                          active.lanes &&
-                          active.lanes.map((lane, index) => (
-                            <LaneConfig
-                              key={"lane-config-" + index}
-                              index={index}
-                              move={(from, to) => {
-                                const dragItem = active.lanes?.[from]!;
-                                const lanes = update(active.lanes, {
-                                  $splice: [
-                                    [from, 1],
-                                    [to, 0, dragItem],
-                                  ],
-                                });
-                                const copy = { ...active };
-                                copy.lanes = lanes;
-                                designerDispatch({
-                                  type: "UPDATE",
-                                  data: copy,
-                                });
-                              }}
-                            />
-                          ))}
-                        <Button
-                          type={"link"}
-                          onClick={() => {
-                            const copy = { ...active };
-                            copy.lanes!.push({ cellDataList: [], span: 50 });
-                            designerDispatch({
-                              type: "UPDATE",
-                              data: copy,
-                            });
-                          }}
-                        >
-                          添加列
-                        </Button>
-                      </>
+                      <GridCellConfig active={active} />
                     ) : (
                       <></>
                     )

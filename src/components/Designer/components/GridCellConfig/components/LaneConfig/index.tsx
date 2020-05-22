@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useDrag, useDrop, XYCoord } from "react-dnd";
 import { AiOutlineMenu, AiOutlineMinusCircle } from "react-icons/ai";
 import { Button, InputNumber } from "antd";
+import { LaneData } from "../../../../schemas/LaneData";
 
 interface DragItem {
   index: number;
@@ -10,10 +11,19 @@ interface DragItem {
 
 interface LaneConfigProps {
   index: number;
+  data: LaneData;
   move: (from: number, to: number) => void;
+  onRemove: () => void;
+  onResize: (span: number | undefined) => void;
 }
 
-export default function LaneConfig({ index, move }: LaneConfigProps) {
+export default function LaneConfig({
+  index,
+  data,
+  move,
+  onRemove,
+  onResize,
+}: LaneConfigProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -80,15 +90,17 @@ export default function LaneConfig({ index, move }: LaneConfigProps) {
   return (
     <>
       <div ref={ref} style={{ marginTop: 10 }}>
-        <AiOutlineMenu />
+        <AiOutlineMenu style={{ cursor: "move" }} />
         <InputNumber
+          onChange={onResize}
+          value={data.span}
           size={"small"}
           style={{
             width: "220px",
             margin: "0 4px",
           }}
         />
-        <Button type={"link"} style={{ padding: "0" }}>
+        <Button type={"link"} onClick={onRemove} style={{ padding: "0" }}>
           <AiOutlineMinusCircle />
         </Button>
       </div>
