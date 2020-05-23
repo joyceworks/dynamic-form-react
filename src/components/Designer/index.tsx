@@ -17,6 +17,7 @@ import { WidgetGroups } from "../../constants/WidgetGroups";
 import { DnDCell } from "./components/DnDCell";
 import { Cell } from "./components/Cell";
 import GridCellConfig from "./components/GridCellConfig";
+import InputCellConfig from "./components/InputCellConfig";
 
 const { Sider, Content, Header } = Layout;
 
@@ -105,7 +106,9 @@ export const Designer = function () {
                 >
                   {active ? (
                     active.type === "grid" ? (
-                      <GridCellConfig active={active} />
+                      <GridCellConfig data={active} />
+                    ) : active.type === "input" ? (
+                      <InputCellConfig data={active} />
                     ) : (
                       <></>
                     )

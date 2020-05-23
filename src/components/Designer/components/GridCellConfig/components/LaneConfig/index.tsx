@@ -96,7 +96,7 @@ export default function LaneConfig({
           value={data.span}
           size={"small"}
           style={{
-            width: "220px",
+            width: "210px",
             margin: "0 4px",
           }}
         />

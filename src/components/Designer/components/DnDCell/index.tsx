@@ -164,6 +164,7 @@ export const DnDCell = function ({
       ref={ref}
       style={{ opacity: isDragging ? "0.5" : 1 }}
       cellData={data}
+      layout={layout}
     />
   );
 };
