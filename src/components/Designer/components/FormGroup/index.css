@@ -31,7 +31,7 @@
 .form-group.inline > tbody > tr > td.element {
   padding: 0 4px;
 }
-.form-group.inline > tbody > tr > td.element > input {
+.form-group.inline > tbody > tr > td.element > * {
   width: 190px;
 }
 /*# sourceMappingURL=index.css.map */

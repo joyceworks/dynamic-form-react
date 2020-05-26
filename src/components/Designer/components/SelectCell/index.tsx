@@ -42,7 +42,6 @@ export const SelectCell = forwardRef(
           }
           element={
             <Select
-              style={{ width: "100%" }}
               onChange={(value) => {
                 dispatch({
                   type: "SET_VALUE",

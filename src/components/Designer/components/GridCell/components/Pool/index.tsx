@@ -12,6 +12,7 @@ import { CellData } from "../../../../schemas/CellData";
 import { DesignerContext, PreviewContext } from "../../../../index";
 import { Button } from "antd";
 import update from "immutability-helper";
+import { FormGroup } from "../../../FormGroup";
 
 interface PoolProps {
   direction?: "column" | "row";
@@ -24,7 +25,7 @@ export const FormContext = React.createContext<any>(null);
 export const Pool = forwardRef(
   ({ direction = "column", cellData, style }: PoolProps, ref: any) => {
     function getLane(lane: any, index: number) {
-      const isDesigner = previewDispatch === null;
+      const isDesigner = preview === null;
       return isDesigner ? (
         <DndLane
           key={cellData.id + "-" + index}
@@ -49,7 +50,7 @@ export const Pool = forwardRef(
       data: cellData,
     });
     const designerDispatch = useContext(DesignerContext);
-    const previewDispatch = useContext(PreviewContext);
+    const preview = useContext(PreviewContext);
     return (
       <FormContext.Provider value={dispatch}>
         <table ref={ref} className={"lanes"} style={style}>
@@ -60,6 +61,25 @@ export const Pool = forwardRef(
               </tr>
             ) : (
               <>
+                {preview && (
+                  <tr>
+                    <td
+                      style={{
+                        padding: 10,
+                        whiteSpace: "nowrap",
+                        border: "1px solid #d3d3d3",
+                        width: "100%",
+                        overflowX: "auto",
+                      }}
+                    >
+                      {cellData.lanes![0].cellDataList.map((item) => (
+                        <div style={{ width: 200, display: "inline-block" }}>
+                          <span>{item.label}</span>
+                        </div>
+                      ))}
+                    </td>
+                  </tr>
+                )}
                 {cellData.lanes!.map((lane, index) => {
                   return (
                     <tr key={cellData.id + "-" + index + "-parent"}>
@@ -71,7 +91,7 @@ export const Pool = forwardRef(
             )}
           </tbody>
         </table>
-        {previewDispatch && direction === "row" && (
+        {preview && direction === "row" && (
           <Button
             onClick={() => {
               designerDispatch({

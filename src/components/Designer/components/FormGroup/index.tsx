@@ -1,5 +1,6 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useContext } from "react";
 import "./index.css";
+import { PreviewContext } from "../../index";
 
 interface FormGroupProps {
   layout?: "inline" | "default";
@@ -7,7 +8,7 @@ interface FormGroupProps {
   warning?: string | null;
   warnable: boolean;
   label: JSX.Element | null;
-  element: JSX.Element;
+  element: JSX.Element | null;
 }
 
 export const FormGroup = forwardRef(
@@ -22,6 +23,7 @@ export const FormGroup = forwardRef(
     }: FormGroupProps,
     ref: any
   ) => {
+    const previewContext = useContext(PreviewContext);
     return (
       <table ref={ref} className={["form-group", layout].join(" ")}>
         <tbody>
@@ -47,12 +49,14 @@ export const FormGroup = forwardRef(
             </>
           ) : (
             <>
-              <tr>
-                <td className={"label"}>
-                  {required ? <span className={"required"}>*</span> : <></>}
-                  {label}
-                </td>
-              </tr>
+              {!previewContext && (
+                <tr>
+                  <td className={"label"}>
+                    {required ? <span className={"required"}>*</span> : <></>}
+                    {label}
+                  </td>
+                </tr>
+              )}
               <tr>
                 <td className={"element"}>{element}</td>
               </tr>

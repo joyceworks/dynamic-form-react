@@ -47,7 +47,11 @@ export const Cell = forwardRef(
             </>
           ) : cellData.type === "textarea" ? (
             <>
-              <TextAreaCell element={data} dispatch={dispatch} />
+              <TextAreaCell
+                element={data}
+                dispatch={dispatch}
+                layout={layout}
+              />
             </>
           ) : cellData.type === "grid" ? (
             <>
@@ -59,10 +63,10 @@ export const Cell = forwardRef(
             </>
           ) : cellData.type === "select" ? (
             <>
-              <SelectCell cellData={data} dispatch={dispatch} />
+              <SelectCell cellData={data} dispatch={dispatch} layout={layout} />
             </>
           ) : cellData.type === "datetime" ? (
-            <DateCell data={data} dispatch={dispatch} />
+            <DateCell data={data} dispatch={dispatch} layout={layout} />
           ) : (
             <></>
           )}
