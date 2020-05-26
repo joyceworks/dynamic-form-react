@@ -20,8 +20,8 @@ export const Cell = forwardRef(
     { cellData, layout = "default", style, onClick, className }: CellProps,
     ref: any
   ) => {
+    const preview = useContext(PreviewContext);
     const dispatch = useContext(FormContext);
-    const preview = useContext<boolean>(PreviewContext);
     const data = {
       ...cellData,
       required: false,

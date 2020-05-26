@@ -11,7 +11,7 @@ import Backend from "react-dnd-html5-backend";
 import { WidgetData } from "./schemas/WidgetData";
 import "./index.css";
 import { Widget } from "./components/Widget";
-import { getActive, reducer } from "./util";
+import { getActive, designerReducer } from "./util";
 import { CellData } from "./schemas/CellData";
 import { WidgetGroups } from "../../constants/WidgetGroups";
 import { DnDCell } from "./components/DnDCell";
@@ -31,7 +31,7 @@ const rootCellData: CellData = {
 export const DesignerContext = React.createContext<any>(null);
 export const PreviewContext = React.createContext<any>(null);
 export const Designer = function () {
-  const [data, designerDispatch] = useReducer(reducer, rootCellData);
+  const [data, designerDispatch] = useReducer(designerReducer, rootCellData);
   const [previewDialogVisible, setPreviewDialogVisible] = useState(false);
   const delFunction = useCallback((event) => {
     if (event.keyCode === 46) {
@@ -87,11 +87,11 @@ export const Designer = function () {
                       }}
                     >
                       <Space>
-                        <Button>清空</Button>
+                        <Button>Reset</Button>
                         <Button onClick={() => setPreviewDialogVisible(true)}>
-                          预览
+                          Preview
                         </Button>
-                        <Button>保存</Button>
+                        <Button>Save</Button>
                       </Space>
                     </Header>
                     <Content className={"form"} style={{ height: "100%" }}>
@@ -120,17 +120,18 @@ export const Designer = function () {
             </Content>
           </Layout>
         </DndProvider>
+        <Modal
+          width={1000}
+          title={"Preview"}
+          visible={previewDialogVisible}
+          onOk={() => setPreviewDialogVisible(false)}
+          onCancel={() => setPreviewDialogVisible(false)}
+        >
+          <PreviewContext.Provider value={true}>
+            <Cell cellData={data} />
+          </PreviewContext.Provider>
+        </Modal>
       </DesignerContext.Provider>
-      <Modal
-        title={"Preview"}
-        visible={previewDialogVisible}
-        onOk={() => setPreviewDialogVisible(false)}
-        onCancel={() => setPreviewDialogVisible(false)}
-      >
-        <PreviewContext.Provider value={true}>
-          <Cell cellData={data} />
-        </PreviewContext.Provider>
-      </Modal>
     </>
   );
 };

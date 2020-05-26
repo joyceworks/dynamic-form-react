@@ -89,8 +89,7 @@ function drop(
   }
   active(root, cell.id);
 }
-
-export function reducer(state: any, action: any): CellData {
+export function designerReducer(state: any, action: any): CellData {
   if (!action.type) {
     return state;
   }
