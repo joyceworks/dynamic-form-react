@@ -9,7 +9,6 @@ import "./index.css";
 import { DndLane } from "./components/DndLane";
 import { Lane } from "./components/Lane";
 import { CellData } from "../../../../schemas/CellData";
-import { DesignerContext } from "../../../../index";
 import { Button } from "antd";
 import update from "immutability-helper";
 import { PreviewContext } from "../../../Preview";
@@ -24,8 +23,9 @@ export const FormContext = React.createContext<any>(null);
 
 export const Pool = forwardRef(
   ({ direction = "column", cellData, style }: PoolProps, ref: any) => {
+    const previewDispatch = useContext(PreviewContext);
+    const isDesigner = previewDispatch === null;
     function getLane(lane: any, index: number) {
-      const isDesigner = previewDispatch === null;
       return isDesigner ? (
         <DndLane
           key={cellData.id + "-" + index}
@@ -49,8 +49,6 @@ export const Pool = forwardRef(
     const [, dispatch] = useReducer(formReducer, {
       data: cellData,
     });
-    const designerDispatch = useContext(DesignerContext);
-    const previewDispatch = useContext(PreviewContext);
     return (
       <FormContext.Provider value={dispatch}>
         <table ref={ref} className={"lanes"} style={style}>
@@ -61,7 +59,7 @@ export const Pool = forwardRef(
               </tr>
             ) : (
               <>
-                {previewDispatch && (
+                {!isDesigner && (
                   <tr>
                     <td
                       style={{
@@ -91,7 +89,7 @@ export const Pool = forwardRef(
             )}
           </tbody>
         </table>
-        {previewDispatch && direction === "row" && (
+        {!isDesigner && direction === "row" && (
           <Button
             onClick={() => {
               previewDispatch({
