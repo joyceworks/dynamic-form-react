@@ -6,7 +6,7 @@ import { TextAreaCell } from "../TextAreaCell";
 import { GridCell } from "../GridCell";
 import { SelectCell } from "../SelectCell";
 import { DateCell } from "../DateCell";
-import { PreviewContext } from "../../index";
+import { PreviewContext } from "../Preview";
 
 interface CellProps {
   cellData: CellData;

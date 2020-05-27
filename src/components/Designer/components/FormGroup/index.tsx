@@ -1,6 +1,6 @@
 import React, { forwardRef, useContext } from "react";
 import "./index.css";
-import { PreviewContext } from "../../index";
+import { PreviewContext } from "../Preview";
 
 interface FormGroupProps {
   layout?: "inline" | "default";

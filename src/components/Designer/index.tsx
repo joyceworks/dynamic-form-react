@@ -11,13 +11,13 @@ import Backend from "react-dnd-html5-backend";
 import { WidgetData } from "./schemas/WidgetData";
 import "./index.css";
 import { Widget } from "./components/Widget";
-import { getActive, designerReducer } from "./util";
+import { getActive, reducer } from "./util";
 import { CellData } from "./schemas/CellData";
 import { WidgetGroups } from "../../constants/WidgetGroups";
 import { DnDCell } from "./components/DnDCell";
-import { Cell } from "./components/Cell";
 import GridCellConfig from "./components/GridCellConfig";
 import InputCellConfig from "./components/InputCellConfig";
+import Preview from "./components/Preview";
 
 const { Sider, Content, Header } = Layout;
 
@@ -29,9 +29,8 @@ const rootCellData: CellData = {
 };
 
 export const DesignerContext = React.createContext<any>(null);
-export const PreviewContext = React.createContext<any>(null);
 export const Designer = function () {
-  const [data, designerDispatch] = useReducer(designerReducer, rootCellData);
+  const [data, designerDispatch] = useReducer(reducer, rootCellData);
   const [previewDialogVisible, setPreviewDialogVisible] = useState(false);
   const delFunction = useCallback((event) => {
     if (event.keyCode === 46) {
@@ -127,9 +126,7 @@ export const Designer = function () {
           onOk={() => setPreviewDialogVisible(false)}
           onCancel={() => setPreviewDialogVisible(false)}
         >
-          <PreviewContext.Provider value={true}>
-            <Cell cellData={data} />
-          </PreviewContext.Provider>
+          <Preview data={data} />
         </Modal>
       </DesignerContext.Provider>
     </>

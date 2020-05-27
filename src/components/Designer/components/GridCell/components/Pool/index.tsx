@@ -9,10 +9,10 @@ import "./index.css";
 import { DndLane } from "./components/DndLane";
 import { Lane } from "./components/Lane";
 import { CellData } from "../../../../schemas/CellData";
-import { DesignerContext, PreviewContext } from "../../../../index";
+import { DesignerContext } from "../../../../index";
 import { Button } from "antd";
 import update from "immutability-helper";
-import { FormGroup } from "../../../FormGroup";
+import { PreviewContext } from "../../../Preview";
 
 interface PoolProps {
   direction?: "column" | "row";
@@ -25,7 +25,7 @@ export const FormContext = React.createContext<any>(null);
 export const Pool = forwardRef(
   ({ direction = "column", cellData, style }: PoolProps, ref: any) => {
     function getLane(lane: any, index: number) {
-      const isDesigner = preview === null;
+      const isDesigner = previewDispatch === null;
       return isDesigner ? (
         <DndLane
           key={cellData.id + "-" + index}
@@ -50,7 +50,7 @@ export const Pool = forwardRef(
       data: cellData,
     });
     const designerDispatch = useContext(DesignerContext);
-    const preview = useContext(PreviewContext);
+    const previewDispatch = useContext(PreviewContext);
     return (
       <FormContext.Provider value={dispatch}>
         <table ref={ref} className={"lanes"} style={style}>
@@ -61,7 +61,7 @@ export const Pool = forwardRef(
               </tr>
             ) : (
               <>
-                {preview && (
+                {previewDispatch && (
                   <tr>
                     <td
                       style={{
@@ -91,18 +91,24 @@ export const Pool = forwardRef(
             )}
           </tbody>
         </table>
-        {preview && direction === "row" && (
+        {previewDispatch && direction === "row" && (
           <Button
             onClick={() => {
-              designerDispatch({
+              previewDispatch({
                 type: "UPDATE",
                 data: update(cellData, {
                   lanes: {
                     $push: [
-                      {
-                        span: 100,
-                        cellDataList: [],
-                      },
+                      update(cellData.lanes![0], {
+                        cellDataList: {
+                          $apply: function (x: CellData[]) {
+                            return x.map((y) => ({
+                              ...y,
+                              id: y.id + +new Date(),
+                            }));
+                          },
+                        },
+                      }),
                     ],
                   },
                 }),

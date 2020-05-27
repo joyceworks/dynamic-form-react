@@ -1,8 +1,8 @@
 import React, { forwardRef, useContext } from "react";
-import { PreviewContext } from "../../../../../../index";
 import { CellData } from "../../../../../../schemas/CellData";
 import { DnDCell } from "../../../../../DnDCell";
 import { Cell } from "../../../../../Cell";
+import { PreviewContext } from "../../../../../Preview";
 
 interface LaneProps {
   cellDataList: CellData[];

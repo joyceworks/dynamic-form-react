@@ -1,6 +1,33 @@
 import { CellData } from "./schemas/CellData";
 import CellLocation from "./schemas/CellLocation";
 
+export function peek(
+  root: CellData,
+  func: (
+    value: CellData,
+    index: number | null,
+    array: CellData[] | null
+  ) => void
+) {
+  const copy = JSON.parse(JSON.stringify(root));
+  let recursion = function (data: CellData): void {
+    if (data.lanes) {
+      for (const lane of data.lanes) {
+        for (let i = 0; i < lane.cellDataList.length; i++) {
+          let cellData = lane.cellDataList[i];
+          func(cellData, i, lane.cellDataList);
+          if (cellData.type === "grid" || cellData.type === "list") {
+            recursion(cellData);
+          }
+        }
+      }
+    }
+  };
+  func(copy, null, null);
+  recursion(copy);
+  return copy;
+}
+
 export function locate(
   root: CellData,
   matchFunc: (value: CellData, index: number, array: CellData[]) => boolean
@@ -89,7 +116,7 @@ function drop(
   }
   active(root, cell.id);
 }
-export function designerReducer(state: any, action: any): CellData {
+export function reducer(state: any, action: any): CellData {
   if (!action.type) {
     return state;
   }
