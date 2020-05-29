@@ -1,4 +1,5 @@
 import React, {
+  Dispatch,
   Fragment,
   useCallback,
   useEffect,
@@ -11,13 +12,14 @@ import Backend from "react-dnd-html5-backend";
 import { WidgetData } from "./schemas/WidgetData";
 import "./index.css";
 import { Widget } from "./components/Widget";
-import { getActive, reducer } from "./util";
+import { getActive, peek, reducer } from "./util";
 import { CellData } from "./schemas/CellData";
 import { WidgetGroups } from "../../constants/WidgetGroups";
 import { DnDCell } from "./components/DnDCell";
 import GridCellConfig from "./components/GridCellConfig";
 import InputCellConfig from "./components/InputCellConfig";
-import Preview from "./components/Preview";
+import Form from "../Form";
+import SwimlaneLocation from "./schemas/SwimlaneLocation";
 
 const { Sider, Content, Header } = Layout;
 
@@ -28,7 +30,58 @@ const rootCellData: CellData = {
   active: false,
 };
 
-export const DesignerContext = React.createContext<any>(null);
+interface DispatchNoobProps {
+  type: "NOOB";
+  position: "up" | "down";
+  dragItem: CellData;
+  dropItemId: string;
+}
+
+interface DispatchActiveProps {
+  id: string;
+  type: "ACTIVE";
+}
+
+interface DispatchEditProps {
+  id: string;
+  type: "EDIT";
+}
+
+interface DispatchMoveProps {
+  type: "MOVE";
+  dragItemId: string;
+  position: "up" | "down";
+  dropItemId: string;
+}
+
+interface DispatchFarmProps {
+  type: "FARM";
+  cellDataId: string;
+  location: SwimlaneLocation;
+}
+
+interface DispatchAddProps {
+  type: "ADD";
+  cellData: CellData;
+  location: SwimlaneLocation;
+}
+
+interface DispatchUpdateProps {
+  type: "UPDATE";
+  data: CellData;
+}
+
+export const DesignerContext = React.createContext<
+  Dispatch<
+    | DispatchMoveProps
+    | DispatchNoobProps
+    | DispatchActiveProps
+    | DispatchEditProps
+    | DispatchFarmProps
+    | DispatchAddProps
+    | DispatchUpdateProps
+  >
+>({} as Dispatch<any>);
 export const Designer = function () {
   const [data, designerDispatch] = useReducer(reducer, rootCellData);
   const [previewDialogVisible, setPreviewDialogVisible] = useState(false);
@@ -126,7 +179,11 @@ export const Designer = function () {
           onOk={() => setPreviewDialogVisible(false)}
           onCancel={() => setPreviewDialogVisible(false)}
         >
-          <Preview data={data} />
+          <Form
+            data={peek(data, function (item) {
+              item.id += "p";
+            })}
+          />
         </Modal>
       </DesignerContext.Provider>
     </>

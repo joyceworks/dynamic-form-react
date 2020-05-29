@@ -11,7 +11,7 @@ import { Lane } from "./components/Lane";
 import { CellData } from "../../../../schemas/CellData";
 import { Button } from "antd";
 import update from "immutability-helper";
-import { PreviewContext } from "../../../Preview";
+import { UserContext } from "../../../../../Form";
 
 interface PoolProps {
   direction?: "column" | "row";
@@ -23,8 +23,8 @@ export const FormContext = React.createContext<any>(null);
 
 export const Pool = forwardRef(
   ({ direction = "column", cellData, style }: PoolProps, ref: any) => {
-    const previewDispatch = useContext(PreviewContext);
-    const isDesigner = previewDispatch === null;
+    const userDispatch = useContext(UserContext);
+    const isDesigner = userDispatch === null;
     function getLane(lane: any, index: number) {
       return isDesigner ? (
         <DndLane
@@ -92,7 +92,7 @@ export const Pool = forwardRef(
         {!isDesigner && direction === "row" && (
           <Button
             onClick={() => {
-              previewDispatch({
+              userDispatch({
                 type: "UPDATE",
                 data: update(cellData, {
                   lanes: {

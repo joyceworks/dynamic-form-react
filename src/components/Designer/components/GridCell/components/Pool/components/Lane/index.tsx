@@ -2,7 +2,7 @@ import React, { forwardRef, useContext } from "react";
 import { CellData } from "../../../../../../schemas/CellData";
 import { DnDCell } from "../../../../../DnDCell";
 import { Cell } from "../../../../../Cell";
-import { PreviewContext } from "../../../../../Preview";
+import { UserContext } from "../../../../../../../Form";
 
 interface LaneProps {
   cellDataList: CellData[];
@@ -12,7 +12,7 @@ interface LaneProps {
 
 export const Lane = forwardRef(
   ({ cellDataList, direction, className }: LaneProps, ref: any) => {
-    const previewDispatch = useContext(PreviewContext);
+    const previewDispatch = useContext(UserContext);
     const layout = direction === "column" ? "default" : "inline";
     const cells = cellDataList.map((child, index) =>
       previewDispatch === null ? (
