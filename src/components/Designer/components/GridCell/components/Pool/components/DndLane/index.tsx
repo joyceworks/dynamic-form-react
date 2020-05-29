@@ -37,14 +37,14 @@ export const DndLane = function ({
 
         if (item.type === "instance") {
           dispatch({
-            type: "FARM",
-            cellDataId: item.id,
+            type: "MOVE",
+            id: item.id,
             location: location,
           });
         } else {
           dispatch({
             type: "ADD",
-            cellData: createWidgetInstance(item.type),
+            dragItem: createWidgetInstance(item.type),
             location: Object.assign({}, location, {
               index: cellDataList.length,
             }),

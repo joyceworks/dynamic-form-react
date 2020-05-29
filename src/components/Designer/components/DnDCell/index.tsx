@@ -117,14 +117,14 @@ export const DnDCell = function ({
 
       if (item.type === "instance") {
         designerDispatch({
-          type: "MOVE",
-          dragItemId: monitor.getItem().id,
+          type: "POSITIONED_MOVE",
+          id: monitor.getItem().id,
           position: position,
           dropItemId: cellData.id,
         });
       } else {
         designerDispatch({
-          type: "NOOB",
+          type: "POSITIONED_ADD",
           position: position,
           dropItemId: cellData.id,
           dragItem: createWidgetInstance(item.type as string),

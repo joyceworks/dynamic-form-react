@@ -30,13 +30,6 @@ const rootCellData: CellData = {
   active: false,
 };
 
-interface DispatchNoobProps {
-  type: "NOOB";
-  position: "up" | "down";
-  dragItem: CellData;
-  dropItemId: string;
-}
-
 interface DispatchActiveProps {
   id: string;
   type: "ACTIVE";
@@ -47,22 +40,33 @@ interface DispatchEditProps {
   type: "EDIT";
 }
 
-interface DispatchMoveProps {
-  type: "MOVE";
-  dragItemId: string;
+// Move to a swimlane with position
+interface DispatchPositionedMove {
+  type: "POSITIONED_MOVE";
+  id: string;
   position: "up" | "down";
   dropItemId: string;
 }
 
-interface DispatchFarmProps {
-  type: "FARM";
-  cellDataId: string;
+// Move to a swimlane without position
+interface DispatchMoveProps {
+  type: "MOVE";
+  id: string;
   location: SwimlaneLocation;
 }
 
+// Add to a swimlane with position
+interface DispatchPositionedAddProps {
+  type: "POSITIONED_ADD";
+  position: "up" | "down";
+  dragItem: CellData;
+  dropItemId: string;
+}
+
+// Add to a swimlane without position(append to last)
 interface DispatchAddProps {
   type: "ADD";
-  cellData: CellData;
+  dragItem: CellData;
   location: SwimlaneLocation;
 }
 
@@ -73,11 +77,11 @@ interface DispatchUpdateProps {
 
 export const DesignerContext = React.createContext<
   Dispatch<
-    | DispatchMoveProps
-    | DispatchNoobProps
+    | DispatchPositionedMove
+    | DispatchPositionedAddProps
     | DispatchActiveProps
     | DispatchEditProps
-    | DispatchFarmProps
+    | DispatchMoveProps
     | DispatchAddProps
     | DispatchUpdateProps
   >
