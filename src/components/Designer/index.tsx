@@ -30,18 +30,18 @@ const rootCellData: CellData = {
   active: false,
 };
 
-interface DispatchActiveProps {
+export interface DispatchActiveProps {
   id: string;
   type: "ACTIVE";
 }
 
-interface DispatchEditProps {
+export interface DispatchEditProps {
   id: string;
   type: "EDIT";
 }
 
 // Move to a swimlane with position
-interface DispatchPositionedMove {
+export interface DispatchPositionedMove {
   type: "POSITIONED_MOVE";
   id: string;
   position: "up" | "down";
@@ -49,14 +49,14 @@ interface DispatchPositionedMove {
 }
 
 // Move to a swimlane without position
-interface DispatchMoveProps {
+export interface DispatchMoveProps {
   type: "MOVE";
   id: string;
   location: SwimlaneLocation;
 }
 
 // Add to a swimlane with position
-interface DispatchPositionedAddProps {
+export interface DispatchPositionedAddProps {
   type: "POSITIONED_ADD";
   position: "up" | "down";
   dragItem: CellData;
@@ -64,15 +64,19 @@ interface DispatchPositionedAddProps {
 }
 
 // Add to a swimlane without position(append to last)
-interface DispatchAddProps {
+export interface DispatchAddProps {
   type: "ADD";
   dragItem: CellData;
   location: SwimlaneLocation;
 }
 
-interface DispatchUpdateProps {
+export interface DispatchUpdateProps {
   type: "UPDATE";
   data: CellData;
+}
+
+export interface DispatchDeleteActiveProps {
+  type: "DELETE_ACTIVE";
 }
 
 export const DesignerContext = React.createContext<
@@ -84,6 +88,7 @@ export const DesignerContext = React.createContext<
     | DispatchMoveProps
     | DispatchAddProps
     | DispatchUpdateProps
+    | DispatchDeleteActiveProps
   >
 >({} as Dispatch<any>);
 export const Designer = function () {

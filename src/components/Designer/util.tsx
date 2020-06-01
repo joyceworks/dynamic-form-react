@@ -1,5 +1,15 @@
 import { CellData } from "./schemas/CellData";
 import CellLocation from "./schemas/CellLocation";
+import {
+  DispatchActiveProps,
+  DispatchAddProps,
+  DispatchDeleteActiveProps,
+  DispatchEditProps,
+  DispatchMoveProps,
+  DispatchPositionedAddProps,
+  DispatchPositionedMove,
+  DispatchUpdateProps,
+} from "./index";
 
 export function peek(
   root: CellData,
@@ -116,19 +126,30 @@ function drop(
   }
   active(root, cell.id);
 }
-export function reducer(state: any, action: any): CellData {
+export function reducer(
+  state: any,
+  action:
+    | DispatchPositionedMove
+    | DispatchPositionedAddProps
+    | DispatchActiveProps
+    | DispatchEditProps
+    | DispatchMoveProps
+    | DispatchAddProps
+    | DispatchUpdateProps
+    | DispatchDeleteActiveProps
+): CellData {
   if (!action.type) {
     return state;
   }
   const copy = JSON.parse(JSON.stringify(state));
-  if (action.type === "MOVE") {
+  if (action.type === "POSITIONED_MOVE") {
     const [dragLocation, dragList, dragCell] = locate(
       copy,
-      (item) => item.id === action.dragItemId
+      (item) => item.id === action.id
     )!;
     dragList.splice(dragLocation.index, 1);
     drop(copy, dragCell, action.dropItemId, action.position);
-  } else if (action.type === "NOOB") {
+  } else if (action.type === "POSITIONED_ADD") {
     drop(copy, action.dragItem, action.dropItemId, action.position);
   } else if (action.type === "ADD") {
     const cells = getCellDataList(
@@ -136,18 +157,18 @@ export function reducer(state: any, action: any): CellData {
       action.location.parentId,
       action.location.laneIndex
     )!;
-    cells.push(action.cellData);
-    active(copy, action.cellData.id);
+    cells.push(action.dragItem);
+    active(copy, action.dragItem.id);
   } else if (action.type === "UPDATE") {
     const [location, list] = locate(
       copy,
       (data) => data.id === action.data.id
     )!;
     list.splice(location.index, 1, action.data);
-  } else if (action.type === "FARM") {
+  } else if (action.type === "MOVE") {
     const [location, list, cell] = locate(
       copy,
-      (item) => item.id === action.cellDataId
+      (item) => item.id === action.id
     )!;
     list.splice(location.index, 1);
     const cellDataList = getCellDataList(
