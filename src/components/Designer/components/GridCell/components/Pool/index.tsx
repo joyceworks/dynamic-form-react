@@ -11,7 +11,7 @@ import { Lane } from "./components/Lane";
 import { CellData } from "../../../../schemas/CellData";
 import { Button } from "antd";
 import update from "immutability-helper";
-import { UserContext } from "../../../../../Form";
+import { UserContext } from "../../../../../Instance";
 
 interface PoolProps {
   direction?: "column" | "row";
@@ -33,7 +33,7 @@ export const Pool = forwardRef(
           cellDataList={lane.cellDataList}
           location={{
             parentId: cellData.id,
-            laneIndex: index,
+            index: index,
           }}
         />
       ) : (

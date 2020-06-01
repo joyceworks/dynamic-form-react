@@ -84,19 +84,19 @@ export function deleteActive(rootCellData: CellData) {
 export function getCellDataList(
   root: CellData,
   parentId: string,
-  laneIndex: number
+  index: number
 ): CellData[] | null {
   let list: CellData[] | null = null;
   let func = function (data: CellData) {
     if (data.id === parentId) {
-      return data.lanes![laneIndex].cellDataList;
+      return data.lanes![index].cellDataList;
     }
     if (data.lanes) {
       for (const lane of data.lanes) {
         for (const cellData of lane.cellDataList) {
           if (cellData.type === "grid" || cellData.type === "list") {
             if (cellData.id === parentId) {
-              list = cellData.lanes![laneIndex].cellDataList;
+              list = cellData.lanes![index].cellDataList;
             } else {
               func(cellData);
             }
@@ -155,7 +155,7 @@ export function reducer(
     const cells = getCellDataList(
       copy,
       action.location.parentId,
-      action.location.laneIndex
+      action.location.index
     )!;
     cells.push(action.dragItem);
     active(copy, action.dragItem.id);
@@ -174,7 +174,7 @@ export function reducer(
     const cellDataList = getCellDataList(
       copy,
       action.location.parentId,
-      action.location.laneIndex
+      action.location.index
     );
     cellDataList?.push(cell);
     active(copy, cell.id);

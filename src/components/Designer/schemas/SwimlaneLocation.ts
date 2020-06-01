@@ -1,4 +1,4 @@
 export default interface SwimlaneLocation {
   parentId: string;
-  laneIndex: number;
+  index: number;
 }

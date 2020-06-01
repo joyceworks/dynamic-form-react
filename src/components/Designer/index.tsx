@@ -18,7 +18,7 @@ import { WidgetGroups } from "../../constants/WidgetGroups";
 import { DnDCell } from "./components/DnDCell";
 import GridCellConfig from "./components/GridCellConfig";
 import InputCellConfig from "./components/InputCellConfig";
-import Form from "../Form";
+import Form from "../Instance";
 import SwimlaneLocation from "./schemas/SwimlaneLocation";
 
 const { Sider, Content, Header } = Layout;
@@ -181,20 +181,20 @@ export const Designer = function () {
             </Content>
           </Layout>
         </DndProvider>
-        <Modal
-          width={1000}
-          title={"Preview"}
-          visible={previewDialogVisible}
-          onOk={() => setPreviewDialogVisible(false)}
-          onCancel={() => setPreviewDialogVisible(false)}
-        >
-          <Form
-            data={peek(data, function (item) {
-              item.id += "p";
-            })}
-          />
-        </Modal>
       </DesignerContext.Provider>
+      <Modal
+        width={1000}
+        title={"Preview"}
+        visible={previewDialogVisible}
+        onOk={() => setPreviewDialogVisible(false)}
+        onCancel={() => setPreviewDialogVisible(false)}
+      >
+        <Form
+          data={peek(data, function (item) {
+            item.id += "p";
+          })}
+        />
+      </Modal>
     </>
   );
 };

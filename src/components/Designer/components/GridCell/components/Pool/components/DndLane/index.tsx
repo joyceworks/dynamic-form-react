@@ -45,9 +45,7 @@ export const DndLane = function ({
           dispatch({
             type: "ADD",
             dragItem: createWidgetInstance(item.type),
-            location: Object.assign({}, location, {
-              index: cellDataList.length,
-            }),
+            location: location,
           });
         }
       }
