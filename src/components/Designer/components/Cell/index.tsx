@@ -34,11 +34,9 @@ export const Cell = forwardRef(
         <div
           ref={ref}
           style={style}
-          className={
-            "instance" +
-            (!preview && cellData.active ? " active" : "") +
-            (className || "")
-          }
+          className={`instance ${
+            !preview && cellData.active ? " active " : ""
+          }${className || ""}`}
           onClick={onClick}
         >
           {cellData.type === "input" ? (

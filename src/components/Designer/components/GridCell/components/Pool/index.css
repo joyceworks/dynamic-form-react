@@ -26,20 +26,11 @@
 .lane.hovered {
   background-color: lightpink;
 }
-.edit .lane {
+.preview .lane {
   border-style: none;
 }
-.edit .instance {
+.preview .instance {
   border-style: none;
-}
-.edit.lanes {
-  border-style: none;
-}
-.edit.lanes > tr:first-of-type > .lane.row {
-  height: inherit;
-}
-.edit.lanes > tr:first-of-type > .lane.row > .instance > .form-group {
-  min-height: inherit;
 }
 .list {
   width: 100%;

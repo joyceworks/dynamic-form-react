@@ -12,7 +12,7 @@ export default function ({ data }: FormProps) {
   const [innerData, dispatch] = useReducer(reducer, data);
   return (
     <UserContext.Provider value={dispatch}>
-      <Cell cellData={innerData} />
+      <Cell cellData={innerData} className={"preview"} />
     </UserContext.Provider>
   );
 }
