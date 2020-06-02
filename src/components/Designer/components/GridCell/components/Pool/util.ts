@@ -49,7 +49,7 @@ export function setValue(cell: CellData, target: CellData, value: any) {
               for (const row of element.lanes) {
                 for (let i = 0; i < row.cellDataList.length; i++) {
                   let listElement = row.cellDataList[i];
-                  if (listElement === target) {
+                  if (listElement.id === target.id) {
                     listElement.value = value;
                     return true;
                   }
@@ -57,7 +57,7 @@ export function setValue(cell: CellData, target: CellData, value: any) {
               }
               break;
             default:
-              if (element === target) {
+              if (element.id === target.id) {
                 element.value = value;
                 return true;
               }

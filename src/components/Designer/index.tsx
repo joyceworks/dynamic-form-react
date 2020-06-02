@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useEffect,
   useReducer,
+  useRef,
   useState,
 } from "react";
 import { Layout, Button, Space, Modal } from "antd";
@@ -95,6 +96,7 @@ export const Designer = function () {
   const [data, designerDispatch] = useReducer(reducer, rootCellData);
   const [previewDialogVisible, setPreviewDialogVisible] = useState(false);
   const [previewData, setPreviewData] = useState<CellData | null>(null);
+  const previewRef = useRef<any>();
   const delFunction = useCallback((event) => {
     if (event.keyCode === 46) {
       designerDispatch({
@@ -201,7 +203,17 @@ export const Designer = function () {
         }}
         onCancel={() => setPreviewDialogVisible(false)}
       >
-        {previewData && <Form data={previewData} key={previewData.id} />}
+        <Button
+          onClick={() => {
+            const result = previewRef.current!.getData();
+            alert(JSON.stringify(result));
+          }}
+        >
+          Save
+        </Button>
+        {previewData && (
+          <Form ref={previewRef} data={previewData} key={previewData.id} />
+        )}
       </Modal>
     </>
   );
