@@ -94,6 +94,7 @@ export const DesignerContext = React.createContext<
 export const Designer = function () {
   const [data, designerDispatch] = useReducer(reducer, rootCellData);
   const [previewDialogVisible, setPreviewDialogVisible] = useState(false);
+  const [previewData, setPreviewData] = useState<CellData | null>(null);
   const delFunction = useCallback((event) => {
     if (event.keyCode === 46) {
       designerDispatch({
@@ -149,7 +150,16 @@ export const Designer = function () {
                     >
                       <Space>
                         <Button>Reset</Button>
-                        <Button onClick={() => setPreviewDialogVisible(true)}>
+                        <Button
+                          onClick={() => {
+                            setPreviewDialogVisible(true);
+                            setPreviewData(
+                              peek(data, function (item) {
+                                item.id += +new Date();
+                              })
+                            );
+                          }}
+                        >
                           Preview
                         </Button>
                         <Button>Save</Button>
@@ -186,14 +196,12 @@ export const Designer = function () {
         width={1000}
         title={"Preview"}
         visible={previewDialogVisible}
-        onOk={() => setPreviewDialogVisible(false)}
+        onOk={() => {
+          setPreviewDialogVisible(false);
+        }}
         onCancel={() => setPreviewDialogVisible(false)}
       >
-        <Form
-          data={peek(data, function (item) {
-            item.id += "p";
-          })}
-        />
+        {previewData && <Form data={previewData} key={previewData.id} />}
       </Modal>
     </>
   );

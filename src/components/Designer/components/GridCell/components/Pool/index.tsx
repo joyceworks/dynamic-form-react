@@ -37,13 +37,11 @@ export const Pool = forwardRef(
           }}
         />
       ) : (
-        <>
-          <Lane
-            key={cellData.id + "-" + index}
-            cellDataList={lane.cellDataList}
-            direction={direction}
-          />
-        </>
+        <Lane
+          key={cellData.id + "-" + index}
+          cellDataList={lane.cellDataList}
+          direction={direction}
+        />
       );
     }
     const [, dispatch] = useReducer(formReducer, {
