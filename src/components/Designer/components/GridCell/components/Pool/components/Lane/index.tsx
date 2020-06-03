@@ -12,10 +12,10 @@ interface LaneProps {
 
 export const Lane = forwardRef(
   ({ cellDataList, direction, className }: LaneProps, ref: any) => {
-    const previewDispatch = useContext(InstanceContext);
+    const instanceDispatch = useContext(InstanceContext);
     const layout = direction === "column" ? "default" : "inline";
     const cells = cellDataList.map((child, index) =>
-      previewDispatch === null ? (
+      instanceDispatch === null ? (
         <DnDCell
           key={child.id}
           layout={layout}

@@ -23,7 +23,7 @@ export const FormGroup = forwardRef(
     }: FormGroupProps,
     ref: any
   ) => {
-    const previewContext = useContext(InstanceContext);
+    const instanceDispatch = useContext(InstanceContext);
     return (
       <table ref={ref} className={["form-group", layout].join(" ")}>
         <tbody>
@@ -49,7 +49,7 @@ export const FormGroup = forwardRef(
             </>
           ) : (
             <>
-              {!previewContext && (
+              {!instanceDispatch && (
                 <tr>
                   <td className={"label"}>
                     {required ? <span className={"required"}>*</span> : <></>}
