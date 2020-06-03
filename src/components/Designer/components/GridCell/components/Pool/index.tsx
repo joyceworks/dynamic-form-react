@@ -11,7 +11,7 @@ import { Lane } from "./components/Lane";
 import { CellData } from "../../../../schemas/CellData";
 import { Button } from "antd";
 import update from "immutability-helper";
-import { UserContext } from "../../../../../Instance";
+import { InstanceContext } from "../../../../../Instance";
 
 interface PoolProps {
   direction?: "column" | "row";
@@ -19,11 +19,9 @@ interface PoolProps {
   style?: CSSProperties;
 }
 
-export const FormContext = React.createContext<any>(null);
-
 export const Pool = forwardRef(
   ({ direction = "column", cellData, style }: PoolProps, ref: any) => {
-    const userDispatch = useContext(UserContext);
+    const userDispatch = useContext(InstanceContext);
     const isDesigner = userDispatch === null;
     function getLane(lane: any, index: number) {
       return isDesigner ? (
@@ -44,11 +42,9 @@ export const Pool = forwardRef(
         />
       );
     }
-    const [, dispatch] = useReducer(formReducer, {
-      data: cellData,
-    });
+
     return (
-      <FormContext.Provider value={dispatch}>
+      <>
         <table ref={ref} className={"lanes"} style={style}>
           <tbody>
             {direction === "column" ? (
@@ -115,7 +111,7 @@ export const Pool = forwardRef(
             Add
           </Button>
         )}
-      </FormContext.Provider>
+      </>
     );
   }
 );

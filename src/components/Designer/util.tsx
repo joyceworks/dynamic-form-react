@@ -8,8 +8,11 @@ import {
   DispatchMoveProps,
   DispatchPositionedAddProps,
   DispatchPositionedMove,
+  DispatchSetValueProps,
   DispatchUpdateProps,
+  DispatchValidateProps,
 } from "./index";
+import { setValue } from "./components/GridCell/components/Pool/util";
 
 export function peek(
   root: CellData,
@@ -137,6 +140,8 @@ export function reducer(
     | DispatchAddProps
     | DispatchUpdateProps
     | DispatchDeleteActiveProps
+    | DispatchSetValueProps
+    | DispatchValidateProps
 ): CellData {
   if (!action.type) {
     return state;
@@ -182,6 +187,15 @@ export function reducer(
     active(copy, action.id);
   } else if (action.type === "DELETE_ACTIVE") {
     deleteActive(copy);
+  } else if (action.type === "SET_VALUE") {
+    setValue(copy, action.target, action.value);
+  } else if (action.type === "VALIDATE") {
+    return peek(state, function (cellData) {
+      if (!cellData.value) {
+        cellData.warning = `${cellData.label} is required.`;
+        cellData.warnable = true;
+      }
+    });
   }
   return copy;
 }

@@ -1,6 +1,6 @@
 import React, { forwardRef, useContext } from "react";
 import "./index.css";
-import { UserContext } from "../../../Instance";
+import { InstanceContext } from "../../../Instance";
 
 interface FormGroupProps {
   layout?: "inline" | "default";
@@ -23,7 +23,7 @@ export const FormGroup = forwardRef(
     }: FormGroupProps,
     ref: any
   ) => {
-    const previewContext = useContext(UserContext);
+    const previewContext = useContext(InstanceContext);
     return (
       <table ref={ref} className={["form-group", layout].join(" ")}>
         <tbody>

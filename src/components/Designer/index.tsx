@@ -41,6 +41,16 @@ export interface DispatchEditProps {
   type: "EDIT";
 }
 
+export interface DispatchSetValueProps {
+  type: "SET_VALUE";
+  target: CellData;
+  value: any;
+}
+
+export interface DispatchValidateProps {
+  type: "VALIDATE";
+}
+
 // Move to a swimlane with position
 export interface DispatchPositionedMove {
   type: "POSITIONED_MOVE";
@@ -193,28 +203,33 @@ export const Designer = function () {
             </Content>
           </Layout>
         </DndProvider>
-      </DesignerContext.Provider>
-      <Modal
-        width={1000}
-        title={"Preview"}
-        visible={previewDialogVisible}
-        onOk={() => {
-          setPreviewDialogVisible(false);
-        }}
-        onCancel={() => setPreviewDialogVisible(false)}
-      >
-        <Button
-          onClick={() => {
-            const result = previewRef.current!.getData();
-            alert(JSON.stringify(result));
+        <Modal
+          width={1000}
+          title={"Preview"}
+          visible={previewDialogVisible}
+          onOk={() => {
+            setPreviewDialogVisible(false);
           }}
+          onCancel={() => setPreviewDialogVisible(false)}
         >
-          Save
-        </Button>
-        {previewData && (
-          <Form ref={previewRef} data={previewData} key={previewData.id} />
-        )}
-      </Modal>
+          <Space>
+            <Button
+              onClick={() => {
+                const result = previewRef.current!.getData();
+                alert(JSON.stringify(result));
+              }}
+            >
+              Save
+            </Button>
+            <Button onClick={() => previewRef.current.validate()}>
+              Validate
+            </Button>
+          </Space>
+          {previewData && (
+            <Form ref={previewRef} data={previewData} key={previewData.id} />
+          )}
+        </Modal>
+      </DesignerContext.Provider>
     </>
   );
 };
