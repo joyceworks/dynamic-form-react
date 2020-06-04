@@ -32,6 +32,7 @@ import {
   DispatchUpdateProps,
   DispatchValidateProps,
 } from "./schemas/ReducerAction";
+import styled from "styled-components";
 
 const { Sider, Content, Header } = Layout;
 
@@ -41,6 +42,24 @@ const rootCellData: CellData = {
   lanes: [{ span: 100, cellDataList: [] }],
   active: false,
 };
+
+const RootCell = styled(DnDCell)`
+  height: 100%;
+  &:after {
+    content: "Drag to drop";
+    font-size: 32px;
+    color: #d3d3d3;
+    left: calc(50% - 85px);
+    top: calc(50% - 25px);
+    position: absolute;
+    display: ${(props) =>
+      props.cellData.lanes![0].cellDataList.length === 0 ? "block" : "none"};
+  }
+
+  > .lanes {
+    height: 100%;
+  }
+`;
 
 export const DesignerContext = React.createContext<
   Dispatch<
@@ -132,7 +151,7 @@ export const Designer = function () {
                       </Space>
                     </Header>
                     <Content className={"form"} style={{ height: "100%" }}>
-                      <DnDCell cellData={data} index={0} />
+                      <RootCell cellData={data} index={0} />
                     </Content>
                   </Layout>
                 </Content>

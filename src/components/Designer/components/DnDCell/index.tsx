@@ -9,6 +9,7 @@ interface DnDCellProps {
   cellData: CellData;
   layout?: "inline" | "default";
   index: number;
+  className?: string;
 }
 
 interface DragItem {
@@ -21,6 +22,7 @@ export const DnDCell = function ({
   cellData,
   index,
   layout = "default",
+  className,
 }: DnDCellProps) {
   const data = {
     ...cellData,
@@ -149,7 +151,7 @@ export const DnDCell = function ({
 
   return (
     <Cell
-      className={isOver ? dropClassName : ""}
+      className={`${isOver ? dropClassName : ""} ${className}`}
       onClick={(event) => {
         event.stopPropagation();
         designerDispatch({

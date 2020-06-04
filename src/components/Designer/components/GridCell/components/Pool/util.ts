@@ -12,15 +12,12 @@ export function getData(cell: CellData) {
               break;
             case "list":
               result[element.id] = [];
-              // @ts-ignore
-              element.lanes.forEach((row, index) => {
-                if (index > 0) {
-                  let rowResult: { [key: string]: any } = {};
-                  row.cellDataList.forEach((listElement: CellData) => {
-                    rowResult[listElement.id] = listElement.value;
-                  });
-                  result[element.id].push(rowResult);
-                }
+              element.lanes!.forEach((row, index) => {
+                let rowResult: { [key: string]: any } = {};
+                row.cellDataList.forEach((listElement: CellData) => {
+                  rowResult[listElement.id] = listElement.value;
+                });
+                result[element.id].push(rowResult);
               });
               break;
             default:
