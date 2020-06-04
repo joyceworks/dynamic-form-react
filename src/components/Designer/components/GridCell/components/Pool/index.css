@@ -28,6 +28,13 @@
 }
 .preview .lane {
   border-style: none;
+  padding: 0 10px;
+}
+.preview .lane.row {
+  height: auto;
+}
+.preview .lane.row .form-group.inline {
+  min-height: auto;
 }
 .preview .instance {
   border-style: none;

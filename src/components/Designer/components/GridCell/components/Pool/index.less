@@ -1,4 +1,4 @@
-@background_color_lightpink: lightpink;
+@background-color-lightpink: lightpink;
 
 .instance.active {
   border: 1px solid #1890ff;
@@ -28,11 +28,18 @@
   position: relative;
 }
 .lane.hovered {
-  background-color: @background_color_lightpink;
+  background-color: @background-color-lightpink;
 }
 .preview {
   .lane {
     border-style: none;
+    padding: 0 10px;
+  }
+  .lane.row {
+    height: auto;
+    .form-group.inline {
+      min-height: auto;
+    }
   }
   .instance {
     border-style: none;

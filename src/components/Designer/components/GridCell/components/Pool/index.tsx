@@ -15,12 +15,12 @@ interface PoolProps {
 }
 
 const InstanceListHeaderItem = styled.td`
-  padding: 10px;
+  padding: 0 10px;
   white-space: nowrap;
   width: 100%;
   overflow-x: auto;
 
-  > td {
+  > div {
     width: 200px;
     display: inline-block;
   }
@@ -64,9 +64,9 @@ export const Pool = forwardRef(
                   <tr>
                     <InstanceListHeaderItem>
                       {cellData.lanes![0].cellDataList.map((item) => (
-                        <td>
+                        <div>
                           <span>{item.label}</span>
-                        </td>
+                        </div>
                       ))}
                     </InstanceListHeaderItem>
                   </tr>
