@@ -1,10 +1,5 @@
-import React, {
-  CSSProperties,
-  forwardRef,
-  useContext,
-  useReducer,
-} from "react";
-import { formReducer } from "./util";
+import React, { CSSProperties, forwardRef, useContext } from "react";
+import styled from "styled-components";
 import "./index.css";
 import { DndLane } from "./components/DndLane";
 import { Lane } from "./components/Lane";
@@ -19,10 +14,22 @@ interface PoolProps {
   style?: CSSProperties;
 }
 
+const InstanceListHeaderItem = styled.td`
+  padding: 10px;
+  white-space: nowrap;
+  width: 100%;
+  overflow-x: auto;
+
+  > td {
+    width: 200px;
+    display: inline-block;
+  }
+`;
+
 export const Pool = forwardRef(
   ({ direction = "column", cellData, style }: PoolProps, ref: any) => {
-    const userDispatch = useContext(InstanceContext);
-    const isDesigner = userDispatch === null;
+    const instanceDispatch = useContext(InstanceContext);
+    const isDesigner = instanceDispatch === null;
     function getLane(lane: any, index: number) {
       return isDesigner ? (
         <DndLane
@@ -55,21 +62,13 @@ export const Pool = forwardRef(
               <>
                 {!isDesigner && (
                   <tr>
-                    <td
-                      style={{
-                        padding: 10,
-                        whiteSpace: "nowrap",
-                        border: "1px solid #d3d3d3",
-                        width: "100%",
-                        overflowX: "auto",
-                      }}
-                    >
+                    <InstanceListHeaderItem>
                       {cellData.lanes![0].cellDataList.map((item) => (
-                        <div style={{ width: 200, display: "inline-block" }}>
+                        <td>
                           <span>{item.label}</span>
-                        </div>
+                        </td>
                       ))}
-                    </td>
+                    </InstanceListHeaderItem>
                   </tr>
                 )}
                 {cellData.lanes!.map((lane, index) => {
@@ -86,7 +85,7 @@ export const Pool = forwardRef(
         {!isDesigner && direction === "row" && (
           <Button
             onClick={() => {
-              userDispatch({
+              instanceDispatch({
                 type: "UPDATE",
                 data: update(cellData, {
                   lanes: {

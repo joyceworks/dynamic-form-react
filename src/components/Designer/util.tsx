@@ -1,5 +1,6 @@
 import { CellData } from "./schemas/CellData";
 import CellLocation from "./schemas/CellLocation";
+import { setValue } from "./components/GridCell/components/Pool/util";
 import {
   DispatchActiveProps,
   DispatchAddProps,
@@ -11,8 +12,7 @@ import {
   DispatchSetValueProps,
   DispatchUpdateProps,
   DispatchValidateProps,
-} from "./index";
-import { setValue } from "./components/GridCell/components/Pool/util";
+} from "./schemas/ReducerAction";
 
 export function peek(
   root: CellData,
@@ -194,6 +194,9 @@ export function reducer(
       if (!cellData.value) {
         cellData.warning = `${cellData.label} is required.`;
         cellData.warnable = true;
+      } else {
+        cellData.warnable = false;
+        cellData.warning = "";
       }
     });
   }

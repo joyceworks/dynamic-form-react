@@ -1,5 +1,4 @@
 import { CellData } from "../../../../schemas/CellData";
-import { peek } from "../../../../util";
 
 export function getData(cell: CellData) {
   let result = {};
@@ -70,21 +69,4 @@ export function setValue(cell: CellData, target: CellData, value: any) {
     return false;
   };
   return func(cell);
-}
-
-export function formReducer(state: any, action: any) {
-  switch (action.type) {
-    case "SET_VALUE":
-      const copy = { ...state };
-      setValue(copy.data, action.target, action.value);
-      return { ...copy };
-    case "VALIDATE":
-      return peek(state.data, function (cellData) {
-        if (!cellData.value) {
-          cellData.warning = "123";
-        }
-      });
-    default:
-      return state;
-  }
 }

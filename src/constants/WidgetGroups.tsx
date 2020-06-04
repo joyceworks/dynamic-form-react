@@ -51,12 +51,6 @@ export const WidgetGroups: { name: string; widgets: WidgetData[] }[] = [
         name: "多选",
         enable: true,
       },
-      {
-        type: "radio",
-        icon: <AiOutlineCheckSquare />,
-        name: "单选",
-        enable: true,
-      },
     ],
   },
   {
