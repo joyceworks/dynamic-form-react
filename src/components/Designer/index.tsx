@@ -13,7 +13,7 @@ import Backend from "react-dnd-html5-backend";
 import { WidgetData } from "./schemas/WidgetData";
 import "./index.css";
 import { Widget } from "./components/Widget";
-import { getActive, peek, reducer } from "./util";
+import { getActive, cloneAndForEach, reducer } from "./util";
 import { CellData } from "./schemas/CellData";
 import { WidgetGroups } from "../../constants/WidgetGroups";
 import { DnDCell } from "./components/DnDCell";
@@ -139,7 +139,7 @@ export const Designer = function () {
                           onClick={() => {
                             setPreviewDialogVisible(true);
                             setPreviewData(
-                              peek(data, function (item) {
+                              cloneAndForEach(data, function (item) {
                                 item.id += +new Date();
                               })
                             );

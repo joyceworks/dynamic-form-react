@@ -14,21 +14,43 @@ import {
   DispatchValidateProps,
 } from "./schemas/ReducerAction";
 
-export function peek(
+/**
+ * Clone and iterate nested CellData
+ * @param root
+ * @param handler
+ */
+export function cloneAndForEach(
   root: CellData,
-  func: (
+  handler: (
     value: CellData,
     index: number | null,
     array: CellData[] | null
   ) => void
-) {
+): CellData {
   const copy = JSON.parse(JSON.stringify(root));
+  forEach(copy, handler);
+  return copy;
+}
+
+/**
+ * Iterate nested CellData
+ * @param root
+ * @param handler
+ */
+export function forEach(
+  root: CellData,
+  handler: (
+    value: CellData,
+    index: number | null,
+    array: CellData[] | null
+  ) => void
+): void {
   let recursion = function (data: CellData): void {
     if (data.lanes) {
       for (const lane of data.lanes) {
         for (let i = 0; i < lane.cellDataList.length; i++) {
           let cellData = lane.cellDataList[i];
-          func(cellData, i, lane.cellDataList);
+          handler(cellData, i, lane.cellDataList);
           if (cellData.type === "grid" || cellData.type === "list") {
             recursion(cellData);
           }
@@ -36,9 +58,8 @@ export function peek(
       }
     }
   };
-  func(copy, null, null);
-  recursion(copy);
-  return copy;
+  handler(root, null, null);
+  recursion(root);
 }
 
 export function locate(
@@ -77,7 +98,10 @@ export function locate(
 }
 
 export function deleteActive(rootCellData: CellData) {
-  const location = locate(rootCellData, (item) => item.active);
+  const location = locate(
+    rootCellData,
+    (item) => item.active !== undefined && item.active
+  );
   if (location) {
     const [cellLocation, list] = location;
     list.splice(cellLocation.index, 1);
@@ -190,7 +214,7 @@ export function reducer(
   } else if (action.type === "SET_VALUE") {
     setValue(copy, action.target, action.value);
   } else if (action.type === "VALIDATE") {
-    return peek(state, function (cellData) {
+    return cloneAndForEach(state, function (cellData) {
       if (!cellData.value) {
         cellData.warning = `${cellData.label} is required.`;
         cellData.warnable = true;
@@ -204,19 +228,17 @@ export function reducer(
 }
 
 export function getActive(root: CellData): CellData | null {
-  const location = locate(root, (item) => item.active);
+  const location = locate(
+    root,
+    (item) => item.active !== undefined && item.active
+  );
   return location ? location[2] : null;
 }
 
 export function active(root: CellData, id: string) {
-  const prevLocation = locate(root, (item) => item.active);
-  if (prevLocation) {
-    prevLocation[2].active = false;
-  }
-  const currentLocation = locate(root, (item) => item.id === id);
-  if (currentLocation) {
-    currentLocation[2].active = true;
-  }
+  forEach(root, function (cellData) {
+    cellData.active = id === cellData.id;
+  });
 }
 
 export function createWidgetInstance(type: string) {

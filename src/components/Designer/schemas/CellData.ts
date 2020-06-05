@@ -1,7 +1,7 @@
 import { LaneData } from "./LaneData";
 
 export interface CellData {
-  active: boolean;
+  active?: boolean;
   options?: { value: any; label: string }[];
   value?: any;
   id: string;
