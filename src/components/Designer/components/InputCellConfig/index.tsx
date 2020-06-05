@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
 import { CellData } from "../../schemas/CellData";
 import { DesignerContext } from "../../index";
-import { Input } from "antd";
-import { FormGroup } from "../FormGroup";
+import { Input, Switch, Form } from "antd";
 import update from "immutability-helper";
 
 interface InputCellConfigProps {
@@ -13,12 +12,8 @@ export default function InputCellConfig({ data }: InputCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
     <>
-      <FormGroup
-        layout={"inline"}
-        required={false}
-        warnable={false}
-        label={<label>标题</label>}
-        element={
+      <Form>
+        <Form.Item label={"标题"}>
           <Input
             value={data.label}
             onChange={(event) => {
@@ -30,8 +25,21 @@ export default function InputCellConfig({ data }: InputCellConfigProps) {
               });
             }}
           />
-        }
-      />
+        </Form.Item>
+        <Form.Item label={"必填"}>
+          <Switch
+            checked={data.required}
+            onChange={(checked) => {
+              designerDispatch({
+                type: "UPDATE",
+                data: update(data, {
+                  required: { $set: checked },
+                }),
+              });
+            }}
+          />
+        </Form.Item>
+      </Form>
     </>
   );
 }

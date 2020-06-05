@@ -32,15 +32,17 @@ export const Pool = forwardRef(
     const isDesigner = instanceDispatch === null;
     function getLane(lane: any, index: number) {
       return isDesigner ? (
-        <DndLane
-          key={cellData.id + "-" + index}
-          direction={direction}
-          cellDataList={lane.cellDataList}
-          location={{
-            parentId: cellData.id,
-            index: index,
-          }}
-        />
+        <>
+          <DndLane
+            key={cellData.id + "-" + index}
+            direction={direction}
+            cellDataList={lane.cellDataList}
+            location={{
+              parentId: cellData.id,
+              index: index,
+            }}
+          />
+        </>
       ) : (
         <Lane
           key={cellData.id + "-" + index}

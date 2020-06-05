@@ -25,11 +25,11 @@ export const DnDCell = function ({
   className,
 }: DnDCellProps) {
   const data = {
-    ...cellData,
     required: false,
     warnable: false,
     layout: "default",
     labeled: true,
+    ...cellData,
   };
   const ref = useRef<any>(null);
   const designerDispatch = useContext(DesignerContext);
@@ -150,23 +150,25 @@ export const DnDCell = function ({
   drag(drop(ref));
 
   return (
-    <Cell
-      className={`${isOver ? dropClassName : ""} ${className}`}
-      onClick={(event) => {
-        event.stopPropagation();
-        designerDispatch({
-          type: "ACTIVE",
-          id: cellData.id,
-        });
-        designerDispatch({
-          type: "EDIT",
-          id: cellData.id,
-        });
-      }}
-      ref={ref}
-      style={{ opacity: isDragging ? "0.5" : 1 }}
-      cellData={data}
-      layout={layout}
-    />
+    <>
+      <Cell
+        className={`${isOver ? dropClassName : ""} ${className}`}
+        onClick={(event) => {
+          event.stopPropagation();
+          designerDispatch({
+            type: "ACTIVE",
+            id: cellData.id,
+          });
+          designerDispatch({
+            type: "EDIT",
+            id: cellData.id,
+          });
+        }}
+        ref={ref}
+        style={{ opacity: isDragging ? "0.5" : 1 }}
+        cellData={data}
+        layout={layout}
+      />
+    </>
   );
 };
