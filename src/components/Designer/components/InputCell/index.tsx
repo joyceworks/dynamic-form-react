@@ -27,6 +27,7 @@ export const InputCell = forwardRef(
         }
         element={
           <Input
+            disabled={element.disabled}
             value={element.value}
             placeholder={element.placeholder}
             onChange={(event) => {

@@ -33,6 +33,8 @@ import {
   DispatchValidateProps,
 } from "./schemas/ReducerAction";
 import styled from "styled-components";
+import DateCellConfig from "./components/DateCellConfig";
+import SelectCellConfig from "./components/SelectCellConfig";
 
 const { Sider, Content, Header } = Layout;
 
@@ -165,6 +167,10 @@ export const Designer = function () {
                       <GridCellConfig data={active} />
                     ) : active.type === "input" ? (
                       <InputCellConfig data={active} />
+                    ) : active.type === "datetime" ? (
+                      <DateCellConfig data={active} />
+                    ) : active.type === "select" ? (
+                      <SelectCellConfig data={active} />
                     ) : (
                       <></>
                     )

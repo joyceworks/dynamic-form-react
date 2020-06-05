@@ -42,6 +42,8 @@ export const SelectCell = forwardRef(
           }
           element={
             <Select
+              disabled={cellData.disabled}
+              style={{ width: "100%" }}
               onChange={(value) => {
                 dispatch({
                   type: "SET_VALUE",

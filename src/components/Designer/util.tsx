@@ -215,7 +215,7 @@ export function reducer(
     setValue(copy, action.target, action.value);
   } else if (action.type === "VALIDATE") {
     return cloneAndForEach(state, function (cellData) {
-      if (!cellData.value) {
+      if (cellData.required && !cellData.value) {
         cellData.warning = `${cellData.label} is required.`;
         cellData.warnable = true;
       } else {

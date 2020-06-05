@@ -4,11 +4,11 @@ import { DesignerContext } from "../../index";
 import { Input, Switch, Form } from "antd";
 import update from "immutability-helper";
 
-interface InputCellConfigProps {
+interface SelectCellConfigProps {
   data: CellData;
 }
 
-export default function InputCellConfig({ data }: InputCellConfigProps) {
+export default function SelectCellConfig({ data }: SelectCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
     <>

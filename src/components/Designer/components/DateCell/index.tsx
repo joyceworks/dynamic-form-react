@@ -23,6 +23,8 @@ export const DateCell = forwardRef(
         }
         element={
           <DatePicker
+            style={{ width: "100%" }}
+            disabled={data.disabled}
             value={data.value}
             placeholder={data.placeholder}
             onChange={(date) => {
