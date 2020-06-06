@@ -152,7 +152,7 @@ export const DnDCell = function ({
   return (
     <>
       <Cell
-        className={`${isOver ? dropClassName : ""} ${className}`}
+        className={`${isOver ? dropClassName : ""} ${className || ""}`}
         onClick={(event) => {
           event.stopPropagation();
           designerDispatch({

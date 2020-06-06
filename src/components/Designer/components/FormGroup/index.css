@@ -22,7 +22,6 @@
   color: red;
 }
 .form-group.inline {
-  display: inline-block;
   margin: 6px 0;
 }
 .form-group.inline > tbody > tr > td.label {

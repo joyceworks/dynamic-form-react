@@ -33,7 +33,7 @@ export const Cell = forwardRef(
           ref={ref}
           style={style}
           className={`instance ${
-            !instanceDispatch && data.active ? " active " : ""
+            !instanceDispatch && data.active ? " active " : " "
           }${className || ""}`}
           onClick={onClick}
         >

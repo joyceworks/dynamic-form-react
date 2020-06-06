@@ -1,17 +1,19 @@
-import React, { forwardRef, useContext } from "react";
+import React, { forwardRef, useContext, Fragment } from "react";
 import { CellData } from "../../../../../../schemas/CellData";
 import { DnDCell } from "../../../../../DnDCell";
 import { Cell } from "../../../../../Cell";
 import { InstanceContext } from "../../../../../../../Instance";
+import { Col } from "antd";
 
 interface LaneProps {
   cellDataList: CellData[];
   direction: "column" | "row";
   className?: string;
+  span?: number;
 }
 
 export const Lane = forwardRef(
-  ({ cellDataList, direction, className }: LaneProps, ref: any) => {
+  ({ cellDataList, direction, className, span }: LaneProps, ref: any) => {
     const instanceDispatch = useContext(InstanceContext);
     const layout = direction === "column" ? "default" : "inline";
     const cells = cellDataList.map((child, index) =>
@@ -30,9 +32,11 @@ export const Lane = forwardRef(
     );
 
     return (
-      <td ref={ref} className={"lane " + direction + (className || "")}>
-        {cells}
-      </td>
+      <Col flex={span} className={"lane " + direction + (className || "")}>
+        <div style={{ width: "100%", height: "100%" }} ref={ref}>
+          {cells}
+        </div>
+      </Col>
     );
   }
 );

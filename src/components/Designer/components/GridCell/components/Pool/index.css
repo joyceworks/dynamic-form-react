@@ -19,7 +19,7 @@
 .lane {
   padding: 10px;
   border: 1px solid #d3d3d3;
-  height: 62px;
+  min-height: 62px;
   vertical-align: top;
   position: relative;
 }
@@ -31,7 +31,7 @@
   padding: 0 10px;
 }
 .preview .lane.row {
-  height: auto;
+  min-height: auto;
 }
 .preview .lane.row .form-group.inline {
   min-height: auto;

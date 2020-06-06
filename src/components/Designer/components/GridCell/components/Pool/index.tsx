@@ -1,20 +1,20 @@
-import React, { CSSProperties, forwardRef, useContext } from "react";
+import React, { forwardRef, useContext } from "react";
+import { Button, Row, Col } from "antd";
 import styled from "styled-components";
-import "./index.css";
+import update from "immutability-helper";
+import { CellData } from "../../../../schemas/CellData";
+import { InstanceContext } from "../../../../../Instance";
 import { DndLane } from "./components/DndLane";
 import { Lane } from "./components/Lane";
-import { CellData } from "../../../../schemas/CellData";
-import { Button } from "antd";
-import update from "immutability-helper";
-import { InstanceContext } from "../../../../../Instance";
+import "./index.css";
+import { LaneData } from "../../../../schemas/LaneData";
 
 interface PoolProps {
   direction?: "column" | "row";
   cellData: CellData;
-  style?: CSSProperties;
 }
 
-const InstanceListHeaderItem = styled.td`
+const InstanceListHeaderItem = styled(Col)`
   padding: 0 10px;
   white-space: nowrap;
   width: 100%;
@@ -27,63 +27,53 @@ const InstanceListHeaderItem = styled.td`
 `;
 
 export const Pool = forwardRef(
-  ({ direction = "column", cellData, style }: PoolProps, ref: any) => {
+  ({ direction = "column", cellData }: PoolProps, ref: any) => {
     const instanceDispatch = useContext(InstanceContext);
     const isDesigner = instanceDispatch === null;
-    function getLane(lane: any, index: number) {
+    function getLane(lane: LaneData, index: number) {
       return isDesigner ? (
-        <>
-          <DndLane
-            key={cellData.id + "-" + index}
-            direction={direction}
-            cellDataList={lane.cellDataList}
-            location={{
-              parentId: cellData.id,
-              index: index,
-            }}
-          />
-        </>
+        <DndLane
+          key={cellData.id + "-" + index}
+          direction={direction}
+          cellDataList={lane.cellDataList}
+          location={{
+            parentId: cellData.id,
+            index: index,
+          }}
+          span={lane.span}
+        />
       ) : (
         <Lane
           key={cellData.id + "-" + index}
           cellDataList={lane.cellDataList}
           direction={direction}
+          span={lane.span}
         />
       );
     }
 
     return (
       <>
-        <table ref={ref} className={"lanes"} style={style}>
-          <tbody>
-            {direction === "column" ? (
-              <tr>
-                {cellData.lanes!.map((lane, index) => getLane(lane, index))}
-              </tr>
-            ) : (
-              <>
-                {!isDesigner && (
-                  <tr>
-                    <InstanceListHeaderItem>
-                      {cellData.lanes![0].cellDataList.map((item) => (
-                        <div>
-                          <span>{item.label}</span>
-                        </div>
-                      ))}
-                    </InstanceListHeaderItem>
-                  </tr>
-                )}
-                {cellData.lanes!.map((lane, index) => {
-                  return (
-                    <tr key={cellData.id + "-" + index + "-parent"}>
-                      {getLane(lane, 0)}
-                    </tr>
-                  );
-                })}
-              </>
-            )}
-          </tbody>
-        </table>
+        <Row ref={ref} className={"lanes"}>
+          {direction === "column" ? (
+            <>{cellData.lanes!.map((lane, index) => getLane(lane, index))}</>
+          ) : (
+            <>
+              {!isDesigner && (
+                <InstanceListHeaderItem span={12}>
+                  {cellData.lanes![0].cellDataList.map((item) => (
+                    <div>
+                      <span>{item.label}</span>
+                    </div>
+                  ))}
+                </InstanceListHeaderItem>
+              )}
+              {cellData.lanes!.map((lane) => {
+                return getLane(lane, 0);
+              })}
+            </>
+          )}
+        </Row>
         {!isDesigner && direction === "row" && (
           <Button
             onClick={() => {

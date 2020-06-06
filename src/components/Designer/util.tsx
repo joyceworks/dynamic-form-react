@@ -249,8 +249,8 @@ export function createWidgetInstance(type: string) {
   };
   if (cellData.type === "grid") {
     cellData.lanes = [
-      { span: 50, cellDataList: [] },
-      { span: 50, cellDataList: [] },
+      { span: 12, cellDataList: [] },
+      { span: 12, cellDataList: [] },
     ];
   } else if (cellData.type === "input") {
     cellData.label = "单行文本";

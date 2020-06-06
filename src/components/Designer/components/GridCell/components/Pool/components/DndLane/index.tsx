@@ -10,12 +10,14 @@ interface LaneProps {
   cellDataList: CellData[];
   direction: "column" | "row";
   location: SwimlaneLocation;
+  span?: number;
 }
 
 export const DndLane = function ({
   cellDataList,
   direction,
   location,
+  span,
 }: LaneProps) {
   const dispatch = useContext(DesignerContext);
   const [{ isOver }, drop] = useDrop({
@@ -60,6 +62,7 @@ export const DndLane = function ({
   });
   return (
     <Lane
+      span={span}
       cellDataList={cellDataList}
       className={isOver ? " hovered" : ""}
       ref={drop}
