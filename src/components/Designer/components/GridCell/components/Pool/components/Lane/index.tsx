@@ -32,7 +32,7 @@ export const Lane = forwardRef(
     );
 
     return (
-      <Col flex={span} className={"lane " + direction + (className || "")}>
+      <Col span={span} className={"lane " + direction + (className || "")}>
         <div style={{ width: "100%", height: "100%" }} ref={ref}>
           {cells}
         </div>
