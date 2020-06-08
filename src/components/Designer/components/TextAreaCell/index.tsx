@@ -32,11 +32,12 @@ export const TextAreaCell = forwardRef(
             value={element.value}
             placeholder={element.placeholder}
             onChange={(event) => {
-              dispatch({
-                type: "SET_VALUE",
-                target: element,
-                value: event.target.value,
-              });
+              dispatch &&
+                dispatch({
+                  type: "SET_VALUE",
+                  target: element,
+                  value: event.target.value,
+                });
             }}
           />
         }

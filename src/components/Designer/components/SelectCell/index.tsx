@@ -45,11 +45,12 @@ export const SelectCell = forwardRef(
               disabled={cellData.disabled}
               style={{ width: "100%" }}
               onChange={(value) => {
-                dispatch({
-                  type: "SET_VALUE",
-                  target: cellData,
-                  value: value,
-                });
+                dispatch &&
+                  dispatch({
+                    type: "SET_VALUE",
+                    target: cellData,
+                    value: value,
+                  });
               }}
             >
               {cellData.options?.map((option) => (

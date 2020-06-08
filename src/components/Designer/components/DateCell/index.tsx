@@ -28,11 +28,12 @@ export const DateCell = forwardRef(
             value={data.value}
             placeholder={data.placeholder}
             onChange={(date) => {
-              dispatch({
-                type: "SET_VALUE",
-                target: data,
-                value: date,
-              });
+              dispatch &&
+                dispatch({
+                  type: "SET_VALUE",
+                  target: data,
+                  value: date,
+                });
             }}
           />
         }

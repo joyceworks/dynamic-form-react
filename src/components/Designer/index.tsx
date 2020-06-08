@@ -202,7 +202,13 @@ export const Designer = function () {
           ]}
         >
           {previewData && (
-            <Form ref={previewRef} data={previewData} key={previewData.id} />
+            <Form
+              ref={previewRef}
+              data={cloneAndForEach(previewData, (data) => {
+                data.value = data.defaultValue || data.value;
+              })}
+              key={previewData.id}
+            />
           )}
         </Modal>
       </DesignerContext.Provider>

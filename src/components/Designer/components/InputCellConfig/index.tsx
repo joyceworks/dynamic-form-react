@@ -52,6 +52,19 @@ export default function InputCellConfig({ data }: InputCellConfigProps) {
             }}
           />
         </Form.Item>
+        <Form.Item label={"默认值"}>
+          <Input
+            value={data.defaultValue}
+            onChange={(event) => {
+              designerDispatch({
+                type: "UPDATE",
+                data: update(data, {
+                  defaultValue: { $set: event.target.value },
+                }),
+              });
+            }}
+          />
+        </Form.Item>
       </Form>
     </>
   );
