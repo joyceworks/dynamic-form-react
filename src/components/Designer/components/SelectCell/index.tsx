@@ -12,9 +12,9 @@ interface SelectCellProps {
 }
 
 export const SelectCell = forwardRef(
-  ({ cellData, layout, dispatch }: SelectCellProps, ref: any) => {
-    if (!cellData.options || cellData.options.length === 0) {
-      cellData.options = [
+  ({ cellData: data, layout, dispatch }: SelectCellProps, ref: any) => {
+    if (!data.options || data.options.length === 0) {
+      data.options = [
         {
           label: "Joyce",
           value: "1",
@@ -29,31 +29,32 @@ export const SelectCell = forwardRef(
       <>
         <FormGroup
           ref={ref}
-          required={cellData.required!}
-          warning={cellData.warning}
+          required={data.required!}
+          warning={data.warning}
           layout={layout}
-          warnable={cellData.warnable!}
+          warnable={data.warnable!}
           label={
-            cellData.labeled ? (
-              <label title={cellData.label}>{cellData.label}</label>
+            data.labeled ? (
+              <label title={data.label}>{data.label}</label>
             ) : (
               <></>
             )
           }
           element={
             <Select
-              disabled={cellData.disabled}
+              placeholder={data.placeholder}
+              disabled={data.disabled}
               style={{ width: "100%" }}
               onChange={(value) => {
                 dispatch &&
                   dispatch({
                     type: "SET_VALUE",
-                    target: cellData,
+                    target: data,
                     value: value,
                   });
               }}
             >
-              {cellData.options?.map((option) => (
+              {data.options?.map((option) => (
                 <Option value={option.value}>{option.label}</Option>
               ))}
             </Select>

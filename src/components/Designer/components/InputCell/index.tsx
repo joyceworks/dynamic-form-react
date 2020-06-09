@@ -10,31 +10,27 @@ interface InputCellProps {
 }
 
 export const InputCell = forwardRef(
-  ({ element, layout, dispatch }: InputCellProps, ref: any) => (
+  ({ element: data, layout, dispatch }: InputCellProps, ref: any) => (
     <>
       <FormGroup
         ref={ref}
-        required={element.required!}
-        warning={element.warning}
+        required={data.required!}
+        warning={data.warning}
         layout={layout}
-        warnable={element.warnable!}
+        warnable={data.warnable!}
         label={
-          element.labeled ? (
-            <label title={element.label}>{element.label}</label>
-          ) : (
-            <></>
-          )
+          data.labeled ? <label title={data.label}>{data.label}</label> : <></>
         }
         element={
           <Input
-            disabled={element.disabled}
-            value={element.value}
-            placeholder={element.placeholder}
+            disabled={data.disabled}
+            value={data.value}
+            placeholder={data.placeholder}
             onChange={(event) => {
               dispatch &&
                 dispatch({
                   type: "SET_VALUE",
-                  target: element,
+                  target: data,
                   value: event.target.value,
                 });
             }}

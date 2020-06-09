@@ -18,14 +18,12 @@ export const Lane = forwardRef(
     const layout = direction === "column" ? "default" : "inline";
     const cells = cellDataList.map((child, index) =>
       instanceDispatch === null ? (
-        <>
-          <DnDCell
-            key={child.id}
-            layout={layout}
-            cellData={child}
-            index={index}
-          />
-        </>
+        <DnDCell
+          key={child.id}
+          layout={layout}
+          cellData={child}
+          index={index}
+        />
       ) : (
         <Cell cellData={child} key={child.id} layout={layout} />
       )

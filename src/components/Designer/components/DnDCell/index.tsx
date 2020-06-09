@@ -84,7 +84,6 @@ export const DnDCell = function ({
       }
     },
     collect: (monitor) => {
-      console.log(cellData.id);
       return {
         isOver: monitor.isOver({ shallow: true }),
       };
@@ -139,8 +138,7 @@ export const DnDCell = function ({
     collect: (monitor: any) => ({
       isDragging: !!monitor.isDragging(),
     }),
-    begin: (monitor) => {
-      console.log(monitor);
+    begin: () => {
       designerDispatch({
         type: "ACTIVE",
         id: cellData.id,

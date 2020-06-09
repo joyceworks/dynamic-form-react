@@ -1,6 +1,5 @@
 import React, {
   Dispatch,
-  Fragment,
   useCallback,
   useEffect,
   useReducer,
@@ -10,9 +9,7 @@ import React, {
 import { Layout, Button, Space, Modal } from "antd";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
-import { WidgetData } from "./schemas/WidgetData";
 import "./index.css";
-import { Widget } from "./components/Widget";
 import { getActive, cloneAndForEach, reducer } from "./util";
 import { CellData } from "./schemas/CellData";
 import { WidgetGroups } from "../../constants/WidgetGroups";
@@ -35,6 +32,7 @@ import {
 import styled from "styled-components";
 import DateCellConfig from "./components/DateCellConfig";
 import SelectCellConfig from "./components/SelectCellConfig";
+import WidgetGroup from "./components/WidgetGroup";
 
 const { Sider, Content, Header } = Layout;
 
@@ -77,6 +75,23 @@ export const DesignerContext = React.createContext<
     | DispatchValidateProps
   >
 >({} as Dispatch<any>);
+const LeftSider = styled(Sider).attrs({
+  width: 280,
+})`
+  padding: 10px;
+  border-right: 1px solid #d3d3d3;
+`;
+const RightSider = styled(Sider).attrs({
+  width: 280,
+})`
+  padding: 10px;
+  border-left: 1px solid #d3d3d3;
+`;
+const ToolBar = styled(Header)`
+  padding: 0 10px;
+  text-align: right;
+  border-bottom: 1px solid #a3a3a3;
+`;
 export const Designer = function () {
   const [data, designerDispatch] = useReducer(reducer, rootCellData);
   const [previewDialogVisible, setPreviewDialogVisible] = useState(false);
@@ -110,31 +125,14 @@ export const Designer = function () {
                 className={"layout"}
                 style={{ borderTop: "1px solid #a3a3a3" }}
               >
-                <Sider
-                  width={280}
-                  className={"left"}
-                  style={{ borderRight: "1px solid #a3a3a3" }}
-                >
+                <LeftSider>
                   {WidgetGroups.map((g) => (
-                    <Fragment key={g.name}>
-                      <div>{g.name}</div>
-                      <ul className={"panel"}>
-                        {g.widgets.map((w: WidgetData) => {
-                          return <Widget key={w.name} widget={w} />;
-                        })}
-                      </ul>
-                    </Fragment>
+                    <WidgetGroup key={g.name} name={g.name} list={g.widgets} />
                   ))}
-                </Sider>
+                </LeftSider>
                 <Content>
                   <Layout style={{ height: "100%" }}>
-                    <Header
-                      style={{
-                        padding: "0 10px",
-                        textAlign: "right",
-                        borderBottom: "1px solid #a3a3a3",
-                      }}
-                    >
+                    <ToolBar>
                       <Space>
                         <Button>Reset</Button>
                         <Button
@@ -151,17 +149,13 @@ export const Designer = function () {
                         </Button>
                         <Button>Save</Button>
                       </Space>
-                    </Header>
-                    <Content className={"form"} style={{ height: "100%" }}>
+                    </ToolBar>
+                    <Content style={{ height: "100%", padding: 10 }}>
                       <RootCell cellData={data} index={0} />
                     </Content>
                   </Layout>
                 </Content>
-                <Sider
-                  width={280}
-                  className={"right"}
-                  style={{ borderLeft: "1px solid #a3a3a3" }}
-                >
+                <RightSider>
                   {active ? (
                     active.type === "grid" ? (
                       <GridCellConfig data={active} />
@@ -177,7 +171,7 @@ export const Designer = function () {
                   ) : (
                     <></>
                   )}
-                </Sider>
+                </RightSider>
               </Layout>
             </Content>
           </Layout>

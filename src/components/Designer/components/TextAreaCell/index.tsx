@@ -11,31 +11,27 @@ interface TextAreaCellProps {
 const { TextArea } = Input;
 
 export const TextAreaCell = forwardRef(
-  ({ element, layout, dispatch }: TextAreaCellProps, ref: any) => (
+  ({ element: data, layout, dispatch }: TextAreaCellProps, ref: any) => (
     <>
       <FormGroup
         ref={ref}
-        required={element.required!}
-        warning={element.warning}
+        required={data.required!}
+        warning={data.warning}
         layout={layout}
-        warnable={element.warnable!}
+        warnable={data.warnable!}
         label={
-          element.labeled ? (
-            <label title={element.label}>{element.label}</label>
-          ) : (
-            <></>
-          )
+          data.labeled ? <label title={data.label}>{data.label}</label> : <></>
         }
         element={
           <TextArea
             rows={4}
-            value={element.value}
-            placeholder={element.placeholder}
+            value={data.value}
+            placeholder={data.placeholder}
             onChange={(event) => {
               dispatch &&
                 dispatch({
                   type: "SET_VALUE",
-                  target: element,
+                  target: data,
                   value: event.target.value,
                 });
             }}

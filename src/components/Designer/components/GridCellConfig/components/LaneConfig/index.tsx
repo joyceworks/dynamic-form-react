@@ -25,7 +25,7 @@ export default function LaneConfig({
   onResize,
 }: LaneConfigProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [{ isDragging }, drag] = useDrag({
+  const [, drag] = useDrag({
     item: {
       type: "config",
       index: index,
