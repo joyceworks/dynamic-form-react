@@ -1,17 +1,16 @@
 import React, { forwardRef } from "react";
-import { Input } from "antd";
-import { CellData } from "../../schemas/CellData";
-import { FormGroup } from "../FormGroup";
-interface TextAreaCellProps {
-  element: CellData;
+import { DatePicker } from "antd";
+import { FormGroup } from "./FormGroup";
+import { CellData } from "../schemas/CellData";
+
+interface DateCellProps {
+  data: CellData;
   layout?: "inline" | "default";
   dispatch: any;
 }
 
-const { TextArea } = Input;
-
-export const TextAreaCell = forwardRef(
-  ({ element: data, layout, dispatch }: TextAreaCellProps, ref: any) => (
+export const DateCell = forwardRef(
+  ({ data, layout, dispatch }: DateCellProps, ref: any) => (
     <>
       <FormGroup
         ref={ref}
@@ -23,16 +22,17 @@ export const TextAreaCell = forwardRef(
           data.labeled ? <label title={data.label}>{data.label}</label> : <></>
         }
         element={
-          <TextArea
-            rows={4}
+          <DatePicker
+            style={{ width: "100%" }}
+            disabled={data.disabled}
             value={data.value}
             placeholder={data.placeholder}
-            onChange={(event) => {
+            onChange={(date) => {
               dispatch &&
                 dispatch({
                   type: "SET_VALUE",
                   target: data,
-                  value: event.target.value,
+                  value: date,
                 });
             }}
           />

@@ -1,8 +1,8 @@
 import React, { forwardRef, useImperativeHandle, useReducer } from "react";
-import { Cell } from "../Designer/components/Cell";
-import { reducer } from "../Designer/util";
-import { CellData } from "../Designer/schemas/CellData";
-import { getData } from "../Designer/components/GridCell/components/Pool/util";
+import { Cell } from "./Designer/components/Cell";
+import { reducer } from "./Designer/util";
+import { CellData } from "./Designer/schemas/CellData";
+import { getData } from "./Designer/components/GridCell/components/Pool/util";
 
 interface FormProps {
   data: CellData;

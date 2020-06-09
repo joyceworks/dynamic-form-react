@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
-import { CellData } from "../../schemas/CellData";
-import { DesignerContext } from "../../index";
+import { CellData } from "../schemas/CellData";
+import { DesignerContext } from "../index";
 import { Input, Switch, Form } from "antd";
 import update from "immutability-helper";
 
-interface SelectCellConfigProps {
+interface DateCellConfigProps {
   data: CellData;
 }
 
-export default function SelectCellConfig({ data }: SelectCellConfigProps) {
+export default function DateCellConfig({ data }: DateCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
     <>

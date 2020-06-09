@@ -1,5 +1,5 @@
 import React from "react";
-import { WidgetData } from "../../schemas/WidgetData";
+import { WidgetData } from "../schemas/WidgetData";
 import { useDrag } from "react-dnd";
 import styled from "styled-components";
 

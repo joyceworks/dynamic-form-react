@@ -1,11 +1,11 @@
 import React, { CSSProperties, forwardRef, useContext } from "react";
-import { CellData } from "../../schemas/CellData";
-import { InputCell } from "../InputCell";
-import { TextAreaCell } from "../TextAreaCell";
-import { GridCell } from "../GridCell";
-import { SelectCell } from "../SelectCell";
-import { DateCell } from "../DateCell";
-import { InstanceContext } from "../../../Instance";
+import { CellData } from "../schemas/CellData";
+import { InputCell } from "./InputCell";
+import { TextAreaCell } from "./TextAreaCell";
+import { GridCell } from "./GridCell";
+import { SelectCell } from "./SelectCell";
+import { DateCell } from "./DateCell";
+import { InstanceContext } from "../../Instance";
 
 interface CellProps {
   cellData: CellData;

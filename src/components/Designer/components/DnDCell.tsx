@@ -1,9 +1,9 @@
 import React, { useContext, useRef, useState } from "react";
 import { useDrag, useDrop, XYCoord } from "react-dnd";
-import { CellData } from "../../schemas/CellData";
-import { DesignerContext } from "../../index";
-import { createWidgetInstance } from "../../util";
-import { Cell } from "../Cell";
+import { CellData } from "../schemas/CellData";
+import { DesignerContext } from "../index";
+import { createWidgetInstance } from "../util";
+import { Cell } from "./Cell";
 
 interface DnDCellProps {
   cellData: CellData;

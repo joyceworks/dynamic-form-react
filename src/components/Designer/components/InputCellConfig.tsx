@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { CellData } from "../../schemas/CellData";
-import { DesignerContext } from "../../index";
+import { CellData } from "../schemas/CellData";
+import { DesignerContext } from "../index";
 import { Input, Switch, Form } from "antd";
 import update from "immutability-helper";
 
