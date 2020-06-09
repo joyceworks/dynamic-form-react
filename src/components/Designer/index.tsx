@@ -9,7 +9,6 @@ import React, {
 import { Layout, Button, Space, Modal } from "antd";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
-import "./index.css";
 import { getActive, cloneAndForEach, reducer } from "./util";
 import { CellData } from "./schemas/CellData";
 import { WidgetGroups } from "../../constants/WidgetGroups";
@@ -61,6 +60,22 @@ const RootCell = styled(DnDCell)`
   }
 `;
 
+const WhiteLayout = styled(Layout)`
+  background-color: white;
+`;
+
+const WhiteHeader = styled(Header)`
+  background-color: white;
+`;
+
+const WhiteSider = styled(Sider)`
+  background-color: white;
+`;
+
+const WhiteContent = styled(Content)`
+  background-color: white;
+`;
+
 export const DesignerContext = React.createContext<
   Dispatch<
     | DispatchPositionedMove
@@ -75,19 +90,23 @@ export const DesignerContext = React.createContext<
     | DispatchValidateProps
   >
 >({} as Dispatch<any>);
-const LeftSider = styled(Sider).attrs({
+const LeftSider = styled(WhiteSider).attrs({
   width: 280,
 })`
   padding: 10px;
   border-right: 1px solid #d3d3d3;
 `;
-const RightSider = styled(Sider).attrs({
+const RightSider = styled(WhiteSider).attrs({
   width: 280,
 })`
   padding: 10px;
   border-left: 1px solid #d3d3d3;
 `;
-const ToolBar = styled(Header)`
+const FullHeightLayout = styled(WhiteLayout)`
+  border-top: 1px solid #d3d3d3;
+  height: calc(100% - 1px);
+`;
+const ToolBar = styled(WhiteHeader)`
   padding: 0 10px;
   text-align: right;
   border-bottom: 1px solid #a3a3a3;
@@ -116,22 +135,19 @@ export const Designer = function () {
     <>
       <DesignerContext.Provider value={designerDispatch}>
         <DndProvider backend={Backend}>
-          <Layout style={{ height: "100%" }}>
-            <Header style={{ padding: "0 20px" }}>
+          <WhiteLayout style={{ height: "100%" }}>
+            <WhiteHeader style={{ padding: "0 20px" }}>
               <h1>Dynamic Form Designer</h1>
-            </Header>
-            <Content>
-              <Layout
-                className={"layout"}
-                style={{ borderTop: "1px solid #a3a3a3" }}
-              >
+            </WhiteHeader>
+            <WhiteContent>
+              <FullHeightLayout>
                 <LeftSider>
                   {WidgetGroups.map((g) => (
                     <WidgetGroup key={g.name} name={g.name} list={g.widgets} />
                   ))}
                 </LeftSider>
-                <Content>
-                  <Layout style={{ height: "100%" }}>
+                <WhiteContent>
+                  <WhiteLayout style={{ height: "100%" }}>
                     <ToolBar>
                       <Space>
                         <Button>Reset</Button>
@@ -150,11 +166,11 @@ export const Designer = function () {
                         <Button>Save</Button>
                       </Space>
                     </ToolBar>
-                    <Content style={{ height: "100%", padding: 10 }}>
+                    <WhiteContent style={{ height: "100%", padding: 10 }}>
                       <RootCell cellData={data} index={0} />
-                    </Content>
-                  </Layout>
-                </Content>
+                    </WhiteContent>
+                  </WhiteLayout>
+                </WhiteContent>
                 <RightSider>
                   {active ? (
                     active.type === "grid" ? (
@@ -172,9 +188,9 @@ export const Designer = function () {
                     <></>
                   )}
                 </RightSider>
-              </Layout>
-            </Content>
-          </Layout>
+              </FullHeightLayout>
+            </WhiteContent>
+          </WhiteLayout>
         </DndProvider>
         <Modal
           width={1000}

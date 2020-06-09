@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import { Input } from "antd";
-import { CellData } from "../../schemas/CellData";
-import { FormGroup } from "../FormGroup";
+import { CellData } from "../schemas/CellData";
+import { FormGroup } from "./FormGroup";
 
 interface InputCellProps {
   element: CellData;

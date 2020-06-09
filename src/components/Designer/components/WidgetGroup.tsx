@@ -13,7 +13,6 @@ export default function ({ name, list }: WidgetGroupProps) {
       <Fragment key={name}>
         <div>{name}</div>
         <ul
-          className={"panel"}
           style={{
             width: "100%",
             listStyle: "none",

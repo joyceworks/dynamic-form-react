@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { useDrop } from "react-dnd";
-import { Lane } from "../Lane";
-import { CellData } from "../../../../../../schemas/CellData";
-import SwimlaneLocation from "../../../../../../schemas/SwimlaneLocation";
-import { DesignerContext } from "../../../../../../index";
-import { createWidgetInstance } from "../../../../../../util";
+import { Lane } from "./Lane";
+import { CellData } from "../../../../../schemas/CellData";
+import SwimlaneLocation from "../../../../../schemas/SwimlaneLocation";
+import { DesignerContext } from "../../../../../index";
+import { createWidgetInstance } from "../../../../../util";
 
 interface LaneProps {
   cellDataList: CellData[];

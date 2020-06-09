@@ -1,8 +1,8 @@
 import React, { forwardRef, useContext } from "react";
-import { CellData } from "../../../../../../schemas/CellData";
-import { DnDCell } from "../../../../../DnDCell";
-import { Cell } from "../../../../../Cell";
-import { InstanceContext } from "../../../../../../../Instance";
+import { CellData } from "../../../../../schemas/CellData";
+import { DnDCell } from "../../../../DnDCell";
+import { Cell } from "../../../../Cell";
+import { InstanceContext } from "../../../../../../Instance";
 import { Col } from "antd";
 
 interface LaneProps {

@@ -55,11 +55,6 @@
 .lane.row .form-group > tr > td.label {
   text-align: left;
 }
-.lane.row .indicator {
-  display: inline-block;
-  height: 100%;
-  width: 5px;
-}
 .drop-over-downward {
   border-bottom: 1px dashed #1890ff;
 }
