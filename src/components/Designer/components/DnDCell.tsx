@@ -7,7 +7,7 @@ import { Cell } from "./Cell";
 
 interface DnDCellProps {
   cellData: CellData;
-  layout?: "inline" | "default";
+  layout?: "vertical" | "horizontal";
   index: number;
   className?: string;
 }
@@ -21,7 +21,7 @@ interface DragItem {
 export const DnDCell = function ({
   cellData,
   index,
-  layout = "default",
+  layout = "horizontal",
   className,
 }: DnDCellProps) {
   const data = {
@@ -63,7 +63,7 @@ export const DnDCell = function ({
       const hoverBoundingRect = ref.current!.getBoundingClientRect();
       const clientOffset = monitor.getClientOffset();
       const coord = clientOffset as XYCoord;
-      if (layout === "default") {
+      if (layout === "horizontal") {
         const hoverMiddleY =
           (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
         const hoverClientY = coord.y - hoverBoundingRect.top;
@@ -102,7 +102,7 @@ export const DnDCell = function ({
       if (!clientOffset) {
         return;
       }
-      if (layout === "default") {
+      if (layout === "horizontal") {
         const hoverMiddleY =
           (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
         const hoverClientY =

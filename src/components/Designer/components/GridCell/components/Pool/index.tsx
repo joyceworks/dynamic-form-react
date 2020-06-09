@@ -10,7 +10,7 @@ import "./index.css";
 import { LaneData } from "../../../../schemas/LaneData";
 
 interface PoolProps {
-  direction?: "column" | "row";
+  direction?: "horizontal" | "vertical";
   cellData: CellData;
 }
 
@@ -27,7 +27,7 @@ const InstanceListHeaderItem = styled(Col)`
 `;
 
 export const Pool = forwardRef(
-  ({ direction = "column", cellData }: PoolProps, ref: any) => {
+  ({ direction = "horizontal", cellData }: PoolProps, ref: any) => {
     const instanceDispatch = useContext(InstanceContext);
     const isDesigner = instanceDispatch === null;
     function getLane(lane: LaneData, index: number) {
@@ -55,7 +55,7 @@ export const Pool = forwardRef(
     return (
       <>
         <Row ref={ref} className={"lanes"}>
-          {direction === "column" ? (
+          {direction === "horizontal" ? (
             <>{cellData.lanes!.map((lane, index) => getLane(lane, index))}</>
           ) : (
             <>
@@ -74,7 +74,7 @@ export const Pool = forwardRef(
             </>
           )}
         </Row>
-        {!isDesigner && direction === "row" && (
+        {!isDesigner && direction === "vertical" && (
           <Button
             onClick={() => {
               instanceDispatch({

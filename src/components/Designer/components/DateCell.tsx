@@ -5,7 +5,7 @@ import { CellData } from "../schemas/CellData";
 
 interface DateCellProps {
   data: CellData;
-  layout?: "inline" | "default";
+  layout?: "vertical" | "horizontal";
   dispatch: any;
 }
 

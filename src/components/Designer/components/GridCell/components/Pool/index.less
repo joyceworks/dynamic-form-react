@@ -1,7 +1,5 @@
-@background-color-lightpink: lightpink;
-
 .instance.active {
-  border: 1px solid #1890ff;
+  border-color: #1890ff;
 }
 .instance {
   border: 1px solid transparent;
@@ -27,28 +25,7 @@
   vertical-align: top;
   position: relative;
 }
-.lane.hovered {
-  background-color: @background-color-lightpink;
-}
-.preview {
-  .lane {
-    border-style: none;
-    padding: 0 10px;
-  }
-  .lane.row {
-    min-height: auto;
-    .form-group.inline {
-      min-height: auto;
-    }
-  }
-  .instance {
-    border-style: none;
-  }
-}
-.list {
-  width: 100%;
-}
-.lane.row {
+.lane.vertical {
   width: 100%;
   overflow-x: auto;
   white-space: nowrap;
@@ -65,6 +42,25 @@
     }
   }
 }
+.lane.hovered {
+  background-color: lightpink;
+}
+.preview {
+  .lane {
+    border-style: none;
+    padding: 0 10px;
+  }
+  .lane.vertical {
+    min-height: auto;
+    .form-group.inline {
+      min-height: auto;
+    }
+  }
+  .instance {
+    border-style: none;
+  }
+}
+
 @border-1px-dashed-blue: 1px dashed #1890ff;
 .drop-over-downward {
   border-bottom: @border-1px-dashed-blue;

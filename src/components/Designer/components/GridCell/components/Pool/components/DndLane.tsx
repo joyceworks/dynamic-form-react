@@ -8,7 +8,7 @@ import { createWidgetInstance } from "../../../../../util";
 
 interface LaneProps {
   cellDataList: CellData[];
-  direction: "column" | "row";
+  direction: "horizontal" | "vertical";
   location: SwimlaneLocation;
   span?: number;
 }

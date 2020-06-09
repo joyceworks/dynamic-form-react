@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useDrag, useDrop, XYCoord } from "react-dnd";
 import { AiOutlineMenu, AiOutlineMinusCircle } from "react-icons/ai";
 import { Button, InputNumber } from "antd";
-import { LaneData } from "../../../../schemas/LaneData";
+import { LaneData } from "../../../schemas/LaneData";
 
 interface DragItem {
   index: number;

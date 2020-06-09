@@ -7,7 +7,7 @@ import { Col } from "antd";
 
 interface LaneProps {
   cellDataList: CellData[];
-  direction: "column" | "row";
+  direction: "horizontal" | "vertical";
   className?: string;
   span?: number;
 }
@@ -15,17 +15,16 @@ interface LaneProps {
 export const Lane = forwardRef(
   ({ cellDataList, direction, className, span }: LaneProps, ref: any) => {
     const instanceDispatch = useContext(InstanceContext);
-    const layout = direction === "column" ? "default" : "inline";
     const cells = cellDataList.map((child, index) =>
       instanceDispatch === null ? (
         <DnDCell
           key={child.id}
-          layout={layout}
+          layout={direction}
           cellData={child}
           index={index}
         />
       ) : (
-        <Cell cellData={child} key={child.id} layout={layout} />
+        <Cell cellData={child} key={child.id} layout={direction} />
       )
     );
 

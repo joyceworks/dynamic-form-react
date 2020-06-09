@@ -4,7 +4,7 @@ import { CellData } from "../schemas/CellData";
 import { FormGroup } from "./FormGroup";
 interface TextAreaCellProps {
   element: CellData;
-  layout?: "inline" | "default";
+  layout?: "vertical" | "horizontal";
   dispatch: any;
 }
 

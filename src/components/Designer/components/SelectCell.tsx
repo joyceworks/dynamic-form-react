@@ -7,7 +7,7 @@ const { Option } = Select;
 
 interface SelectCellProps {
   cellData: CellData;
-  layout?: "inline" | "default";
+  layout?: "vertical" | "horizontal";
   dispatch: any;
 }
 

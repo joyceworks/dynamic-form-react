@@ -3,7 +3,7 @@ import "./index.css";
 import { InstanceContext } from "../../../Instance";
 
 interface FormGroupProps {
-  layout?: "inline" | "default";
+  layout?: "vertical" | "horizontal";
   required: boolean;
   warning?: string | null;
   warnable: boolean;
@@ -14,7 +14,7 @@ interface FormGroupProps {
 export const FormGroup = forwardRef(
   (
     {
-      layout = "default",
+      layout = "horizontal",
       required = false,
       warning = null,
       warnable = true,
@@ -27,7 +27,7 @@ export const FormGroup = forwardRef(
     return (
       <table ref={ref} className={["form-group", layout].join(" ")}>
         <tbody>
-          {layout === "default" ? (
+          {layout === "horizontal" ? (
             <>
               <tr>
                 <td className={"label"}>

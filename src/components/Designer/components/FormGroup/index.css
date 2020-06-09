@@ -21,16 +21,16 @@
 .form-group > tbody > tr > td.label > .required {
   color: red;
 }
-.form-group.inline {
+.form-group.vertical {
   margin: 6px 0;
 }
-.form-group.inline > tbody > tr > td.label {
+.form-group.vertical > tbody > tr > td.label {
   text-align: left;
 }
-.form-group.inline > tbody > tr > td.element {
+.form-group.vertical > tbody > tr > td.element {
   padding: 0 4px;
 }
-.form-group.inline > tbody > tr > td.element > * {
+.form-group.vertical > tbody > tr > td.element > * {
   width: 190px;
 }
 /*# sourceMappingURL=index.css.map */

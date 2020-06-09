@@ -5,7 +5,7 @@ import { FormGroup } from "./FormGroup";
 
 interface InputCellProps {
   element: CellData;
-  layout?: "inline" | "default";
+  layout?: "vertical" | "horizontal";
   dispatch: any;
 }
 

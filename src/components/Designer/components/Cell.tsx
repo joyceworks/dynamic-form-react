@@ -9,14 +9,14 @@ import { InstanceContext } from "../../Instance";
 
 interface CellProps {
   cellData: CellData;
-  layout?: "inline" | "default";
+  layout?: "vertical" | "horizontal";
   style?: CSSProperties;
   onClick?: (event: any) => void;
   className?: string;
 }
 export const Cell = forwardRef(
   (
-    { cellData, layout = "default", style, onClick, className }: CellProps,
+    { cellData, layout = "horizontal", style, onClick, className }: CellProps,
     ref: any
   ) => {
     const instanceDispatch = useContext(InstanceContext);
@@ -59,7 +59,7 @@ export const Cell = forwardRef(
             </>
           ) : data.type === "list" ? (
             <>
-              <GridCell element={data} direction={"row"} />
+              <GridCell element={data} direction={"vertical"} />
             </>
           ) : data.type === "select" ? (
             <>

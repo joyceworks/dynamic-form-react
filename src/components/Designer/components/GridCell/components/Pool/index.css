@@ -1,5 +1,5 @@
 .instance.active {
-  border: 1px solid #1890ff;
+  border-color: #1890ff;
 }
 .instance {
   border: 1px solid transparent;
@@ -23,6 +23,19 @@
   vertical-align: top;
   position: relative;
 }
+.lane.vertical {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.lane.vertical .instance {
+  width: 200px;
+  vertical-align: top;
+  display: inline-flex;
+}
+.lane.vertical .form-group > tr > td.label {
+  text-align: left;
+}
 .lane.hovered {
   background-color: lightpink;
 }
@@ -30,30 +43,14 @@
   border-style: none;
   padding: 0 10px;
 }
-.preview .lane.row {
+.preview .lane.vertical {
   min-height: auto;
 }
-.preview .lane.row .form-group.inline {
+.preview .lane.vertical .form-group.inline {
   min-height: auto;
 }
 .preview .instance {
   border-style: none;
-}
-.list {
-  width: 100%;
-}
-.lane.row {
-  width: 100%;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-.lane.row .instance {
-  width: 200px;
-  vertical-align: top;
-  display: inline-flex;
-}
-.lane.row .form-group > tr > td.label {
-  text-align: left;
 }
 .drop-over-downward {
   border-bottom: 1px dashed #1890ff;
