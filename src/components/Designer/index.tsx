@@ -30,7 +30,7 @@ import {
 } from "./schemas/ReducerAction";
 import styled from "styled-components";
 import DateCellConfig from "./components/DateCellConfig";
-import SelectCellConfig from "./components/SelectCellConfig";
+import Index from "./components/SelectCellConfig";
 import WidgetGroup from "./components/WidgetGroup";
 
 const { Sider, Content, Header } = Layout;
@@ -180,7 +180,7 @@ export const Designer = function () {
                     ) : active.type === "datetime" ? (
                       <DateCellConfig data={active} />
                     ) : active.type === "select" ? (
-                      <SelectCellConfig data={active} />
+                      <Index data={active} />
                     ) : (
                       <></>
                     )

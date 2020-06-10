@@ -13,10 +13,7 @@ export default function GridCellConfig({ data }: GridCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
     <Form>
-      <Form.Item>
-        <label>列配置项</label>
-      </Form.Item>
-      <Form.Item>
+      <Form.Item label={"列"}>
         <>
           {data &&
             data.lanes &&

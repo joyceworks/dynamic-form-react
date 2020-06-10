@@ -1,29 +1,28 @@
 import React, { useRef } from "react";
 import { useDrag, useDrop, XYCoord } from "react-dnd";
 import { AiOutlineMenu, AiOutlineMinusCircle } from "react-icons/ai";
-import { Button, InputNumber } from "antd";
-import { LaneData } from "../../../schemas/LaneData";
+import { Button, Input } from "antd";
 
 interface DragItem {
   index: number;
   type: string;
 }
 
-interface LaneConfigProps {
+interface OptionConfigProps {
   index: number;
-  data: LaneData;
+  data: string;
   move: (from: number, to: number) => void;
   onRemove: () => void;
-  onResize: (span: number | undefined) => void;
+  onChange: (data: string) => void;
 }
 
-export default function LaneConfig({
+export default function OptionConfig({
   index,
   data,
   move,
   onRemove,
-  onResize,
-}: LaneConfigProps) {
+  onChange,
+}: OptionConfigProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [, drag] = useDrag({
     item: {
@@ -91,9 +90,11 @@ export default function LaneConfig({
     <>
       <div ref={ref}>
         <AiOutlineMenu style={{ cursor: "move" }} />
-        <InputNumber
-          onChange={onResize}
-          value={data.span}
+        <Input
+          onChange={(event) => {
+            onChange(event.target.value);
+          }}
+          value={data}
           size={"small"}
           style={{
             width: "160px",
