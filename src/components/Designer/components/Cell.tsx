@@ -55,11 +55,11 @@ export const Cell = forwardRef(
             </>
           ) : data.type === "grid" ? (
             <>
-              <GridCell element={data} />
+              <GridCell data={data} />
             </>
           ) : data.type === "list" ? (
             <>
-              <GridCell element={data} direction={"vertical"} />
+              <GridCell data={data} direction={"vertical"} />
             </>
           ) : data.type === "select" ? (
             <>
