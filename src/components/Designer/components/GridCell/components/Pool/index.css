@@ -42,6 +42,7 @@
 .preview .lane {
   border-style: none;
   padding: 0 10px;
+  min-height: initial;
 }
 .preview .lane.vertical {
   min-height: auto;
@@ -51,6 +52,9 @@
 }
 .preview .instance {
   border-style: none;
+}
+.preview .form-group.vertical {
+  margin: initial;
 }
 .drop-over-downward {
   border-bottom: 1px dashed #1890ff;
