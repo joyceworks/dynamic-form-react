@@ -3,13 +3,13 @@ import { CellData } from "../../schemas/CellData";
 import { DesignerContext } from "../../index";
 import { Input, Switch, Form, Button } from "antd";
 import update from "immutability-helper";
-import OptionConfig from "./components/OptionConfig";
+import OptionConfig from "../SelectCellConfig/components/OptionConfig";
 
-interface SelectCellConfigProps {
+interface CheckboxCellConfigProps {
   data: CellData;
 }
 
-export default function SelectCellConfig({ data }: SelectCellConfigProps) {
+export default function CheckboxCellConfig({ data }: CheckboxCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
     <>

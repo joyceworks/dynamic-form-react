@@ -6,13 +6,13 @@ import { FormGroup } from "./FormGroup";
 const { Option } = Select;
 
 interface SelectCellProps {
-  cellData: CellData;
+  data: CellData;
   layout?: "vertical" | "horizontal";
   dispatch: any;
 }
 
 export const SelectCell = forwardRef(
-  ({ cellData: data, layout, dispatch }: SelectCellProps, ref: any) => {
+  ({ data, layout, dispatch }: SelectCellProps, ref: any) => {
     if (!data.options || data.options.length === 0) {
       data.options = [
         {
@@ -55,7 +55,9 @@ export const SelectCell = forwardRef(
               }}
             >
               {data.options?.map((option) => (
-                <Option value={option.value}>{option.label}</Option>
+                <Option key={option.value} value={option.value}>
+                  {option.label}
+                </Option>
               ))}
             </Select>
           }

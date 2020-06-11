@@ -4,10 +4,10 @@ import { InstanceContext } from "../../../Instance";
 
 interface FormGroupProps {
   layout?: "vertical" | "horizontal";
-  required: boolean;
+  required?: boolean;
   warning?: string | null;
-  warnable: boolean;
-  label: JSX.Element | null;
+  warnable?: boolean;
+  label?: JSX.Element | null;
   element: JSX.Element | null;
 }
 
@@ -18,7 +18,7 @@ export const FormGroup = forwardRef(
       required = false,
       warning = null,
       warnable = true,
-      label,
+      label = <></>,
       element,
     }: FormGroupProps,
     ref: any

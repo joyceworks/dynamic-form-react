@@ -1,14 +1,31 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { CellData } from "../schemas/CellData";
 import { DesignerContext } from "../index";
-import { Input, Switch, Form } from "antd";
+import { Input, Switch, Form, AutoComplete, Typography } from "antd";
 import update from "immutability-helper";
+
+const { Text } = Typography;
 
 interface DateCellConfigProps {
   data: CellData;
 }
 
 export default function DateCellConfig({ data }: DateCellConfigProps) {
+  const defaultValueOptions = [
+    {
+      label: (
+        <>
+          <Text>now: </Text>
+          <Text type={"secondary"}>当前时间</Text>
+        </>
+      ),
+      text: "now",
+      value: "now",
+    },
+  ];
+  const [currentDefaultValueOptions, setCurrentDefaultValueOptions] = useState(
+    defaultValueOptions
+  );
   const designerDispatch = useContext(DesignerContext);
   return (
     <>
@@ -51,6 +68,23 @@ export default function DateCellConfig({ data }: DateCellConfigProps) {
               });
             }}
           />
+        </Form.Item>
+        <Form.Item label={"默认值"}>
+          <AutoComplete
+            onSearch={(searchText) => {
+              setCurrentDefaultValueOptions(
+                defaultValueOptions.filter(
+                  (item) => item.text.search(new RegExp(searchText, "i")) > -1
+                )
+              );
+            }}
+          >
+            {currentDefaultValueOptions.map((option) => (
+              <AutoComplete.Option value={option.value} key={option.value}>
+                {option.label}
+              </AutoComplete.Option>
+            ))}
+          </AutoComplete>
         </Form.Item>
       </Form>
     </>

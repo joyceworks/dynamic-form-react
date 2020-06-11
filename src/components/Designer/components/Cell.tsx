@@ -6,6 +6,7 @@ import { GridCell } from "./GridCell";
 import { SelectCell } from "./SelectCell";
 import { DateCell } from "./DateCell";
 import { InstanceContext } from "../../Instance";
+import CheckboxCell from "./CheckboxCell";
 
 interface CellProps {
   cellData: CellData;
@@ -40,7 +41,7 @@ export const Cell = forwardRef(
           {data.type === "input" ? (
             <>
               <InputCell
-                element={data}
+                data={data}
                 dispatch={instanceDispatch}
                 layout={layout}
               />
@@ -48,7 +49,7 @@ export const Cell = forwardRef(
           ) : data.type === "textarea" ? (
             <>
               <TextAreaCell
-                element={data}
+                data={data}
                 dispatch={instanceDispatch}
                 layout={layout}
               />
@@ -64,13 +65,19 @@ export const Cell = forwardRef(
           ) : data.type === "select" ? (
             <>
               <SelectCell
-                cellData={data}
+                data={data}
                 dispatch={instanceDispatch}
                 layout={layout}
               />
             </>
           ) : data.type === "datetime" ? (
             <DateCell data={data} dispatch={instanceDispatch} layout={layout} />
+          ) : data.type === "checkbox" ? (
+            <CheckboxCell
+              data={data}
+              dispatch={instanceDispatch}
+              layout={layout}
+            />
           ) : (
             <></>
           )}

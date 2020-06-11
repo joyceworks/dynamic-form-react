@@ -27,6 +27,7 @@ export const DndLane = function ({
       "grid",
       "select",
       "datetime",
+      "checkbox",
       "list",
       "instance",
     ],

@@ -30,8 +30,9 @@ import {
 } from "./schemas/ReducerAction";
 import styled from "styled-components";
 import DateCellConfig from "./components/DateCellConfig";
-import Index from "./components/SelectCellConfig";
+import SelectCellConfig from "./components/SelectCellConfig";
 import WidgetGroup from "./components/WidgetGroup";
+import CheckboxCellConfig from "./components/CheckboxCellConfig";
 
 const { Sider, Content, Header } = Layout;
 
@@ -180,7 +181,9 @@ export const Designer = function () {
                     ) : active.type === "datetime" ? (
                       <DateCellConfig data={active} />
                     ) : active.type === "select" ? (
-                      <Index data={active} />
+                      <SelectCellConfig data={active} />
+                    ) : active.type === "checkbox" ? (
+                      <CheckboxCellConfig data={active} />
                     ) : (
                       <></>
                     )

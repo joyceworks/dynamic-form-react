@@ -40,12 +40,6 @@ export const WidgetGroups: { name: string; widgets: WidgetData[] }[] = [
         enable: true,
       },
       {
-        type: "tree",
-        icon: <AiOutlineDownSquare />,
-        name: "级联选择",
-        enable: false,
-      },
-      {
         type: "checkbox",
         icon: <AiOutlineCheckSquare />,
         name: "多选",
@@ -63,13 +57,6 @@ export const WidgetGroups: { name: string; widgets: WidgetData[] }[] = [
         name: "列表",
         enable: true,
       },
-      {
-        type: "separator",
-        icon: <AiOutlineMinus />,
-        name: "分割线",
-        enable: false,
-      },
-      { type: "tab", icon: <AiOutlineCopy />, name: "标签页", enable: false },
     ],
   },
 ];

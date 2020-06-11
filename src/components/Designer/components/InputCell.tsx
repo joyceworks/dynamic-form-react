@@ -4,13 +4,13 @@ import { CellData } from "../schemas/CellData";
 import { FormGroup } from "./FormGroup";
 
 interface InputCellProps {
-  element: CellData;
+  data: CellData;
   layout?: "vertical" | "horizontal";
   dispatch: any;
 }
 
 export const InputCell = forwardRef(
-  ({ element: data, layout, dispatch }: InputCellProps, ref: any) => (
+  ({ data, layout, dispatch }: InputCellProps, ref: any) => (
     <>
       <FormGroup
         ref={ref}

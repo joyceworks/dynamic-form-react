@@ -3,7 +3,7 @@ import { Input } from "antd";
 import { CellData } from "../schemas/CellData";
 import { FormGroup } from "./FormGroup";
 interface TextAreaCellProps {
-  element: CellData;
+  data: CellData;
   layout?: "vertical" | "horizontal";
   dispatch: any;
 }
@@ -11,7 +11,7 @@ interface TextAreaCellProps {
 const { TextArea } = Input;
 
 export const TextAreaCell = forwardRef(
-  ({ element: data, layout, dispatch }: TextAreaCellProps, ref: any) => (
+  ({ data, layout, dispatch }: TextAreaCellProps, ref: any) => (
     <>
       <FormGroup
         ref={ref}
