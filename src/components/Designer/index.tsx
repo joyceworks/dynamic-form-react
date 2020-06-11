@@ -34,6 +34,7 @@ import DateCellConfig from "./components/DateCellConfig";
 import SelectCellConfig from "./components/SelectCellConfig";
 import WidgetGroup from "./components/WidgetGroup";
 import CheckboxCellConfig from "./components/CheckboxCellConfig";
+import LabelCellConfig from "./components/LabelCellConfig";
 
 const { Sider, Content, Header } = Layout;
 
@@ -195,6 +196,8 @@ export const Designer = function () {
                       <SelectCellConfig data={active} />
                     ) : active.type === "checkbox" ? (
                       <CheckboxCellConfig data={active} />
+                    ) : active.type === "label" ? (
+                      <LabelCellConfig data={active} />
                     ) : (
                       <></>
                     )

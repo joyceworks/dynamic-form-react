@@ -7,6 +7,7 @@ import { SelectCell } from "./SelectCell";
 import { DateCell } from "./DateCell";
 import { InstanceContext } from "../../Instance";
 import CheckboxCell from "./CheckboxCell";
+import { LabelCell } from "./LabelCell";
 
 interface CellProps {
   cellData: CellData;
@@ -74,6 +75,12 @@ export const Cell = forwardRef(
             <DateCell data={data} dispatch={instanceDispatch} layout={layout} />
           ) : data.type === "checkbox" ? (
             <CheckboxCell
+              data={data}
+              dispatch={instanceDispatch}
+              layout={layout}
+            />
+          ) : data.type === "label" ? (
+            <LabelCell
               data={data}
               dispatch={instanceDispatch}
               layout={layout}

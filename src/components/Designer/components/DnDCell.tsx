@@ -50,6 +50,7 @@ export const DnDCell = function ({
       "datetime",
       "grid",
       "list",
+      "label",
     ],
     hover: (item: DragItem, monitor) => {
       if (

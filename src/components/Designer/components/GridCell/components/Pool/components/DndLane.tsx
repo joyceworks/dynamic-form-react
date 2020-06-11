@@ -30,6 +30,7 @@ export const DndLane = function ({
       "checkbox",
       "list",
       "instance",
+      "label",
     ],
     drop: (item: any, monitor) => {
       if (isOver) {

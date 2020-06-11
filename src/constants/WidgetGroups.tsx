@@ -4,6 +4,7 @@ import {
   AiOutlineCheckSquare,
   AiOutlineDownSquare,
   AiOutlineEdit,
+  AiOutlineFontSize,
   AiOutlineOrderedList,
   AiOutlineTable,
 } from "react-icons/ai";
@@ -41,6 +42,12 @@ export const WidgetGroups: { name: string; widgets: WidgetData[] }[] = [
         type: "checkbox",
         icon: <AiOutlineCheckSquare />,
         name: "多选",
+        enable: true,
+      },
+      {
+        type: "label",
+        icon: <AiOutlineFontSize />,
+        name: "文本",
         enable: true,
       },
     ],
