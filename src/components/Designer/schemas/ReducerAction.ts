@@ -21,6 +21,11 @@ export interface DispatchValidateProps {
   type: "VALIDATE";
 }
 
+export interface DispatchInitProps {
+  type: "INIT";
+  data: CellData;
+}
+
 // Move to a swimlane with position
 export interface DispatchPositionedMove {
   type: "POSITIONED_MOVE";

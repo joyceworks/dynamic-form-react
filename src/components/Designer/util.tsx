@@ -6,6 +6,7 @@ import {
   DispatchAddProps,
   DispatchDeleteActiveProps,
   DispatchEditProps,
+  DispatchInitProps,
   DispatchMoveProps,
   DispatchPositionedAddProps,
   DispatchPositionedMove,
@@ -166,9 +167,13 @@ export function reducer(
     | DispatchDeleteActiveProps
     | DispatchSetValueProps
     | DispatchValidateProps
+    | DispatchInitProps
 ): CellData {
   if (!action.type) {
     return state;
+  }
+  if (action.type === "INIT") {
+    return action.data;
   }
   const copy = JSON.parse(JSON.stringify(state));
   if (action.type === "POSITIONED_MOVE") {

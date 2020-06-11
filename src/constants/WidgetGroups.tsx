@@ -2,10 +2,8 @@ import { WidgetData } from "../components/Designer/schemas/WidgetData";
 import {
   AiOutlineCalendar,
   AiOutlineCheckSquare,
-  AiOutlineCopy,
   AiOutlineDownSquare,
   AiOutlineEdit,
-  AiOutlineMinus,
   AiOutlineOrderedList,
   AiOutlineTable,
 } from "react-icons/ai";

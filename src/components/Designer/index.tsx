@@ -21,6 +21,7 @@ import {
   DispatchAddProps,
   DispatchDeleteActiveProps,
   DispatchEditProps,
+  DispatchInitProps,
   DispatchMoveProps,
   DispatchPositionedAddProps,
   DispatchPositionedMove,
@@ -89,6 +90,7 @@ export const DesignerContext = React.createContext<
     | DispatchDeleteActiveProps
     | DispatchSetValueProps
     | DispatchValidateProps
+    | DispatchInitProps
   >
 >({} as Dispatch<any>);
 const LeftSider = styled(WhiteSider).attrs({
@@ -151,7 +153,16 @@ export const Designer = function () {
                   <WhiteLayout style={{ height: "100%" }}>
                     <ToolBar>
                       <Space>
-                        <Button>Reset</Button>
+                        <Button
+                          onClick={() => {
+                            designerDispatch({
+                              type: "INIT",
+                              data: rootCellData,
+                            });
+                          }}
+                        >
+                          Reset
+                        </Button>
                         <Button
                           onClick={() => {
                             setPreviewDialogVisible(true);
