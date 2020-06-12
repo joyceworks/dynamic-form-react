@@ -1,4 +1,9 @@
-import React, { CSSProperties, forwardRef, useContext } from "react";
+import React, {
+  CSSProperties,
+  forwardRef,
+  FunctionComponent,
+  useContext,
+} from "react";
 import { CellData } from "../schemas/CellData";
 import { InputCell } from "./InputCell";
 import { TextAreaCell } from "./TextAreaCell";
@@ -9,16 +14,36 @@ import { InstanceContext } from "../../Instance";
 import CheckboxCell from "./CheckboxCell";
 import { LabelCell } from "./LabelCell";
 
+export interface PhysicalCellProps {
+  data: CellData;
+  layout?: "vertical" | "horizontal";
+  dispatch: any;
+}
+export interface CustomCell {
+  type: string;
+  cell: FunctionComponent<PhysicalCellProps>;
+  icon: JSX.Element;
+  enable: boolean;
+  name: string;
+}
 interface CellProps {
   cellData: CellData;
   layout?: "vertical" | "horizontal";
   style?: CSSProperties;
   onClick?: (event: any) => void;
   className?: string;
+  customCells?: CustomCell[];
 }
 export const Cell = forwardRef(
   (
-    { cellData, layout = "horizontal", style, onClick, className }: CellProps,
+    {
+      cellData,
+      layout = "horizontal",
+      style,
+      onClick,
+      className,
+      customCells,
+    }: CellProps,
     ref: any
   ) => {
     const instanceDispatch = useContext(InstanceContext);
@@ -86,7 +111,16 @@ export const Cell = forwardRef(
               layout={layout}
             />
           ) : (
-            <></>
+            (customCells &&
+              customCells.some((item) => item.type === data.type) &&
+              React.createElement(
+                customCells.filter((item) => item.type === data.type)[0].cell,
+                {
+                  data,
+                  dispatch: instanceDispatch,
+                  layout,
+                }
+              )) || <></>
           )}
         </div>
       </>

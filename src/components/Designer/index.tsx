@@ -35,6 +35,8 @@ import SelectCellConfig from "./components/SelectCellConfig";
 import WidgetGroup from "./components/WidgetGroup";
 import CheckboxCellConfig from "./components/CheckboxCellConfig";
 import LabelCellConfig from "./components/LabelCellConfig";
+import { CustomCell } from "./components/Cell";
+import { InputCell } from "./components/InputCell";
 
 const { Sider, Content, Header } = Layout;
 
@@ -115,7 +117,22 @@ const ToolBar = styled(WhiteHeader)`
   text-align: right;
   border-bottom: 1px solid #a3a3a3;
 `;
-export const Designer = function () {
+
+interface DesignerProps {
+  customCells?: CustomCell[];
+}
+
+export const Designer = function ({
+  customCells = [
+    // {
+    //   type: "input",
+    //   icon: <></>,
+    //   name: "单行文本",
+    //   enable: true,
+    //   cell: InputCell,
+    // },
+  ],
+}: DesignerProps) {
   const [data, designerDispatch] = useReducer(reducer, rootCellData);
   const [previewDialogVisible, setPreviewDialogVisible] = useState(false);
   const [previewData, setPreviewData] = useState<CellData | null>(null);
@@ -149,6 +166,18 @@ export const Designer = function () {
                   {WidgetGroups.map((g) => (
                     <WidgetGroup key={g.name} name={g.name} list={g.widgets} />
                   ))}
+                  {/*<WidgetGroup*/}
+                  {/*  key={"自定义"}*/}
+                  {/*  name={"自定义"}*/}
+                  {/*  list={[*/}
+                  {/*    {*/}
+                  {/*      type: "input",*/}
+                  {/*      name: "单行文本",*/}
+                  {/*      enable: true,*/}
+                  {/*      icon: <></>,*/}
+                  {/*    },*/}
+                  {/*  ]}*/}
+                  {/*/>*/}
                 </LeftSider>
                 <WhiteContent>
                   <WhiteLayout style={{ height: "100%" }}>
@@ -230,6 +259,7 @@ export const Designer = function () {
         >
           {previewData && (
             <Form
+              customCells={customCells}
               ref={previewRef}
               data={cloneAndForEach(previewData, (data) => {
                 data.value = data.defaultValue || data.value;

@@ -143,6 +143,7 @@ function drop(
   dropItemId: string,
   position: string
 ) {
+  debugger;
   const [dropLocation, dropList] = locate(
     root,
     (item) => item.id === dropItemId
