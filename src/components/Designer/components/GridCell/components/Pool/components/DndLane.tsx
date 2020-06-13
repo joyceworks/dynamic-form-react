@@ -5,12 +5,14 @@ import { CellData } from "../../../../../schemas/CellData";
 import SwimlaneLocation from "../../../../../schemas/SwimlaneLocation";
 import { DesignerContext } from "../../../../../index";
 import { createWidgetInstance } from "../../../../../util";
+import { CustomCell } from "../../../../Cell";
 
 interface LaneProps {
   cellDataList: CellData[];
   direction: "horizontal" | "vertical";
   location: SwimlaneLocation;
   span?: number;
+  customCells?: CustomCell[];
 }
 
 export const DndLane = function ({
@@ -18,6 +20,7 @@ export const DndLane = function ({
   direction,
   location,
   span,
+  customCells,
 }: LaneProps) {
   const dispatch = useContext(DesignerContext);
   const [{ isOver }, drop] = useDrop({
@@ -69,6 +72,7 @@ export const DndLane = function ({
       className={isOver ? " hovered" : ""}
       ref={drop}
       direction={direction}
+      customCells={customCells}
     />
   );
 };

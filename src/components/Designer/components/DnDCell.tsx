@@ -3,13 +3,14 @@ import { useDrag, useDrop, XYCoord } from "react-dnd";
 import { CellData } from "../schemas/CellData";
 import { DesignerContext } from "../index";
 import { createWidgetInstance } from "../util";
-import { Cell } from "./Cell";
+import { Cell, CustomCell } from "./Cell";
 
 interface DnDCellProps {
   cellData: CellData;
   layout?: "vertical" | "horizontal";
   index: number;
   className?: string;
+  customCells?: CustomCell[];
 }
 
 interface DragItem {
@@ -23,6 +24,7 @@ export const DnDCell = function ({
   index,
   layout = "horizontal",
   className,
+  customCells,
 }: DnDCellProps) {
   const data = {
     required: false,
@@ -152,6 +154,7 @@ export const DnDCell = function ({
   return (
     <>
       <Cell
+        customCells={customCells}
         className={`${isOver ? dropClassName : ""} ${className || ""}`}
         onClick={(event) => {
           event.stopPropagation();

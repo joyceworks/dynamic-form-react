@@ -1,7 +1,7 @@
 import React, { forwardRef, useContext } from "react";
 import { CellData } from "../../../../../schemas/CellData";
 import { DnDCell } from "../../../../DnDCell";
-import { Cell } from "../../../../Cell";
+import { Cell, CustomCell } from "../../../../Cell";
 import { InstanceContext } from "../../../../../../Instance";
 import { Col } from "antd";
 
@@ -10,10 +10,14 @@ interface LaneProps {
   direction: "horizontal" | "vertical";
   className?: string;
   span?: number;
+  customCells?: CustomCell[];
 }
 
 export const Lane = forwardRef(
-  ({ cellDataList, direction, className, span }: LaneProps, ref: any) => {
+  (
+    { cellDataList, direction, className, span, customCells }: LaneProps,
+    ref: any
+  ) => {
     const instanceDispatch = useContext(InstanceContext);
     const cells = cellDataList.map((child, index) =>
       instanceDispatch === null ? (
@@ -22,9 +26,15 @@ export const Lane = forwardRef(
           layout={direction}
           cellData={child}
           index={index}
+          customCells={customCells}
         />
       ) : (
-        <Cell cellData={child} key={child.id} layout={direction} />
+        <Cell
+          cellData={child}
+          key={child.id}
+          layout={direction}
+          customCells={customCells}
+        />
       )
     );
 

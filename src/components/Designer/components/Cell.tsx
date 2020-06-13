@@ -6,7 +6,6 @@ import React, {
 } from "react";
 import { CellData } from "../schemas/CellData";
 import { InputCell } from "./InputCell";
-import { TextAreaCell } from "./TextAreaCell";
 import { GridCell } from "./GridCell";
 import { SelectCell } from "./SelectCell";
 import { DateCell } from "./DateCell";
@@ -22,6 +21,10 @@ export interface PhysicalCellProps {
 export interface CustomCell {
   type: string;
   cell: FunctionComponent<PhysicalCellProps>;
+  config: FunctionComponent<{
+    data: CellData;
+    onChange: (data: CellData) => void;
+  }>;
   icon: JSX.Element;
   enable: boolean;
   name: string;
@@ -72,17 +75,9 @@ export const Cell = forwardRef(
                 layout={layout}
               />
             </>
-          ) : data.type === "textarea" ? (
-            <>
-              <TextAreaCell
-                data={data}
-                dispatch={instanceDispatch}
-                layout={layout}
-              />
-            </>
           ) : data.type === "grid" ? (
             <>
-              <GridCell data={data} />
+              <GridCell data={data} customCells={customCells} />
             </>
           ) : data.type === "list" ? (
             <>
@@ -120,7 +115,12 @@ export const Cell = forwardRef(
                   dispatch: instanceDispatch,
                   layout,
                 }
-              )) || <></>
+              )) || (
+              <>
+                <span>{"No Data"}</span>
+                <span>{JSON.stringify(customCells?.length)}</span>
+              </>
+            )
           )}
         </div>
       </>

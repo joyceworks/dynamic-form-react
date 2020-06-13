@@ -36,7 +36,9 @@ import WidgetGroup from "./components/WidgetGroup";
 import CheckboxCellConfig from "./components/CheckboxCellConfig";
 import LabelCellConfig from "./components/LabelCellConfig";
 import { CustomCell } from "./components/Cell";
-import { InputCell } from "./components/InputCell";
+import { AiOutlineEdit } from "react-icons/all";
+import { TextAreaCell } from "./components/TextAreaCell";
+import TextAreaCellConfig from "./components/TextAreaCellConfig";
 
 const { Sider, Content, Header } = Layout;
 
@@ -124,13 +126,14 @@ interface DesignerProps {
 
 export const Designer = function ({
   customCells = [
-    // {
-    //   type: "input",
-    //   icon: <></>,
-    //   name: "单行文本",
-    //   enable: true,
-    //   cell: InputCell,
-    // },
+    {
+      type: "textarea",
+      icon: <AiOutlineEdit />,
+      name: "多行文本",
+      enable: true,
+      cell: TextAreaCell,
+      config: TextAreaCellConfig,
+    },
   ],
 }: DesignerProps) {
   const [data, designerDispatch] = useReducer(reducer, rootCellData);
@@ -166,18 +169,18 @@ export const Designer = function ({
                   {WidgetGroups.map((g) => (
                     <WidgetGroup key={g.name} name={g.name} list={g.widgets} />
                   ))}
-                  {/*<WidgetGroup*/}
-                  {/*  key={"自定义"}*/}
-                  {/*  name={"自定义"}*/}
-                  {/*  list={[*/}
-                  {/*    {*/}
-                  {/*      type: "input",*/}
-                  {/*      name: "单行文本",*/}
-                  {/*      enable: true,*/}
-                  {/*      icon: <></>,*/}
-                  {/*    },*/}
-                  {/*  ]}*/}
-                  {/*/>*/}
+                  <WidgetGroup
+                    key={"自定义"}
+                    name={"自定义"}
+                    list={[
+                      ...customCells?.map((cell) => ({
+                        type: cell.type,
+                        name: cell.name,
+                        enable: true,
+                        icon: cell.icon,
+                      })),
+                    ]}
+                  />
                 </LeftSider>
                 <WhiteContent>
                   <WhiteLayout style={{ height: "100%" }}>
@@ -209,7 +212,11 @@ export const Designer = function ({
                       </Space>
                     </ToolBar>
                     <WhiteContent style={{ height: "100%", padding: 10 }}>
-                      <RootCell cellData={data} index={0} />
+                      <RootCell
+                        cellData={data}
+                        index={0}
+                        customCells={customCells}
+                      />
                     </WhiteContent>
                   </WhiteLayout>
                 </WhiteContent>
@@ -228,7 +235,22 @@ export const Designer = function ({
                     ) : active.type === "label" ? (
                       <LabelCellConfig data={active} />
                     ) : (
-                      <></>
+                      (customCells &&
+                        customCells.some((item) => item.type === active.type) &&
+                        React.createElement(
+                          customCells.filter(
+                            (item) => item.type === active.type
+                          )[0].config,
+                          {
+                            data: active,
+                            onChange: function (data: CellData) {
+                              designerDispatch({
+                                type: "UPDATE",
+                                data: data,
+                              });
+                            },
+                          }
+                        )) || <></>
                     )
                   ) : (
                     <></>

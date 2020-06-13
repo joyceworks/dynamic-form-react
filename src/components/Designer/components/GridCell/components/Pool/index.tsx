@@ -8,10 +8,12 @@ import { DndLane } from "./components/DndLane";
 import { Lane } from "./components/Lane";
 import "./index.css";
 import { LaneData } from "../../../../schemas/LaneData";
+import { CustomCell } from "../../../Cell";
 
 interface PoolProps {
   direction?: "horizontal" | "vertical";
   cellData: CellData;
+  customCells?: CustomCell[];
 }
 
 const InstanceListHeaderItem = styled(Col)`
@@ -27,7 +29,10 @@ const InstanceListHeaderItem = styled(Col)`
 `;
 
 export const Pool = forwardRef(
-  ({ direction = "horizontal", cellData }: PoolProps, ref: any) => {
+  (
+    { direction = "horizontal", cellData, customCells }: PoolProps,
+    ref: any
+  ) => {
     const instanceDispatch = useContext(InstanceContext);
     const isDesigner = instanceDispatch === null;
     function getLane(lane: LaneData, index: number) {
@@ -41,6 +46,7 @@ export const Pool = forwardRef(
             index: index,
           }}
           span={lane.span}
+          customCells={customCells}
         />
       ) : (
         <Lane
@@ -48,6 +54,7 @@ export const Pool = forwardRef(
           cellDataList={lane.cellDataList}
           direction={direction}
           span={lane.span}
+          customCells={customCells}
         />
       );
     }

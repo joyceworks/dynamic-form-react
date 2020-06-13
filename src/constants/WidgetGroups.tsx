@@ -21,12 +21,6 @@ export const WidgetGroups: { name: string; widgets: WidgetData[] }[] = [
         enable: true,
       },
       {
-        type: "textarea",
-        icon: <AiOutlineEdit />,
-        name: "多行文本",
-        enable: true,
-      },
-      {
         type: "select",
         icon: <AiOutlineDownSquare />,
         name: "下拉选择",
