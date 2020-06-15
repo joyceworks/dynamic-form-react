@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/dynamic-form-react/static/css/main.fe790c40.chunk.css",
+    "main.js": "/dynamic-form-react/static/js/main.976f9663.chunk.js",
+    "main.js.map": "/dynamic-form-react/static/js/main.976f9663.chunk.js.map",
+    "runtime-main.js": "/dynamic-form-react/static/js/runtime-main.eb2c22b3.js",
+    "runtime-main.js.map": "/dynamic-form-react/static/js/runtime-main.eb2c22b3.js.map",
+    "static/css/2.35fcc229.chunk.css": "/dynamic-form-react/static/css/2.35fcc229.chunk.css",
+    "static/js/2.8ea38b09.chunk.js": "/dynamic-form-react/static/js/2.8ea38b09.chunk.js",
+    "static/js/2.8ea38b09.chunk.js.map": "/dynamic-form-react/static/js/2.8ea38b09.chunk.js.map",
+    "index.html": "/dynamic-form-react/index.html",
+    "precache-manifest.2df5d179c8767a09c8801c3768b37063.js": "/dynamic-form-react/precache-manifest.2df5d179c8767a09c8801c3768b37063.js",
+    "service-worker.js": "/dynamic-form-react/service-worker.js",
+    "static/css/2.35fcc229.chunk.css.map": "/dynamic-form-react/static/css/2.35fcc229.chunk.css.map",
+    "static/css/main.fe790c40.chunk.css.map": "/dynamic-form-react/static/css/main.fe790c40.chunk.css.map",
+    "static/js/2.8ea38b09.chunk.js.LICENSE.txt": "/dynamic-form-react/static/js/2.8ea38b09.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.eb2c22b3.js",
+    "static/css/2.35fcc229.chunk.css",
+    "static/js/2.8ea38b09.chunk.js",
+    "static/css/main.fe790c40.chunk.css",
+    "static/js/main.976f9663.chunk.js"
+  ]
+}
