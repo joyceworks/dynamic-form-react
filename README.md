@@ -1,3 +1,3 @@
 ### Preview
 
-https://www.joyceworks.com/dynamic-form-react/
+https://joyceworks.github.io/dynamic-form-react/
