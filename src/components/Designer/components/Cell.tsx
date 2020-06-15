@@ -13,20 +13,19 @@ import { InstanceContext } from "../../Instance";
 import CheckboxCell from "./CheckboxCell";
 import { LabelCell } from "./LabelCell";
 
-export interface PhysicalCellProps {
+export interface CustomCellProps {
   data: CellData;
   layout?: "vertical" | "horizontal";
   dispatch: any;
 }
 export interface CustomCell {
   type: string;
-  cell: FunctionComponent<PhysicalCellProps>;
+  cell: FunctionComponent<CustomCellProps>;
   config: FunctionComponent<{
     data: CellData;
     onChange: (data: CellData) => void;
   }>;
   icon: JSX.Element;
-  enable: boolean;
   name: string;
 }
 interface CellProps {

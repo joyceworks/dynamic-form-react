@@ -1,6 +1,5 @@
 export interface WidgetData {
   type: string;
-  icon: any;
+  icon: JSX.Element;
   name: string;
-  enable: boolean;
 }

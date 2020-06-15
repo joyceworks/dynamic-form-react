@@ -26,7 +26,6 @@ export const DndLane = function ({
   const [{ isOver }, drop] = useDrop({
     accept: [
       "input",
-      "textarea",
       "grid",
       "select",
       "datetime",
@@ -34,6 +33,7 @@ export const DndLane = function ({
       "list",
       "instance",
       "label",
+      ...(customCells || []).map((item) => item.type),
     ],
     drop: (item: any, monitor) => {
       if (isOver) {

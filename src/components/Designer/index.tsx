@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Layout, Button, Space, Modal } from "antd";
+import { Button, Space, Modal } from "antd";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import { getActive, cloneAndForEach, reducer } from "./util";
@@ -37,10 +37,9 @@ import CheckboxCellConfig from "./components/CheckboxCellConfig";
 import LabelCellConfig from "./components/LabelCellConfig";
 import { CustomCell } from "./components/Cell";
 import { AiOutlineEdit } from "react-icons/all";
-import { TextAreaCell } from "./components/TextAreaCell";
-import TextAreaCellConfig from "./components/TextAreaCellConfig";
-
-const { Sider, Content, Header } = Layout;
+import { TextAreaCell } from "../TextAreaCell";
+import TextAreaCellConfig from "../TextAreaCellConfig";
+import { WhiteContent, WhiteHeader, WhiteLayout, WhiteSider } from "../Layout";
 
 const rootCellData: CellData = {
   type: "grid",
@@ -65,22 +64,6 @@ const RootCell = styled(DnDCell)`
   > .lanes {
     height: 100%;
   }
-`;
-
-const WhiteLayout = styled(Layout)`
-  background-color: white;
-`;
-
-const WhiteHeader = styled(Header)`
-  background-color: white;
-`;
-
-const WhiteSider = styled(Sider)`
-  background-color: white;
-`;
-
-const WhiteContent = styled(Content)`
-  background-color: white;
 `;
 
 export const DesignerContext = React.createContext<
@@ -130,7 +113,6 @@ export const Designer = function ({
       type: "textarea",
       icon: <AiOutlineEdit />,
       name: "多行文本",
-      enable: true,
       cell: TextAreaCell,
       config: TextAreaCellConfig,
     },
@@ -161,7 +143,7 @@ export const Designer = function ({
         <DndProvider backend={Backend}>
           <WhiteLayout style={{ height: "100%" }}>
             <WhiteHeader style={{ padding: "0 20px" }}>
-              <h1>Dynamic Form Designer</h1>
+              <h1>Form Designer</h1>
             </WhiteHeader>
             <WhiteContent>
               <FullHeightLayout>
@@ -176,7 +158,6 @@ export const Designer = function ({
                       ...customCells?.map((cell) => ({
                         type: cell.type,
                         name: cell.name,
-                        enable: true,
                         icon: cell.icon,
                       })),
                     ]}

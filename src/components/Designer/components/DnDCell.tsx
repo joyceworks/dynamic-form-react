@@ -46,13 +46,13 @@ export const DnDCell = function ({
     accept: [
       "instance",
       "input",
-      "textarea",
       "select",
       "checkbox",
       "datetime",
       "grid",
       "list",
       "label",
+      ...(customCells || []).map((item) => item.type),
     ],
     hover: (item: DragItem, monitor) => {
       if (

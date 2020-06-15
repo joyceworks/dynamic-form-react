@@ -29,7 +29,7 @@ export default function DateCellConfig({ data }: DateCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
     <>
-      <Form>
+      <Form labelCol={{ span: 6 }}>
         <Form.Item label={"标题"}>
           <Input
             value={data.label}

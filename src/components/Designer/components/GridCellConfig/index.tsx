@@ -12,7 +12,7 @@ interface GridCellConfigProps {
 export default function GridCellConfig({ data }: GridCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
-    <Form>
+    <Form labelCol={{ span: 6 }}>
       <Form.Item label={"列"}>
         <>
           {data &&

@@ -261,10 +261,6 @@ export function createWidgetInstance(type: string) {
     cellData.label = "单行文本";
     cellData.placeholder = "请填写";
     cellData.required = false;
-  } else if (cellData.type === "textarea") {
-    cellData.label = "多行文本";
-    cellData.placeholder = "请填写";
-    cellData.required = false;
   } else if (cellData.type === "select") {
     cellData.label = "下拉选择";
     cellData.placeholder = "请选择";

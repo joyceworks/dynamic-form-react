@@ -97,7 +97,7 @@ export default function OptionConfig({
           value={data}
           size={"small"}
           style={{
-            width: "160px",
+            width: "120px",
             margin: "0 4px",
           }}
         />
