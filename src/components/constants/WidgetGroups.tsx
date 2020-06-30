@@ -1,4 +1,4 @@
-import { WidgetData } from "../components/Designer/schemas/WidgetData";
+import { WidgetData } from "../Designer/schemas/WidgetData";
 import {
   AiOutlineCalendar,
   AiOutlineCheckSquare,

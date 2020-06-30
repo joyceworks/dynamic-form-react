@@ -11,7 +11,7 @@ import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import { getActive, cloneAndForEach, reducer } from "./util";
 import { CellData } from "./schemas/CellData";
-import { WidgetGroups } from "../../constants/WidgetGroups";
+import { WidgetGroups } from "../constants/WidgetGroups";
 import { DnDCell } from "./components/DnDCell";
 import GridCellConfig from "./components/GridCellConfig";
 import InputCellConfig from "./components/InputCellConfig";
