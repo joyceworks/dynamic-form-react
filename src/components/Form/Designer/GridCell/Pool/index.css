@@ -1,0 +1,72 @@
+.instance.active {
+  border-color: #1890ff;
+}
+.instance {
+  border: 1px solid transparent;
+  position: relative;
+}
+.lanes {
+  table-layout: fixed;
+  width: 100%;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.lanes:not(:first-of-type):not(:last-of-type) {
+  margin: 10px 0;
+}
+.lane {
+  padding: 10px;
+  border: 1px solid #d3d3d3;
+  min-height: 62px;
+  vertical-align: top;
+  position: relative;
+}
+.lane.vertical {
+  width: 100%;
+  min-height: 42px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.lane.vertical .instance {
+  width: 200px;
+  vertical-align: top;
+  display: inline-flex;
+}
+.lane.vertical .form-group > tr > td.label {
+  text-align: left;
+}
+.lane.hovered {
+  background-color: lightpink;
+}
+.preview .lane {
+  border-style: none;
+  padding: 0;
+  min-height: initial;
+}
+.preview .lane.vertical {
+  min-height: auto;
+}
+.preview .lane.vertical .form-group.inline {
+  min-height: auto;
+}
+.preview .instance {
+  border-style: none;
+}
+.preview .form-group.vertical {
+  margin: initial;
+}
+.drop-over-downward {
+  border-bottom: 1px dashed #1890ff;
+}
+.drop-over-upward {
+  border-top: 1px dashed #1890ff;
+}
+.drop-over-leftward {
+  border-left: 1px dashed #1890ff;
+}
+.drop-over-rightward {
+  border-right: 1px dashed #1890ff;
+}
+/*# sourceMappingURL=index.css.map */

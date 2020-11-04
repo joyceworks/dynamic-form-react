@@ -1,0 +1,33 @@
+.form-group {
+  table-layout: fixed;
+  width: 100%;
+  min-height: 42px;
+}
+.form-group > tbody > tr > td.element {
+  padding: 0 4px;
+}
+.form-group > tbody > tr > td.warning {
+  color: red;
+  margin: 0;
+}
+.form-group > tbody > tr > td.label {
+  padding: 0 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+  width: 100px;
+}
+.form-group > tbody > tr > td.label > .required {
+  color: red;
+}
+.form-group.vertical {
+  margin: 6px 0;
+}
+.form-group.vertical > tbody > tr > td.label {
+  text-align: left;
+}
+.form-group.vertical > tbody > tr > td.element {
+  padding: 0;
+}
+/*# sourceMappingURL=index.css.map */

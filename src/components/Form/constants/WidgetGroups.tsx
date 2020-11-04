@@ -1,4 +1,3 @@
-import { WidgetData } from "../Designer/schemas/WidgetData";
 import {
   AiOutlineCalendar,
   AiOutlineCheckSquare,
@@ -9,6 +8,7 @@ import {
   AiOutlineTable,
 } from "react-icons/ai";
 import React from "react";
+import { WidgetData } from "../schema";
 
 export const WidgetGroups: { name: string; widgets: WidgetData[] }[] = [
   {
@@ -18,6 +18,11 @@ export const WidgetGroups: { name: string; widgets: WidgetData[] }[] = [
         type: "input",
         icon: <AiOutlineEdit />,
         name: "单行文本",
+      },
+      {
+        type: "textarea",
+        icon: <AiOutlineEdit />,
+        name: "多行文本",
       },
       {
         type: "select",
@@ -45,6 +50,7 @@ export const WidgetGroups: { name: string; widgets: WidgetData[] }[] = [
     name: "高级字段",
     widgets: [
       { type: "grid", icon: <AiOutlineTable />, name: "布局" },
+      { type: "tab", icon: <AiOutlineTable />, name: "选项卡" },
       {
         type: "list",
         icon: <AiOutlineOrderedList />,

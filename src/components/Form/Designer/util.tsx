@@ -1,19 +1,26 @@
-import { CellData } from "./schemas/CellData";
-import CellLocation from "./schemas/CellLocation";
-import { setValue } from "./components/GridCell/components/Pool/util";
-import {
-  DispatchActiveProps,
-  DispatchAddProps,
-  DispatchDeleteActiveProps,
-  DispatchEditProps,
-  DispatchInitProps,
-  DispatchMoveProps,
-  DispatchPositionedAddProps,
-  DispatchPositionedMove,
-  DispatchSetValueProps,
-  DispatchUpdateProps,
-  DispatchValidateProps,
-} from "./schemas/ReducerAction";
+import { CellData, CellLocation } from "../schema";
+import { set } from "../util";
+import { ReducerActionProps } from "../type";
+
+export function clone(src: CellData): CellData {
+  const copy = JSON.parse(JSON.stringify(src));
+  forEach(src, (src) => {
+    forEach(copy, (dest) => {
+      if (dest.id === src.id) {
+        if (typeof src.required === "function") {
+          dest.required = src.required;
+        }
+        if (src.onChange) {
+          dest.onChange = src.onChange;
+        }
+        if (src.onClick) {
+          dest.onClick = src.onClick;
+        }
+      }
+    });
+  });
+  return copy;
+}
 
 /**
  * Clone and iterate nested CellData
@@ -28,7 +35,7 @@ export function cloneAndForEach(
     array: CellData[] | null
   ) => void
 ): CellData {
-  const copy = JSON.parse(JSON.stringify(root));
+  const copy = clone(root);
   forEach(copy, handler);
   return copy;
 }
@@ -52,7 +59,11 @@ export function forEach(
         for (let i = 0; i < lane.cellDataList.length; i++) {
           let cellData = lane.cellDataList[i];
           handler(cellData, i, lane.cellDataList);
-          if (cellData.type === "grid" || cellData.type === "list") {
+          if (
+            cellData.type === "grid" ||
+            cellData.type === "list" ||
+            cellData.type === "tab"
+          ) {
             recursion(cellData);
           }
         }
@@ -87,7 +98,11 @@ export function locate(
             ];
             break;
           }
-          if (cellData.type === "grid" || cellData.type === "list") {
+          if (
+            cellData.type === "grid" ||
+            cellData.type === "list" ||
+            cellData.type === "tab"
+          ) {
             func(cellData);
           }
         }
@@ -122,7 +137,11 @@ export function getCellDataList(
     if (data.lanes) {
       for (const lane of data.lanes) {
         for (const cellData of lane.cellDataList) {
-          if (cellData.type === "grid" || cellData.type === "list") {
+          if (
+            cellData.type === "grid" ||
+            cellData.type === "list" ||
+            cellData.type === "tab"
+          ) {
             if (cellData.id === parentId) {
               list = cellData.lanes![index].cellDataList;
             } else {
@@ -154,37 +173,29 @@ function drop(
   }
   active(root, cell.id);
 }
-export function reducer(
-  state: any,
-  action:
-    | DispatchPositionedMove
-    | DispatchPositionedAddProps
-    | DispatchActiveProps
-    | DispatchEditProps
-    | DispatchMoveProps
-    | DispatchAddProps
-    | DispatchUpdateProps
-    | DispatchDeleteActiveProps
-    | DispatchSetValueProps
-    | DispatchValidateProps
-    | DispatchInitProps
-): CellData {
+export function reducer(state: any, action: ReducerActionProps): CellData {
   if (!action.type) {
     return state;
   }
   if (action.type === "INIT") {
     return action.data;
   }
-  const copy = JSON.parse(JSON.stringify(state));
+  const copy = clone(state);
   if (action.type === "POSITIONED_MOVE") {
     const [dragLocation, dragList, dragCell] = locate(
       copy,
       (item) => item.id === action.id
     )!;
-    dragList.splice(dragLocation.index, 1);
-    drop(copy, dragCell, action.dropItemId, action.position);
+    const location = locate(copy, (item) => item.id === action.dropItemId);
+    if (location) {
+      dragList.splice(dragLocation.index, 1);
+      drop(copy, dragCell, action.dropItemId, action.position);
+    }
   } else if (action.type === "POSITIONED_ADD") {
-    drop(copy, action.dragItem, action.dropItemId, action.position);
+    const location = locate(copy, (item) => item.id === action.dropItemId);
+    if (location) {
+      drop(copy, action.dragItem, action.dropItemId, action.position);
+    }
   } else if (action.type === "ADD") {
     const cells = getCellDataList(
       copy,
@@ -212,15 +223,28 @@ export function reducer(
     );
     cellDataList?.push(cell);
     active(copy, cell.id);
+  } else if (action.type === "DELETE") {
+    const [location, list] = locate(copy, (item) => item.id === action.id)!;
+    list.splice(location.index, 1);
   } else if (action.type === "ACTIVE") {
     active(copy, action.id);
   } else if (action.type === "DELETE_ACTIVE") {
     deleteActive(copy);
+  } else if (action.type === "SET") {
+    set(copy, action.targetId, action.key, action.value);
   } else if (action.type === "SET_VALUE") {
-    setValue(copy, action.target, action.value);
+    set(copy, action.targetId, "value", action.value);
+  } else if (action.type === "SET_OPTION") {
+    set(copy, action.targetId, "options", action.options);
   } else if (action.type === "VALIDATE") {
     return cloneAndForEach(state, function (cellData) {
-      if (cellData.required && !cellData.value) {
+      if (
+        typeof cellData.required === "function"
+          ? !cellData.required()
+          : cellData.required &&
+            (!cellData.value ||
+              (cellData.value instanceof Array && cellData.value.length === 0))
+      ) {
         cellData.warning = `${cellData.label} is required.`;
         cellData.warnable = true;
       } else {
@@ -246,17 +270,24 @@ export function active(root: CellData, id: string) {
   });
 }
 
-export function createWidgetInstance(type: string) {
+export function createWidgetInstance(type: string): CellData {
   let cellData: CellData = {
     type: type,
     id: type + new Date().getTime(),
     active: false,
+    label: type,
   };
   if (cellData.type === "grid") {
     cellData.lanes = [
       { span: 12, cellDataList: [] },
       { span: 12, cellDataList: [] },
     ];
+  } else if (cellData.type === "tab") {
+    cellData.lanes = [
+      { span: 24, cellDataList: [] },
+      { span: 0, cellDataList: [] },
+    ];
+    cellData.tabs = ["选项卡1", "选项卡2"];
   } else if (cellData.type === "input") {
     cellData.label = "单行文本";
     cellData.placeholder = "请填写";

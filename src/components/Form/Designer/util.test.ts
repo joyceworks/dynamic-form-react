@@ -1,5 +1,5 @@
 import { cloneAndForEach, forEach, locate } from "./util";
-import { CellData } from "./schemas/CellData";
+import { CellData } from "../schema";
 
 test("all ids changed", () => {
   const root = {
