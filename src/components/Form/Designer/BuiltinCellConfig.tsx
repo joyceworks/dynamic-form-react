@@ -16,8 +16,8 @@ export default function BuiltinCellConfig({ data }: BuiltinCellConfigProps) {
   innerData.label = innerData.label || "自定义控件";
   return (
     <>
-      <Form labelCol={{ span: 6 }}>
-        <Form.Item label={"标题"}>
+      <Form labelCol={{ span: 8 }}>
+        <Form.Item label={"Title"}>
           <Input
             value={innerData.label}
             onChange={(event) => {
@@ -30,7 +30,7 @@ export default function BuiltinCellConfig({ data }: BuiltinCellConfigProps) {
             }}
           />
         </Form.Item>
-        <Form.Item label={"必填"}>
+        <Form.Item label={"Required"}>
           <Switch
             disabled={!!innerData.required}
             checked={!!innerData.required}

@@ -2,13 +2,13 @@ import React, { forwardRef, useCallback, useContext, useMemo } from "react";
 import { Button, Col, Row } from "antd";
 import styled from "styled-components";
 import update from "immutability-helper";
-import { CellData, LaneData } from "../../../schema";
-import { InstanceContext } from "../../../index";
+import { CellData, LaneData } from "../../../../schema";
+import { InstanceContext } from "../../../../index";
 import { DndLane } from "./DndLane";
 import { Lane } from "./Lane";
 import "./index.css";
-import { CustomCell } from "../../Cell";
-import { FormGroup } from "../../FormGroup";
+import { CustomCell } from "../../index";
+import { FormGroup } from "../../../FormGroup";
 
 interface PoolProps {
   direction?: "horizontal" | "vertical";

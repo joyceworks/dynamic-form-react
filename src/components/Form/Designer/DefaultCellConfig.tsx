@@ -16,8 +16,8 @@ export default function DefaultCellConfig({
   innerData.label = innerData.label || "自定义控件";
   return (
     <>
-      <Form labelCol={{ span: 6 }}>
-        <Form.Item label={"标题"}>
+      <Form labelCol={{ span: 8 }}>
+        <Form.Item label={"Title"}>
           <Input
             value={innerData.label}
             onChange={(event) => {
@@ -30,7 +30,7 @@ export default function DefaultCellConfig({
             }}
           />
         </Form.Item>
-        <Form.Item label={"必填"}>
+        <Form.Item label={"Required"}>
           <Switch
             checked={!!innerData.required}
             onChange={(checked) => {
@@ -43,7 +43,7 @@ export default function DefaultCellConfig({
             }}
           />
         </Form.Item>
-        <Form.Item label={"只读"}>
+        <Form.Item label={"Readonly"}>
           <Switch
             checked={innerData.disabled}
             onChange={(checked) => {
@@ -56,7 +56,7 @@ export default function DefaultCellConfig({
             }}
           />
         </Form.Item>
-        <Form.Item label={"默认值"}>
+        <Form.Item label={"Default"}>
           <Input
             value={innerData.defaultValue}
             onChange={(event) => {

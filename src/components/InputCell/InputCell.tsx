@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import { Input } from "antd";
-import { CellProps } from "../schema";
-import { FormGroup } from "./FormGroup";
+import { CellProps } from "../Form/schema";
+import { FormGroup } from "../Form/Designer/FormGroup";
 
 export const InputCell = forwardRef(
   ({ data, layout, onChange }: CellProps, ref: any) => {

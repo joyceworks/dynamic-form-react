@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { CellData } from "../../schema";
-import { DesignerContext } from "../index";
+import { CellData } from "../../Form/schema";
+import { DesignerContext } from "../../Form/Designer";
 import { Input, Switch, Form, Button } from "antd";
 import update from "immutability-helper";
 import OptionConfig from "./OptionConfig";
@@ -13,8 +13,8 @@ export default function SelectCellConfig({ data }: SelectCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
     <>
-      <Form labelCol={{ span: 6 }}>
-        <Form.Item label={"标题"}>
+      <Form labelCol={{ span: 8 }}>
+        <Form.Item label={"Title"}>
           <Input
             value={data.label}
             onChange={(event) => {
@@ -27,7 +27,7 @@ export default function SelectCellConfig({ data }: SelectCellConfigProps) {
             }}
           />
         </Form.Item>
-        <Form.Item label={"必填"}>
+        <Form.Item label={"Required"}>
           <Switch
             checked={!!data.required}
             onChange={(checked) => {
@@ -40,7 +40,7 @@ export default function SelectCellConfig({ data }: SelectCellConfigProps) {
             }}
           />
         </Form.Item>
-        <Form.Item label={"只读"}>
+        <Form.Item label={"Readonly"}>
           <Switch
             checked={data.disabled}
             onChange={(checked) => {
@@ -53,7 +53,7 @@ export default function SelectCellConfig({ data }: SelectCellConfigProps) {
             }}
           />
         </Form.Item>
-        <Form.Item label={"选项"}>
+        <Form.Item label={"Options"}>
           <>
             {data &&
               data.options &&
@@ -107,14 +107,14 @@ export default function SelectCellConfig({ data }: SelectCellConfigProps) {
               type={"link"}
               onClick={() => {
                 const copy = { ...data };
-                copy.options!.push({ label: "新选项", value: +new Date() });
+                copy.options!.push({ label: "New Item", value: +new Date() });
                 designerDispatch({
                   type: "UPDATE",
                   data: copy,
                 });
               }}
             >
-              添加列
+              Add
             </Button>
           </>
         </Form.Item>

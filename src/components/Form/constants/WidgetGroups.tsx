@@ -12,49 +12,49 @@ import { WidgetData } from "../schema";
 
 export const WidgetGroups: { name: string; widgets: WidgetData[] }[] = [
   {
-    name: "基础字段",
+    name: "Basic",
     widgets: [
       {
         type: "input",
         icon: <AiOutlineEdit />,
-        name: "单行文本",
+        name: "Input",
       },
       {
         type: "textarea",
         icon: <AiOutlineEdit />,
-        name: "多行文本",
+        name: "Textarea",
       },
       {
         type: "select",
         icon: <AiOutlineDownSquare />,
-        name: "下拉选择",
+        name: "Select",
       },
       {
         type: "datetime",
         icon: <AiOutlineCalendar />,
-        name: "日期时间",
+        name: "Datepicker",
       },
       {
         type: "checkbox",
         icon: <AiOutlineCheckSquare />,
-        name: "多选",
+        name: "Checkbox",
       },
       {
         type: "label",
         icon: <AiOutlineFontSize />,
-        name: "文本",
+        name: "Label",
       },
     ],
   },
   {
-    name: "高级字段",
+    name: "Layout",
     widgets: [
-      { type: "grid", icon: <AiOutlineTable />, name: "布局" },
-      { type: "tab", icon: <AiOutlineTable />, name: "选项卡" },
+      { type: "grid", icon: <AiOutlineTable />, name: "Grid" },
+      { type: "tab", icon: <AiOutlineTable />, name: "Tab" },
       {
         type: "list",
         icon: <AiOutlineOrderedList />,
-        name: "列表",
+        name: "List",
       },
     ],
   },

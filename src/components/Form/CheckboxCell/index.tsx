@@ -1,6 +1,6 @@
 import React from "react";
 import { CellProps } from "../schema";
-import { FormGroup } from "./FormGroup";
+import { FormGroup } from "../Designer/FormGroup";
 import { Checkbox } from "antd";
 
 export default function ({ data, layout, onChange }: CellProps) {

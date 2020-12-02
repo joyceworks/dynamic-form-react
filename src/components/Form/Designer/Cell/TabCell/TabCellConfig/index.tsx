@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import TabConfig from "./TabConfig";
 import update from "immutability-helper";
 import { Button, Form } from "antd";
-import { CellData } from "../../schema";
-import { DesignerContext } from "../index";
+import { CellData } from "../../../../schema";
+import { DesignerContext } from "../../../index";
 
 interface TabCellConfigProps {
   data: CellData;
@@ -12,7 +12,7 @@ interface TabCellConfigProps {
 export default function TabCellConfig({ data }: TabCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
-    <Form labelCol={{ span: 6 }}>
+    <Form labelCol={{ span: 8 }}>
       <Form.Item label={"选项卡"}>
         <>
           {data &&

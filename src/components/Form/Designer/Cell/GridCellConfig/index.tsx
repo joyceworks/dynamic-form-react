@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 import LaneConfig from "./LaneConfig";
 import update from "immutability-helper";
 import { Button, Form } from "antd";
-import { CellData } from "../../schema";
-import { DesignerContext } from "../index";
+import { CellData } from "../../../schema";
+import { DesignerContext } from "../../index";
 
 interface GridCellConfigProps {
   data: CellData;
@@ -12,7 +12,7 @@ interface GridCellConfigProps {
 export default function GridCellConfig({ data }: GridCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
-    <Form labelCol={{ span: 6 }}>
+    <Form labelCol={{ span: 8 }}>
       <Form.Item label={"列"}>
         <>
           {data &&

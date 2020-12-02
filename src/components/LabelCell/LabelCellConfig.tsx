@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { CellData } from "../schema";
-import { DesignerContext } from "./index";
+import { CellData } from "../Form/schema";
+import { DesignerContext } from "../Form/Designer";
 import { Input, Form } from "antd";
 import update from "immutability-helper";
 
@@ -12,8 +12,8 @@ export default function LabelCellConfig({ data }: LabelCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
     <>
-      <Form labelCol={{ span: 6 }}>
-        <Form.Item label={"标题"}>
+      <Form labelCol={{ span: 8 }}>
+        <Form.Item label={"Title"}>
           <Input
             value={data.label}
             onChange={(event) => {

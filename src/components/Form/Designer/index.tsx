@@ -17,13 +17,13 @@ import { clone, cloneAndForEach, getActive, reducer } from "./util";
 import { CellData } from "../schema";
 import { WidgetGroups } from "../constants/WidgetGroups";
 import { DnDCell } from "./DnDCell";
-import GridCellConfig from "./GridCellConfig";
+import GridCellConfig from "./Cell/GridCellConfig";
 import styled from "styled-components";
-import DateCellConfig from "./DateCellConfig";
-import SelectCellConfig from "./SelectCellConfig";
+import DateCellConfig from "../../DateCell/DateCellConfig";
+import SelectCellConfig from "../../SelectCell/SelectCellConfig";
 import WidgetGroup from "./WidgetGroup";
-import CheckboxCellConfig from "./CheckboxCellConfig";
-import LabelCellConfig from "./LabelCellConfig";
+import CheckboxCellConfig from "../CheckboxCell/CheckboxCellConfig";
+import LabelCellConfig from "../../LabelCell/LabelCellConfig";
 import { CustomCell } from "./Cell";
 import { AiOutlineEdit } from "react-icons/all";
 import { WhiteContent, WhiteHeader, WhiteLayout, WhiteSider } from "../Layout";
@@ -32,7 +32,7 @@ import { CellDataType, ReducerActionProps } from "../type";
 import useInteractions from "../hooks/interactions";
 import Form from "../index";
 import { InteractContext } from "../util";
-import TabCellConfig from "./TabCellConfig";
+import TabCellConfig from "./Cell/TabCell/TabCellConfig";
 import "./index.css";
 
 const rootCellData: CellData = {
@@ -152,12 +152,12 @@ export const Designer = forwardRef(
                   ))}
                   {finalAvailableCells && (
                     <WidgetGroup
-                      key={"自定义"}
-                      name={"自定义"}
+                      key={"Custom"}
+                      name={"Custom"}
                       list={[
                         ...finalAvailableCells.map((cell) => ({
                           type: cell.type,
-                          name: cell.name || "自定义组件",
+                          name: cell.name || "Custom",
                           icon: cell.icon || <AiOutlineEdit />,
                         })),
                       ]}
@@ -213,12 +213,6 @@ export const Designer = forwardRef(
                       <GridCellConfig data={active} />
                     ) : active.type === "tab" ? (
                       <TabCellConfig data={active} />
-                    ) : active.type === "datetime" ? (
-                      <DateCellConfig data={active} />
-                    ) : active.type === "select" ? (
-                      <SelectCellConfig data={active} />
-                    ) : active.type === "checkbox" ? (
-                      <CheckboxCellConfig data={active} />
                     ) : active.type === "label" ? (
                       <LabelCellConfig data={active} />
                     ) : (

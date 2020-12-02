@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { CellData } from "../schema";
-import { DesignerContext } from "./index";
+import { DesignerContext } from "../Designer";
 import { Input, Switch, Form, Button } from "antd";
 import update from "immutability-helper";
-import OptionConfig from "./SelectCellConfig/OptionConfig";
+import OptionConfig from "../../SelectCell/SelectCellConfig/OptionConfig";
 
 interface CheckboxCellConfigProps {
   data: CellData;
@@ -13,8 +13,8 @@ export default function CheckboxCellConfig({ data }: CheckboxCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
     <>
-      <Form labelCol={{ span: 6 }}>
-        <Form.Item label={"标题"}>
+      <Form labelCol={{ span: 8 }}>
+        <Form.Item label={"Title"}>
           <Input
             value={data.label}
             onChange={(event) => {
@@ -27,7 +27,7 @@ export default function CheckboxCellConfig({ data }: CheckboxCellConfigProps) {
             }}
           />
         </Form.Item>
-        <Form.Item label={"必填"}>
+        <Form.Item label={"Required"}>
           <Switch
             checked={!!data.required}
             onChange={(checked) => {
@@ -40,7 +40,7 @@ export default function CheckboxCellConfig({ data }: CheckboxCellConfigProps) {
             }}
           />
         </Form.Item>
-        <Form.Item label={"只读"}>
+        <Form.Item label={"Readonly"}>
           <Switch
             checked={data.disabled}
             onChange={(checked) => {

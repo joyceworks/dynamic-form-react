@@ -287,31 +287,10 @@ export function createWidgetInstance(type: string): CellData {
       { span: 24, cellDataList: [] },
       { span: 0, cellDataList: [] },
     ];
-    cellData.tabs = ["选项卡1", "选项卡2"];
-  } else if (cellData.type === "input") {
-    cellData.label = "单行文本";
-    cellData.placeholder = "请填写";
-    cellData.required = false;
-  } else if (cellData.type === "select") {
-    cellData.label = "下拉选择";
-    cellData.placeholder = "请选择";
-    cellData.options = [];
-    cellData.required = false;
+    cellData.tabs = ["Tab 1", "Tab 2"];
   } else if (cellData.type === "list") {
-    cellData.label = "列表";
+    cellData.label = "List";
     cellData.lanes = [{ cellDataList: [], span: 100 }];
-  } else if (cellData.type === "datetime") {
-    cellData.label = "日期时间";
-    cellData.placeholder = "请选择";
-    cellData.required = false;
-  } else if (cellData.type === "checkbox") {
-    cellData.label = "多选";
-    cellData.options = [];
-    cellData.required = false;
-  } else if (cellData.type === "radio") {
-    cellData.label = "单选";
-    cellData.options = [];
-    cellData.required = false;
   }
   return cellData;
 }

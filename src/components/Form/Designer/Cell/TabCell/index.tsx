@@ -1,11 +1,11 @@
 import React, { forwardRef, useCallback, useContext, useState } from "react";
-import { CellData, LaneData } from "../schema";
-import { Pool } from "./GridCell/Pool";
-import { CustomCell } from "./Cell";
+import { CellData, LaneData } from "../../../schema";
+import { Pool } from "../GridCell/Pool";
+import { CustomCell } from "../index";
 import styled from "styled-components";
-import { DesignerContext } from "./index";
+import { DesignerContext } from "../../index";
 import update from "immutability-helper";
-import { InstanceContext } from "../index";
+import { InstanceContext } from "../../../index";
 
 interface TabCellProps {
   data: CellData;

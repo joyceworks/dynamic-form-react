@@ -10,20 +10,20 @@ import {
   CellData,
   CellProps as ActualCellProps,
   SwimlaneLocation,
-} from "../schema";
-import { InputCell } from "./InputCell";
+} from "../../schema";
+import { InputCell } from "../../../InputCell/InputCell";
 import { GridCell } from "./GridCell";
-import { SelectCell } from "./SelectCell";
-import { DateCell } from "./DateCell";
-import { InstanceContext } from "../index";
-import CheckboxCell from "./CheckboxCell";
-import { LabelCell } from "./LabelCell";
-import { SwitchCell } from "./SwitchCell";
-import { Interactions } from "../hooks/interactions";
-import { InteractContext } from "../util";
+import { SelectCell } from "../../../SelectCell";
+import { DateCell } from "../../../DateCell";
+import { InstanceContext } from "../../index";
+import CheckboxCell from "../../CheckboxCell";
+import { LabelCell } from "../../../LabelCell/LabelCell";
+import { SwitchCell } from "../../../SwitchCell";
+import { Interactions } from "../../hooks/interactions";
+import { InteractContext } from "../../util";
 import { TabCell } from "./TabCell";
-import { DesignerContext } from "./index";
-import { DispatchSetValueProps } from "../schema/ReducerAction";
+import { DesignerContext } from "../index";
+import { DispatchSetValueProps } from "../../schema/ReducerAction";
 
 export interface CustomCell {
   type: string;
@@ -170,9 +170,7 @@ export const Cell = forwardRef(
           onClick={onClick}
         >
           {children}
-          {data.type === "input" ? (
-            <InputCell {...props} />
-          ) : data.type === "grid" ? (
+          {data.type === "grid" ? (
             <GridCell data={data} customCells={customCells} />
           ) : data.type === "list" ? (
             <GridCell
@@ -180,16 +178,6 @@ export const Cell = forwardRef(
               direction={"vertical"}
               customCells={customCells}
             />
-          ) : data.type === "select" ? (
-            <SelectCell {...props} />
-          ) : data.type === "datetime" ? (
-            <DateCell {...props} />
-          ) : data.type === "checkbox" ? (
-            <CheckboxCell {...props} />
-          ) : data.type === "label" ? (
-            <LabelCell {...props} />
-          ) : data.type === "switch" ? (
-            <SwitchCell {...props} />
           ) : data.type === "tab" ? (
             <TabCell {...props} customCells={customCells} />
           ) : (

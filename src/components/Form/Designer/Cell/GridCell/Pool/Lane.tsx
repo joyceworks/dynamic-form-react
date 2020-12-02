@@ -1,8 +1,8 @@
 import React, { forwardRef, useContext, useMemo } from "react";
-import { CellData, SwimlaneLocation } from "../../../schema";
-import { DnDCell } from "../../DnDCell";
-import { Cell, CustomCell } from "../../Cell";
-import { InstanceContext } from "../../../index";
+import { CellData, SwimlaneLocation } from "../../../../schema";
+import { DnDCell } from "../../../DnDCell";
+import { Cell, CustomCell } from "../../index";
+import { InstanceContext } from "../../../../index";
 import { Col } from "antd";
 
 interface LaneProps {

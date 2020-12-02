@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
-import { CellData } from "../schema";
-import { DesignerContext } from "./index";
+import { CellData } from "../Form/schema";
+import { DesignerContext } from "../Form/Designer";
 import { Input, Switch, Form, AutoComplete, Typography } from "antd";
 import update from "immutability-helper";
 
@@ -29,8 +29,8 @@ export default function DateCellConfig({ data }: DateCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
     <>
-      <Form labelCol={{ span: 6 }}>
-        <Form.Item label={"标题"}>
+      <Form labelCol={{ span: 8 }}>
+        <Form.Item label={"Title"}>
           <Input
             value={data.label}
             onChange={(event) => {
@@ -43,7 +43,7 @@ export default function DateCellConfig({ data }: DateCellConfigProps) {
             }}
           />
         </Form.Item>
-        <Form.Item label={"必填"}>
+        <Form.Item label={"Required"}>
           <Switch
             checked={!!data.required}
             onChange={(checked) => {
@@ -56,7 +56,7 @@ export default function DateCellConfig({ data }: DateCellConfigProps) {
             }}
           />
         </Form.Item>
-        <Form.Item label={"只读"}>
+        <Form.Item label={"Readonly"}>
           <Switch
             checked={data.disabled}
             onChange={(checked) => {
@@ -69,7 +69,7 @@ export default function DateCellConfig({ data }: DateCellConfigProps) {
             }}
           />
         </Form.Item>
-        <Form.Item label={"默认值"}>
+        <Form.Item label={"Default"}>
           <AutoComplete
             onSearch={(searchText) => {
               setCurrentDefaultValueOptions(

@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import { Pool } from "./Pool";
-import { CellData } from "../../schema";
-import { CustomCell } from "../Cell";
+import { CellData } from "../../../schema";
+import { CustomCell } from "../index";
 
 interface GridCellProps {
   data: CellData;
