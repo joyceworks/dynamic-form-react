@@ -19,10 +19,7 @@ import { WidgetGroups } from "../constants/WidgetGroups";
 import { DnDCell } from "./DnDCell";
 import GridCellConfig from "./Cell/GridCellConfig";
 import styled from "styled-components";
-import DateCellConfig from "../../DateCell/DateCellConfig";
-import SelectCellConfig from "../../SelectCell/SelectCellConfig";
 import WidgetGroup from "./WidgetGroup";
-import CheckboxCellConfig from "../CheckboxCell/CheckboxCellConfig";
 import LabelCellConfig from "../../LabelCell/LabelCellConfig";
 import { CustomCell } from "./Cell";
 import { AiOutlineEdit } from "react-icons/all";
@@ -50,6 +47,8 @@ const LeftSider = styled(WhiteSider).attrs({
 })`
   padding: 10px;
   border-right: 1px solid #d3d3d3;
+  height: 100%;
+  overflow-y: auto;
 `;
 const FullHeightBorderedLayout = styled(WhiteLayout)`
   border: 1px solid #d3d3d3;
@@ -206,7 +205,12 @@ export const Designer = forwardRef(
                 </WhiteContent>
                 <WhiteSider
                   width={280}
-                  style={{ padding: 10, borderLeft: "1px solid #d3d3d3" }}
+                  style={{
+                    padding: 10,
+                    borderLeft: "1px solid #d3d3d3",
+                    height: "100%",
+                    overflowY: "auto",
+                  }}
                 >
                   {active ? (
                     active.type === "grid" ? (
