@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { CellData } from "../schema";
 import { DesignerContext } from "../Designer";
-import { Input, Switch, Form, Button } from "antd";
+import { Button, Form, Input, Switch } from "antd";
 import update from "immutability-helper";
 import OptionConfig from "../../SelectCell/SelectCellConfig/OptionConfig";
 
@@ -114,7 +114,7 @@ export default function CheckboxCellConfig({ data }: CheckboxCellConfigProps) {
                 });
               }}
             >
-              添加列
+              Add
             </Button>
           </>
         </Form.Item>

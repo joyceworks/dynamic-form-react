@@ -13,7 +13,7 @@ export default function GridCellConfig({ data }: GridCellConfigProps) {
   const designerDispatch = useContext(DesignerContext);
   return (
     <Form labelCol={{ span: 8 }}>
-      <Form.Item label={"列"}>
+      <Form.Item label={"Column"}>
         <>
           {data &&
             data.lanes &&
@@ -76,7 +76,7 @@ export default function GridCellConfig({ data }: GridCellConfigProps) {
               });
             }}
           >
-            添加列
+            Add
           </Button>
         </>
       </Form.Item>

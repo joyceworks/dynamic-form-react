@@ -95,7 +95,7 @@ export default function TabConfig({
           value={name}
           size={"small"}
           style={{
-            width: "160px",
+            width: "60px",
             margin: "0 4px",
           }}
         />

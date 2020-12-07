@@ -82,7 +82,7 @@ export default function TabCellConfig({ data }: TabCellConfigProps) {
               });
             }}
           >
-            添加列
+            Add
           </Button>
         </>
       </Form.Item>
