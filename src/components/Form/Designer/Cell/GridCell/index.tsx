@@ -1,25 +1,20 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import { Pool } from "./Pool";
-import { CellData } from "../../../schema";
 import { CustomCell } from "../index";
+import { LanedCellData } from "../../../schema";
 
 interface GridCellProps {
-  data: CellData;
+  data: LanedCellData;
   direction?: "horizontal" | "vertical";
   customCells?: CustomCell[];
 }
 
-export const GridCell = forwardRef(
-  ({ data, direction, customCells }: GridCellProps, ref: any) => {
-    return (
-      <>
-        <Pool
-          ref={ref}
-          cellData={data}
-          direction={direction}
-          customCells={customCells}
-        />
-      </>
-    );
-  }
-);
+export const GridCell = ({
+  data,
+  direction,
+  customCells,
+}: GridCellProps): JSX.Element => {
+  return (
+    <Pool cellData={data} direction={direction} customCells={customCells} />
+  );
+};

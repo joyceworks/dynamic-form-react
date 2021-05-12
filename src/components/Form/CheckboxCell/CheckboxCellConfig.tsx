@@ -1,123 +1,26 @@
-import React, { useContext } from "react";
-import { CellData } from "../schema";
-import { DesignerContext } from "../Designer";
-import { Button, Form, Input, Switch } from "antd";
-import update from "immutability-helper";
-import OptionConfig from "../../SelectCell/SelectCellConfig/OptionConfig";
+import React from "react";
+import { Form } from "antd";
+import CellLabelConfig from "../CellLabelConfig";
+import CellRequiredConfig from "../CellRequiredConfig";
+import CellReadonlyConfig from "../CellReadonlyConfig";
+import CellOptionsConfig from "../CellOptionsConfig";
+import { labelCol } from "../Designer/constant";
+import { SelectCellData } from "../SelectCell/schema";
 
 interface CheckboxCellConfigProps {
-  data: CellData;
+  data: SelectCellData;
 }
 
-export default function CheckboxCellConfig({ data }: CheckboxCellConfigProps) {
-  const designerDispatch = useContext(DesignerContext);
+export default function CheckboxCellConfig({
+  data,
+}: CheckboxCellConfigProps): JSX.Element {
   return (
     <>
-      <Form labelCol={{ span: 8 }}>
-        <Form.Item label={"Title"}>
-          <Input
-            value={data.label}
-            onChange={(event) => {
-              designerDispatch({
-                type: "UPDATE",
-                data: update(data, {
-                  label: { $set: event.target.value },
-                }),
-              });
-            }}
-          />
-        </Form.Item>
-        <Form.Item label={"Required"}>
-          <Switch
-            checked={!!data.required}
-            onChange={(checked) => {
-              designerDispatch({
-                type: "UPDATE",
-                data: update(data, {
-                  required: { $set: checked },
-                }),
-              });
-            }}
-          />
-        </Form.Item>
-        <Form.Item label={"Readonly"}>
-          <Switch
-            checked={data.disabled}
-            onChange={(checked) => {
-              designerDispatch({
-                type: "UPDATE",
-                data: update(data, {
-                  disabled: { $set: checked },
-                }),
-              });
-            }}
-          />
-        </Form.Item>
-        <Form.Item label={"选项"}>
-          <>
-            {data &&
-              data.options &&
-              data.options.map((option, index) => (
-                <OptionConfig
-                  key={"option-config-" + index}
-                  index={index}
-                  data={option.label}
-                  onChange={(label) => {
-                    designerDispatch({
-                      type: "UPDATE",
-                      data: {
-                        ...data,
-                        options: update(data.options, {
-                          [index]: {
-                            label: { $set: label || "" },
-                          },
-                        }),
-                      },
-                    });
-                  }}
-                  onRemove={() => {
-                    designerDispatch({
-                      type: "UPDATE",
-                      data: {
-                        ...data,
-                        options: update(data.options, {
-                          $splice: [[index, 1]],
-                        }),
-                      },
-                    });
-                  }}
-                  move={(from, to) => {
-                    const dragItem = data.options?.[from]!;
-                    designerDispatch({
-                      type: "UPDATE",
-                      data: {
-                        ...data,
-                        options: update(data.options, {
-                          $splice: [
-                            [from, 1],
-                            [to, 0, dragItem],
-                          ],
-                        }),
-                      },
-                    });
-                  }}
-                />
-              ))}
-            <Button
-              type={"link"}
-              onClick={() => {
-                const copy = { ...data };
-                copy.options!.push({ label: "新选项", value: +new Date() });
-                designerDispatch({
-                  type: "UPDATE",
-                  data: copy,
-                });
-              }}
-            >
-              Add
-            </Button>
-          </>
-        </Form.Item>
+      <Form labelCol={labelCol}>
+        <CellLabelConfig data={data} />
+        <CellRequiredConfig data={data} />
+        <CellReadonlyConfig data={data} />
+        <CellOptionsConfig data={data} />
       </Form>
     </>
   );

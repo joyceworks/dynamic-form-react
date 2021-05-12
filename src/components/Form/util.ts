@@ -1,15 +1,15 @@
-import { CellData } from "./schema";
+import { CellData, CellDataType, LanedCellData } from "./schema";
 import { forEach } from "./Designer/util";
-import { CellDataType } from "./type";
 import React from "react";
+import { InputCellData } from "./InputCell/schema";
 
 export const InteractContext = React.createContext<any>(null);
 
 export function getValues(cell: CellData): any {
   let result: any = {};
-  let func = function (data: CellData) {
+  const func = function (data: CellData) {
     if (data.lanes) {
-      data.lanes.forEach((lane) => {
+      (data as LanedCellData).lanes.forEach((lane) => {
         lane.cellDataList.forEach((element) => {
           switch (element.type) {
             case "grid":
@@ -17,13 +17,19 @@ export function getValues(cell: CellData): any {
               break;
             case "list":
               result[element.id] = [];
-              element.lanes!.forEach((childLane) => {
+              (element as LanedCellData).lanes.forEach((childLane) => {
+                let isEmpty = true;
                 let detail: { [key: string]: any } = {};
                 childLane.cellDataList.forEach((listElement: CellData) => {
-                  detail[listElement.id] = listElement.value;
+                  if (listElement.value) {
+                    isEmpty = false;
+                    detail[listElement.id] = listElement.value;
+                  }
                 });
-                detail = { ...detail, ...childLane.hiddenValues };
-                result[element.id].push(detail);
+                if (!isEmpty) {
+                  detail = { ...detail, ...childLane.hiddenValues };
+                  result[element.id].push(detail);
+                }
               });
               break;
             default:
@@ -48,7 +54,7 @@ export function getValue(root: CellData, id: string): any | any[] {
   let value: any = null;
   const strings = id.split(".");
   const id1 = strings[0];
-  let func = function (data: CellData) {
+  const func = function (data: CellData) {
     if (data.lanes) {
       for (const lane of data.lanes) {
         for (const element of lane.cellDataList) {
@@ -63,8 +69,8 @@ export function getValue(root: CellData, id: string): any | any[] {
                   if (strings.length === 3) {
                     const index = parseInt(strings[1]);
                     const id2 = strings[2];
-                    const row = element.lanes![index];
-                    for (let item of row.cellDataList) {
+                    const row = (element as LanedCellData).lanes[index];
+                    for (const item of row.cellDataList) {
                       if (item.id === id2) {
                         value = item.value;
                         return true;
@@ -73,8 +79,8 @@ export function getValue(root: CellData, id: string): any | any[] {
                   } else {
                     value = [];
                     const id2 = strings[1];
-                    for (const row of element.lanes!) {
-                      for (let item of row.cellDataList.filter(
+                    for (const row of (element as LanedCellData).lanes) {
+                      for (const item of row.cellDataList.filter(
                         (item) => item.id === id2
                       )) {
                         value.push(item.value);
@@ -101,7 +107,7 @@ export function getValue(root: CellData, id: string): any | any[] {
 export function set(root: CellData, id: string, key: string, value: any): void {
   const strings = id.split(".");
   const id1 = strings[0];
-  let func = function (data: CellData) {
+  const func = function (data: CellData) {
     if (data.lanes) {
       for (const lane of data.lanes) {
         for (const element of lane.cellDataList) {
@@ -116,7 +122,7 @@ export function set(root: CellData, id: string, key: string, value: any): void {
                   const index = parseInt(strings[1]);
                   const id2 = strings[2];
                   const row = element.lanes![index];
-                  for (let item of row.cellDataList) {
+                  for (const item of row.cellDataList) {
                     if (item.id === id2) {
                       item[key] = value;
                       return true;
@@ -147,8 +153,8 @@ function formatValue(value: any, type: CellDataType | string): any {
 
 export function setData(root: CellData, form: any): void {
   const master: any = { ...form };
-  root.lanes![0].hiddenValues = master;
-  for (let cellData of root.lanes![0].cellDataList) {
+  (root as LanedCellData).lanes[0].hiddenValues = master;
+  for (const cellData of (root as LanedCellData).lanes[0].cellDataList) {
     delete master[cellData.id];
     forEach(cellData, (item) => {
       const value = form[cellData.id];
@@ -157,24 +163,55 @@ export function setData(root: CellData, form: any): void {
       } else if (item.type === "list" && value) {
         for (const row of value) {
           const detail: any = { ...row };
-          item.lanes?.push({
+          (item as LanedCellData).lanes.push({
             ...item.lanes[0],
-            cellDataList: item.lanes[0].cellDataList.map((x) => {
-              delete detail[x.id];
-              const y: CellData = {
-                ...x,
-              };
-              const value = row[x.id];
-              y.value = value ? formatValue(value, y.type) : null;
-              return y;
-            }),
+            cellDataList: (item as LanedCellData).lanes[0].cellDataList.map(
+              (x) => {
+                delete detail[x.id];
+                const y: CellData = {
+                  ...x,
+                };
+                const value = row[x.id];
+                y.value = value ? formatValue(value, y.type) : null;
+                return y;
+              }
+            ),
             hiddenValues: detail,
           });
         }
-        if (item.lanes!.length > 1) {
+        if ((item as LanedCellData).lanes.length > 1) {
           item.lanes?.splice(0, 1);
         }
       }
     });
   }
+}
+
+export function validateFormat(cellData: InputCellData): boolean {
+  const isText = cellData.type === "input" || cellData.type === "textarea";
+  if (
+    isText &&
+    cellData.value &&
+    cellData.format &&
+    cellData.format !== "none"
+  ) {
+    let pattern: string;
+    if (cellData.format === "custom") {
+      pattern = cellData.customFormat || "";
+    } else if (cellData.format === "mobile") {
+      pattern = "^1\\d{10}$";
+    } else if (cellData.format === "email") {
+      pattern = "^\\S+@\\S+$";
+    } else {
+      throw `Incorrect format type: ${cellData.format}.`;
+    }
+    if (!(cellData.value as string).match(pattern)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function validateRequired(cellData: CellData): boolean {
+  return !cellData.required || cellData.value;
 }

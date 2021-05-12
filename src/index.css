@@ -1,3 +1,5 @@
+@import "~antd/dist/antd.css";
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -10,4 +12,140 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.-right-px-16 {
+  right: -16px;
+}
+
+.top-px-8 {
+  top: 8px;
+}
+
+.inline {
+  display: inline;
+}
+
+.p-px-8 {
+  padding: 8px;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.pl-0 {
+  padding-left: 0;
+}
+
+.pr-0 {
+  padding-right: 0;
+}
+
+.pt-px-10 {
+  padding-top: 10px;
+}
+
+.pb-px-10 {
+  padding-bottom: 10px;
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.ml-px-16 {
+  margin-left: 16px;
+}
+
+.mr-px-16 {
+  margin-right: 16px;
+}
+
+.mb-px-8 {
+  margin-bottom: 8px;
+}
+
+.mt-px-8 {
+  margin-top: 8px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.border-l-0 {
+  border-left-width: 0;
+}
+
+.border-r-0 {
+  border-right-width: 0;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-full-important {
+  width: 100% !important;
+}
+
+.w-px-30 {
+  width: 30px;
+}
+
+.w-px-100 {
+  width: 100px;
+}
+
+.w-px-300 {
+  width: 300px;
+}
+
+.w-px-350 {
+  width: 350px;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.min-h-px-42 {
+  min-height: 40px;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.rounded-full {
+  border-radius: 9999px;
 }

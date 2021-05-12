@@ -1,6 +1,14 @@
-import { CellData, CellLocation } from "../schema";
-import { set } from "../util";
-import { ReducerActionProps } from "../type";
+import {
+  CellData,
+  CellLocation,
+  LanedCellData,
+  ReducerActionProps,
+} from "../schema";
+import { set, validateFormat, validateRequired } from "../util";
+import { DragItem } from "./DnDCell";
+import { CustomCell } from "./Cell";
+import { InputCellData } from "../InputCell/schema";
+import { message } from "antd";
 
 export function clone(src: CellData): CellData {
   const copy = JSON.parse(JSON.stringify(src));
@@ -53,11 +61,11 @@ export function forEach(
     array: CellData[] | null
   ) => void
 ): void {
-  let recursion = function (data: CellData): void {
+  const recursion = function (data: CellData): void {
     if (data.lanes) {
       for (const lane of data.lanes) {
         for (let i = 0; i < lane.cellDataList.length; i++) {
-          let cellData = lane.cellDataList[i];
+          const cellData = lane.cellDataList[i];
           handler(cellData, i, lane.cellDataList);
           if (
             cellData.type === "grid" ||
@@ -74,18 +82,39 @@ export function forEach(
   recursion(root);
 }
 
+export function filter(
+  root: CellData,
+  predicate: (item: CellData) => boolean
+): CellData[];
+export function filter(root: CellData, type: string): CellData[];
+export function filter(
+  root: CellData,
+  predicate: ((item: CellData) => boolean) | string
+): CellData[] {
+  const result: CellData[] = [];
+  forEach(root, (value) => {
+    if (
+      (typeof predicate === "function" && predicate(value)) ||
+      (typeof predicate === "string" && value.type === predicate)
+    ) {
+      result.push(value);
+    }
+  });
+  return result;
+}
+
 export function locate(
   root: CellData,
   matchFunc: (value: CellData, index: number, array: CellData[]) => boolean
 ): [CellLocation, CellData[], CellData] | null {
   let location: [CellLocation, CellData[], CellData] | null = null;
-  let func = function (
+  const func = function (
     data: CellData
   ): [CellLocation, CellData[], CellData] | null {
     if (data.lanes) {
       for (const lane of data.lanes) {
         for (let i = 0; i < lane.cellDataList.length; i++) {
-          let cellData = lane.cellDataList[i];
+          const cellData = lane.cellDataList[i];
           if (matchFunc(cellData, i, lane.cellDataList)) {
             location = [
               {
@@ -113,7 +142,7 @@ export function locate(
   return func(root);
 }
 
-export function deleteActive(rootCellData: CellData) {
+export function deleteActive(rootCellData: CellData): void {
   const location = locate(
     rootCellData,
     (item) => item.active !== undefined && item.active
@@ -130,9 +159,9 @@ export function getCellDataList(
   index: number
 ): CellData[] | null {
   let list: CellData[] | null = null;
-  let func = function (data: CellData) {
+  const func = function (data: CellData) {
     if (data.id === parentId) {
-      return data.lanes![index].cellDataList;
+      return (data as LanedCellData).lanes[index].cellDataList;
     }
     if (data.lanes) {
       for (const lane of data.lanes) {
@@ -143,7 +172,7 @@ export function getCellDataList(
             cellData.type === "tab"
           ) {
             if (cellData.id === parentId) {
-              list = cellData.lanes![index].cellDataList;
+              list = (cellData as LanedCellData).lanes[index].cellDataList;
             } else {
               func(cellData);
             }
@@ -160,7 +189,7 @@ function drop(
   root: CellData,
   cell: CellData,
   dropItemId: string,
-  position: string
+  position: "up" | "down"
 ) {
   const [dropLocation, dropList] = locate(
     root,
@@ -173,6 +202,7 @@ function drop(
   }
   active(root, cell.id);
 }
+
 export function reducer(state: any, action: ReducerActionProps): CellData {
   if (!action.type) {
     return state;
@@ -207,7 +237,7 @@ export function reducer(state: any, action: ReducerActionProps): CellData {
   } else if (action.type === "UPDATE") {
     const [location, list] = locate(
       copy,
-      (data) => data.id === action.data.id
+      (data) => data.id === (action.id || action.data.id)
     )!;
     list.splice(location.index, 1, action.data);
   } else if (action.type === "MOVE") {
@@ -238,20 +268,26 @@ export function reducer(state: any, action: ReducerActionProps): CellData {
     set(copy, action.targetId, "options", action.options);
   } else if (action.type === "VALIDATE") {
     return cloneAndForEach(state, function (cellData) {
-      if (
-        typeof cellData.required === "function"
-          ? !cellData.required()
-          : cellData.required &&
-            (!cellData.value ||
-              (cellData.value instanceof Array && cellData.value.length === 0))
-      ) {
+      if (!validateRequired(cellData)) {
         cellData.warning = `${cellData.label} is required.`;
+        cellData.warnable = true;
+      } else if (!validateFormat(cellData as InputCellData)) {
+        cellData.warning = `${cellData.label} is incorrect.`;
         cellData.warnable = true;
       } else {
         cellData.warnable = false;
         cellData.warning = "";
       }
     });
+  } else if (action.type === "DELETE_LANE") {
+    const location = locate(copy, (value) => value.id === action.parentId);
+    if (location) {
+      if (location[2].lanes.length > 1) {
+        location[2].lanes.splice(action.index, 1);
+      } else {
+        message.error(`最后一行无法删除`);
+      }
+    }
   }
   return copy;
 }
@@ -264,14 +300,31 @@ export function getActive(root: CellData): CellData | null {
   return location ? location[2] : null;
 }
 
-export function active(root: CellData, id: string) {
+export function active(root: CellData, id: string): void {
   forEach(root, function (cellData) {
     cellData.active = id === cellData.id;
   });
 }
 
-export function createWidgetInstance(type: string): CellData {
-  let cellData: CellData = {
+export function createWidgetInstance(
+  item: DragItem,
+  customCells?: CustomCell[]
+): CellData {
+  if (item.createWidgetInstance) {
+    return item.createWidgetInstance();
+  } else if (customCells) {
+    const find = customCells.find(
+      (customCell) => customCell.type === item.type
+    );
+    if (find && find.createWidgetInstance) {
+      return find.createWidgetInstance();
+    }
+  }
+  return createBasicWidgetInstance(item.type);
+}
+
+export function createBasicWidgetInstance(type: string): CellData {
+  const cellData: CellData = {
     type: type,
     id: type + new Date().getTime(),
     active: false,
@@ -291,6 +344,8 @@ export function createWidgetInstance(type: string): CellData {
   } else if (cellData.type === "list") {
     cellData.label = "List";
     cellData.lanes = [{ cellDataList: [], span: 100 }];
+  } else if (cellData.type === "select") {
+    cellData.options = [];
   }
   return cellData;
 }

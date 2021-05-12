@@ -1,9 +1,15 @@
-import React, { forwardRef, useContext, useMemo } from "react";
-import { CellData, SwimlaneLocation } from "../../../../schema";
+import React, { forwardRef, useContext, useMemo, useState } from "react";
+import {
+  CellData,
+  ReducerActionProps,
+  SwimlaneLocation,
+} from "../../../../schema";
 import { DnDCell } from "../../../DnDCell";
 import { Cell, CustomCell } from "../../index";
 import { InstanceContext } from "../../../../index";
-import { Col } from "antd";
+import { Button, Col } from "antd";
+import DeleteOutlined from "@ant-design/icons/DeleteOutlined";
+import { useTimeoutFn } from "react-use";
 
 interface LaneProps {
   cellDataList: CellData[];
@@ -26,7 +32,13 @@ export const Lane = forwardRef(
     }: LaneProps,
     ref: any
   ) => {
-    const instanceDispatch = useContext(InstanceContext);
+    const instanceDispatch = useContext<React.Dispatch<ReducerActionProps>>(
+      InstanceContext
+    );
+    const [mouseOver, setMouseOver] = useState<boolean>(false);
+    const [, cancel, reset] = useTimeoutFn(() => {
+      setMouseOver(false);
+    }, 1000);
     const cells = useMemo(() => {
       return cellDataList.map((child, index) => {
         const props = {
@@ -48,9 +60,31 @@ export const Lane = forwardRef(
     }, [cellDataList, customCells, direction, instanceDispatch, location]);
 
     return (
-      <Col span={span} className={`lane ${direction}${className || ""}`}>
-        <div style={{ width: "100%", minHeight: 42, height: "100%" }} ref={ref}>
+      <Col
+        span={span}
+        onMouseOver={() => {
+          cancel();
+          setMouseOver(true);
+        }}
+        onMouseOut={reset}
+        className={`lane ${direction}${className || ""}`}
+      >
+        <div className="w-full h-full relative min-h-px-42" ref={ref}>
           {cells}
+          {direction === "vertical" && mouseOver && (
+            <Button
+              onClick={() =>
+                instanceDispatch({
+                  type: "DELETE_LANE",
+                  ...location,
+                })
+              }
+              className="absolute cursor-pointer -right-px-16 top-px-8"
+              type={"link"}
+              size={"small"}
+              icon={<DeleteOutlined />}
+            />
+          )}
         </div>
       </Col>
     );

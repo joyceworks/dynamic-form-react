@@ -3,7 +3,11 @@ import { CellProps } from "../schema";
 import { FormGroup } from "../Designer/FormGroup";
 import { Checkbox } from "antd";
 
-export default function ({ data, layout, onChange }: CellProps) {
+export default function CheckboxCell({
+  data,
+  layout,
+  onChange,
+}: CellProps): JSX.Element {
   return (
     <>
       <FormGroup

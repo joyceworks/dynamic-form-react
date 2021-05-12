@@ -1,10 +1,12 @@
 .form-group {
   table-layout: fixed;
   width: 100%;
-  min-height: 42px;
 }
 .form-group > tbody > tr > td.element {
   padding: 0 4px;
+}
+.form-group > tbody > tr > td.element > * {
+  margin: 5px 0;
 }
 .form-group > tbody > tr > td.warning {
   color: red;
@@ -28,6 +30,6 @@
   text-align: left;
 }
 .form-group.vertical > tbody > tr > td.element {
-  padding: 0;
+  padding: 0 4px;
 }
 /*# sourceMappingURL=index.css.map */

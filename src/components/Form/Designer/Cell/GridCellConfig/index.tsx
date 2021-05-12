@@ -2,24 +2,25 @@ import React, { useContext } from "react";
 import LaneConfig from "./LaneConfig";
 import update from "immutability-helper";
 import { Button, Form } from "antd";
-import { CellData } from "../../../schema";
 import { DesignerContext } from "../../index";
+import { labelCol } from "../../constant";
+import { LanedCellData } from "../../../schema";
 
-interface GridCellConfigProps {
-  data: CellData;
-}
-
-export default function GridCellConfig({ data }: GridCellConfigProps) {
+export default function GridCellConfig({
+  data,
+}: {
+  data: LanedCellData;
+}): JSX.Element {
   const designerDispatch = useContext(DesignerContext);
   return (
-    <Form labelCol={{ span: 8 }}>
+    <Form labelCol={labelCol}>
       <Form.Item label={"Column"}>
         <>
           {data &&
             data.lanes &&
             data.lanes.map((lane, index) => (
               <LaneConfig
-                key={"lane-config-" + index}
+                key={index}
                 index={index}
                 data={lane}
                 onResize={(span) => {
@@ -49,7 +50,7 @@ export default function GridCellConfig({ data }: GridCellConfigProps) {
                   });
                 }}
                 move={(from, to) => {
-                  const dragItem = data.lanes?.[from]!;
+                  const dragItem = data.lanes[from];
                   designerDispatch({
                     type: "UPDATE",
                     data: {
@@ -68,8 +69,8 @@ export default function GridCellConfig({ data }: GridCellConfigProps) {
           <Button
             type={"link"}
             onClick={() => {
-              const copy = { ...data };
-              copy.lanes!.push({ cellDataList: [], span: 12 });
+              const copy: LanedCellData = { ...data };
+              copy.lanes.push({ cellDataList: [], span: 12 });
               designerDispatch({
                 type: "UPDATE",
                 data: copy,

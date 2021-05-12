@@ -1,9 +1,9 @@
 import React, { forwardRef } from "react";
-import { Input } from "antd";
+import { Switch } from "antd";
 import { CellProps } from "../schema";
-import { FormGroup } from "./FormGroup";
+import { FormGroup } from "../Designer/FormGroup";
 
-export const BuiltinCell = forwardRef(
+export const SwitchCell = forwardRef(
   ({ data, layout, onChange }: CellProps, ref: any) => (
     <>
       <FormGroup
@@ -16,11 +16,10 @@ export const BuiltinCell = forwardRef(
           data.labeled ? <label title={data.label}>{data.label}</label> : <></>
         }
         element={
-          <Input
+          <Switch
+            checked={data.value}
+            onChange={(checked) => onChange(checked)}
             disabled={data.disabled}
-            value={data.value}
-            placeholder={data.placeholder}
-            onChange={(event) => onChange(event.target.value)}
           />
         }
       />

@@ -2,6 +2,7 @@ import React, {
   CSSProperties,
   Dispatch,
   forwardRef,
+  Ref,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -14,23 +15,35 @@ import { Button, Modal, Space } from "antd";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { clone, cloneAndForEach, getActive, reducer } from "./util";
-import { CellData } from "../schema";
+import {
+  CellData,
+  CellDataType,
+  LanedCellData,
+  ReducerActionProps,
+  TabCellData,
+} from "../schema";
 import { WidgetGroups } from "../constants/WidgetGroups";
 import { DnDCell } from "./DnDCell";
 import GridCellConfig from "./Cell/GridCellConfig";
 import styled from "styled-components";
 import WidgetGroup from "./WidgetGroup";
-import LabelCellConfig from "../../LabelCell/LabelCellConfig";
+import LabelCellConfig from "../LabelCell/LabelCellConfig";
 import { CustomCell } from "./Cell";
 import { AiOutlineEdit } from "react-icons/all";
 import { WhiteContent, WhiteHeader, WhiteLayout, WhiteSider } from "../Layout";
 import DefaultCellConfig from "./DefaultCellConfig";
-import { CellDataType, ReducerActionProps } from "../type";
 import useInteractions from "../hooks/interactions";
 import Form from "../index";
 import { InteractContext } from "../util";
 import TabCellConfig from "./Cell/TabCell/TabCellConfig";
 import "./index.css";
+import CheckboxCellConfig from "../CheckboxCell/CheckboxCellConfig";
+import SelectCellConfig from "../SelectCell/SelectCellConfig";
+import DateCellConfig from "../DateCell/DateCellConfig";
+import { contentStyle, layoutStyle, rightSiderStyle } from "./style";
+import InputCellConfig from "../InputCell/InputCellConfig";
+import { InputCellData } from "../InputCell/schema";
+import { SelectCellData } from "../SelectCell/schema";
 
 const rootCellData: CellData = {
   type: "grid",
@@ -60,6 +73,10 @@ const ToolBar = styled(WhiteHeader)`
   border-bottom: 1px solid #a3a3a3;
 `;
 
+export interface IEntityFormDesigner {
+  get: () => CellData;
+}
+
 interface DesignerProps {
   customCells?: CustomCell[];
   availableCustomCells?: CustomCell[];
@@ -81,7 +98,7 @@ export const Designer = forwardRef(
       onChange,
       style,
     }: DesignerProps,
-    ref
+    ref: Ref<IEntityFormDesigner>
   ) => {
     const [data, designerDispatch] = useReducer(
       reducer,
@@ -121,7 +138,10 @@ export const Designer = forwardRef(
         });
       },
       get() {
-        return cloneAndForEach(data, (item) => (item.value = undefined));
+        return cloneAndForEach(data, (item) => {
+          item.value = undefined;
+          item.active = false;
+        });
       },
     }));
     const active = getActive(data);
@@ -154,17 +174,20 @@ export const Designer = forwardRef(
                       key={"Custom"}
                       name={"Custom"}
                       list={[
-                        ...finalAvailableCells.map((cell) => ({
-                          type: cell.type,
-                          name: cell.name || "Custom",
-                          icon: cell.icon || <AiOutlineEdit />,
-                        })),
+                        ...finalAvailableCells.map((cell) => {
+                          return {
+                            type: cell.type,
+                            name: cell.name || "Custom",
+                            icon: cell.icon || <AiOutlineEdit />,
+                            createWidgetInstance: cell.createWidgetInstance,
+                          };
+                        }),
                       ]}
                     />
                   )}
                 </LeftSider>
                 <WhiteContent>
-                  <WhiteLayout style={{ height: "100%" }}>
+                  <WhiteLayout style={layoutStyle}>
                     {toolbar && (
                       <ToolBar>
                         <Space>
@@ -193,7 +216,7 @@ export const Designer = forwardRef(
                       </ToolBar>
                     )}
 
-                    <WhiteContent style={{ height: "100%", padding: 10 }}>
+                    <WhiteContent style={contentStyle}>
                       <DnDCell
                         className={"root"}
                         cellData={data}
@@ -203,22 +226,22 @@ export const Designer = forwardRef(
                     </WhiteContent>
                   </WhiteLayout>
                 </WhiteContent>
-                <WhiteSider
-                  width={280}
-                  style={{
-                    padding: 10,
-                    borderLeft: "1px solid #d3d3d3",
-                    height: "100%",
-                    overflowY: "auto",
-                  }}
-                >
+                <WhiteSider width={280} style={rightSiderStyle}>
                   {active ? (
                     active.type === "grid" ? (
-                      <GridCellConfig data={active} />
+                      <GridCellConfig data={active as LanedCellData} />
                     ) : active.type === "tab" ? (
-                      <TabCellConfig data={active} />
+                      <TabCellConfig data={active as TabCellData} />
+                    ) : active.type === "datetime" ? (
+                      <DateCellConfig data={active} />
+                    ) : active.type === "select" ? (
+                      <SelectCellConfig data={active as SelectCellData} />
+                    ) : active.type === "checkbox" ? (
+                      <CheckboxCellConfig data={active as SelectCellData} />
                     ) : active.type === "label" ? (
                       <LabelCellConfig data={active} />
+                    ) : active.type === "input" ? (
+                      <InputCellConfig data={active as InputCellData} />
                     ) : (
                       (customCells &&
                         customCells.some((item) => item.type === active.type) &&
@@ -255,6 +278,7 @@ export const Designer = forwardRef(
           onCancel={() => setPreviewDialogVisible(false)}
           footer={[
             <Button
+              key={"save"}
               onClick={() => {
                 const result = previewRef.current!.getData();
                 alert(JSON.stringify(result));
@@ -262,7 +286,10 @@ export const Designer = forwardRef(
             >
               Save
             </Button>,
-            <Button onClick={() => previewRef.current.validate()}>
+            <Button
+              key={"validate"}
+              onClick={() => previewRef.current.validate()}
+            >
               Validate
             </Button>,
           ]}

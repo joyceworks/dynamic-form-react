@@ -2,7 +2,7 @@ import React, { forwardRef, useCallback, useContext, useMemo } from "react";
 import { Button, Col, Row } from "antd";
 import styled from "styled-components";
 import update from "immutability-helper";
-import { CellData, LaneData } from "../../../../schema";
+import { CellData, LaneData, LanedCellData } from "../../../../schema";
 import { InstanceContext } from "../../../../index";
 import { DndLane } from "./DndLane";
 import { Lane } from "./Lane";
@@ -12,7 +12,7 @@ import { FormGroup } from "../../../FormGroup";
 
 interface PoolProps {
   direction?: "horizontal" | "vertical";
-  cellData: CellData;
+  cellData: LanedCellData;
   customCells?: CustomCell[];
 }
 
@@ -53,7 +53,7 @@ export const Pool = forwardRef(
       [cellData.id, customCells, direction, isDesigner]
     );
     const lanes = useMemo(
-      () => cellData.lanes!.map((lane, index) => getLane(lane, index)),
+      () => cellData.lanes.map((lane, index) => getLane(lane, index)),
       [cellData.lanes, getLane]
     );
 
@@ -66,13 +66,13 @@ export const Pool = forwardRef(
             <FormGroup
               required={!!cellData.required}
               warning={cellData.warning}
-              warnable={cellData.warnable!}
+              warnable={cellData.warnable}
               element={
                 <>
                   {!isDesigner && (
                     <InstanceListHeaderItem span={24}>
-                      {cellData.lanes![0].cellDataList.map((item) => (
-                        <div style={{ width: item.width }}>
+                      {cellData.lanes[0].cellDataList.map((item) => (
+                        <div style={{ width: item.width }} key={item.id}>
                           {item.required && (
                             <span style={{ color: "red" }}>*</span>
                           )}
@@ -91,7 +91,7 @@ export const Pool = forwardRef(
                           data: update(cellData, {
                             lanes: {
                               $push: [
-                                update(cellData.lanes![0], {
+                                update(cellData.lanes[0], {
                                   cellDataList: {
                                     $apply: (x: CellData[]) =>
                                       x.map((y) => ({
@@ -110,7 +110,7 @@ export const Pool = forwardRef(
                       }
                       type={"link"}
                     >
-                      Add
+                      添加行
                     </Button>
                   )}
                 </>

@@ -9,21 +9,25 @@ import React, {
 import {
   CellData,
   CellProps as ActualCellProps,
+  DispatchSetValueProps,
+  LanedCellData,
   SwimlaneLocation,
+  TabCellData,
 } from "../../schema";
-import { InputCell } from "../../../InputCell/InputCell";
 import { GridCell } from "./GridCell";
-import { SelectCell } from "../../../SelectCell";
-import { DateCell } from "../../../DateCell";
 import { InstanceContext } from "../../index";
-import CheckboxCell from "../../CheckboxCell";
-import { LabelCell } from "../../../LabelCell/LabelCell";
-import { SwitchCell } from "../../../SwitchCell";
 import { Interactions } from "../../hooks/interactions";
 import { InteractContext } from "../../util";
 import { TabCell } from "./TabCell";
 import { DesignerContext } from "../index";
-import { DispatchSetValueProps } from "../../schema/ReducerAction";
+import { TextAreaCell } from "../../TextAreaCell";
+import InputCell from "../../InputCell";
+import { SwitchCell } from "../../SwitchCell";
+import { LabelCell } from "../../LabelCell/LabelCell";
+import { DateCell } from "../../DateCell";
+import { SelectCell } from "../../SelectCell";
+import CheckboxCell from "../../CheckboxCell";
+import { SelectCellData } from "../../SelectCell/schema";
 
 export interface CustomCell {
   type: string;
@@ -40,7 +44,7 @@ interface CellProps {
   cellData: CellData;
   layout?: "vertical" | "horizontal";
   style?: CSSProperties;
-  onClick?: (event: any) => void;
+  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   className?: string;
   customCells?: CustomCell[];
   children?: JSX.Element;
@@ -65,7 +69,7 @@ export const Cell = forwardRef(
     const instanceDispatch = useContext(InstanceContext);
     const designerDispatch = useContext(DesignerContext);
     const data = useMemo(
-      () => ({
+      (): CellData => ({
         required: false,
         warnable: false,
         layout: "default",
@@ -76,7 +80,7 @@ export const Cell = forwardRef(
     );
     const interactions = useContext<Interactions>(InteractContext);
     const onChange = useCallback(
-      (value: any, valueObject: any) => {
+      (value: unknown, valueObject: any) => {
         const targetId =
           location && layout === "vertical"
             ? `${location.parentId}.${location.index}.${data.id}`
@@ -101,9 +105,14 @@ export const Cell = forwardRef(
              * Wrapper to replace the result of default getValue with unstaged values
              * @param id: e.g., name, details.0.name, details.name
              */
-            getValue(id: string): any | any[] {
+            getValue(id: string): unknown | unknown[] {
               for (const unstagedId in unstagedValues) {
-                if (!unstagedValues.hasOwnProperty(unstagedId)) {
+                if (
+                  !Object.prototype.hasOwnProperty.call(
+                    unstagedValues,
+                    unstagedId
+                  )
+                ) {
                   continue;
                 }
 
@@ -132,7 +141,7 @@ export const Cell = forwardRef(
              * @param id: e.g., name, details.0.name, details.name
              * @param value: value of component
              */
-            setValue(id: string, value: any): void {
+            setValue(id: string, value: unknown): void {
               unstagedValues[id] = value;
               interactions.setValue(id, value);
             },
@@ -141,15 +150,7 @@ export const Cell = forwardRef(
           location
         );
       },
-      [
-        data.id,
-        data.onChange,
-        designerDispatch,
-        instanceDispatch,
-        interactions,
-        layout,
-        location,
-      ]
+      [data, designerDispatch, instanceDispatch, interactions, layout, location]
     );
     const props = useMemo(
       () => ({
@@ -170,16 +171,34 @@ export const Cell = forwardRef(
           onClick={onClick}
         >
           {children}
-          {data.type === "grid" ? (
-            <GridCell data={data} customCells={customCells} />
+          {data.type === "input" ? (
+            <InputCell {...props} />
+          ) : data.type === "textarea" ? (
+            <TextAreaCell {...props} />
+          ) : data.type === "grid" ? (
+            <GridCell data={data as LanedCellData} customCells={customCells} />
           ) : data.type === "list" ? (
             <GridCell
-              data={data}
+              data={data as LanedCellData}
               direction={"vertical"}
               customCells={customCells}
             />
+          ) : data.type === "select" ? (
+            <SelectCell {...props} data={data as SelectCellData} />
+          ) : data.type === "datetime" ? (
+            <DateCell {...props} />
+          ) : data.type === "checkbox" ? (
+            <CheckboxCell {...props} />
+          ) : data.type === "label" ? (
+            <LabelCell {...props} />
+          ) : data.type === "switch" ? (
+            <SwitchCell {...props} />
           ) : data.type === "tab" ? (
-            <TabCell {...props} customCells={customCells} />
+            <TabCell
+              {...props}
+              data={data as TabCellData}
+              customCells={customCells}
+            />
           ) : (
             (customCells &&
               customCells.some((item) => item.type === data.type) &&

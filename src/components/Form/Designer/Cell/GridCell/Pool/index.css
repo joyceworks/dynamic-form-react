@@ -18,14 +18,18 @@
 }
 .lane {
   padding: 10px;
-  border: 1px solid #d3d3d3;
+  border-top: 1px solid #d3d3d3;
+  border-bottom: 1px solid #d3d3d3;
+  border-left: 1px solid #d3d3d3;
   min-height: 62px;
   vertical-align: top;
   position: relative;
 }
+.lane:last-child {
+  border-right: 1px solid #d3d3d3;
+}
 .lane.vertical {
   width: 100%;
-  min-height: 42px;
   overflow-x: auto;
   white-space: nowrap;
 }
@@ -42,7 +46,7 @@
 }
 .preview .lane {
   border-style: none;
-  padding: 0;
+  padding: 0 10px;
   min-height: initial;
 }
 .preview .lane.vertical {

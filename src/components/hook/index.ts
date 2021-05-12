@@ -1,28 +1,18 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { useDrag, useDrop, XYCoord } from "react-dnd";
-import { AiOutlineMenu, AiOutlineMinusCircle } from "react-icons/ai";
-import { Button, Input } from "antd";
+import update from "immutability-helper";
+import { DesignerContext } from "../Form/Designer";
+import { CellData } from "../Form/schema";
 
 interface DragItem {
   index: number;
   type: string;
 }
 
-interface OptionConfigProps {
-  index: number;
-  data: string;
-  move: (from: number, to: number) => void;
-  onRemove: () => void;
-  onChange: (data: string) => void;
-}
-
-export default function OptionConfig({
-  index,
-  data,
-  move,
-  onRemove,
-  onChange,
-}: OptionConfigProps) {
+export function useVerticalDragDropMemberRef(
+  index: number,
+  move: (from: number, to: number) => void
+): React.RefObject<HTMLDivElement> {
   const ref = useRef<HTMLDivElement>(null);
   const [, drag] = useDrag({
     item: {
@@ -49,7 +39,7 @@ export default function OptionConfig({
       }
 
       // Determine rectangle on screen
-      const hoverBoundingRect = ref.current!.getBoundingClientRect();
+      const hoverBoundingRect = ref.current.getBoundingClientRect();
 
       // Get vertical middle
       const hoverMiddleY =
@@ -86,25 +76,56 @@ export default function OptionConfig({
     },
   });
   drag(drop(ref));
-  return (
-    <>
-      <div ref={ref}>
-        <AiOutlineMenu style={{ cursor: "move" }} />
-        <Input
-          onChange={(event) => {
-            onChange(event.target.value);
-          }}
-          value={data}
-          size={"small"}
-          style={{
-            width: "120px",
-            margin: "0 4px",
-          }}
-        />
-        <Button type={"link"} onClick={onRemove} style={{ padding: "0" }}>
-          <AiOutlineMinusCircle />
-        </Button>
-      </div>
-    </>
-  );
+  return ref;
+}
+
+export function useVerticalDragDropMemberEvent(
+  data: CellData
+): {
+  onChange: (index: number, label: string) => void;
+  onRemove: (index: number) => void;
+  move: (from: number, to: number) => void;
+} {
+  const designerDispatch = useContext(DesignerContext);
+  return {
+    onChange(index: number, label: string) {
+      designerDispatch({
+        type: "UPDATE",
+        data: {
+          ...data,
+          options: update(data.options, {
+            [index]: {
+              label: { $set: label || "" },
+            },
+          }),
+        },
+      });
+    },
+    onRemove(index: number) {
+      designerDispatch({
+        type: "UPDATE",
+        data: {
+          ...data,
+          options: update(data.options, {
+            $splice: [[index, 1]],
+          }),
+        },
+      });
+    },
+    move(from: number, to: number) {
+      const dragItem = data.options![from]!;
+      designerDispatch({
+        type: "UPDATE",
+        data: {
+          ...data,
+          options: update(data.options, {
+            $splice: [
+              [from, 1],
+              [to, 0, dragItem],
+            ],
+          }),
+        },
+      });
+    },
+  };
 }

@@ -20,13 +20,17 @@
 }
 .lane {
   padding: 10px;
-  border: 1px solid #d3d3d3;
+  border-top: 1px solid #d3d3d3;
+  border-bottom: 1px solid #d3d3d3;
+  border-left: 1px solid #d3d3d3;
   min-height: 62px;
   vertical-align: top;
   position: relative;
 }
+.lane:last-child {
+  border-right: 1px solid #d3d3d3;
+}
 .lane.vertical {
-  min-height: 42px;
   width: 100%;
   overflow-x: auto;
   white-space: nowrap;

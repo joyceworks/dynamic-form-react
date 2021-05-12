@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
-import { ReducerActionProps } from "../type";
-import { CellData } from "../schema";
+import { CellData, ReducerActionProps } from "../schema";
 import { getValue as fetchValue } from "../util";
+import { Option } from "../../schema";
 
 export interface Interactions {
   setValue: (id: string, value: any) => void;
-  setOption: (id: string, options: { value: any; label: string }[]) => void;
+  setOption: (id: string, options: Option[]) => void;
   getValue: (id: string) => any;
   set: (id: string, key: string, value: any) => void;
 }
@@ -25,7 +25,7 @@ export default function useInteractions(
     [dispatch]
   );
   const setOption = useCallback(
-    (id: string, options: { value: any; label: string }[]) => {
+    (id: string, options: Option[]) => {
       dispatch({
         type: "SET_OPTION",
         options: options,

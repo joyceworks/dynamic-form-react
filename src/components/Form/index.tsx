@@ -2,9 +2,15 @@ import React, { forwardRef, useImperativeHandle, useReducer } from "react";
 import { Cell, CustomCell } from "./Designer/Cell";
 import { forEach, reducer } from "./Designer/util";
 import { CellData, ConstrainViolation } from "./schema";
-import { getValues, InteractContext } from "./util";
+import {
+  getValues,
+  InteractContext,
+  validateFormat,
+  validateRequired,
+} from "./util";
 import { useUpdateEffect } from "react-use";
 import useInteractions from "./hooks/interactions";
+import { InputCellData } from "./InputCell/schema";
 
 export interface InstanceProps {
   data: CellData;
@@ -16,7 +22,7 @@ export interface InstanceProps {
  * but also allows user's input
  */
 export const InstanceContext = React.createContext<any>(null);
-export default forwardRef(({ data, customCells }: InstanceProps, ref: any) => {
+const Form = forwardRef(({ data, customCells }: InstanceProps, ref: any) => {
   const [innerData, dispatch] = useReducer(reducer, data);
   useImperativeHandle(ref, () => ({
     getData: function () {
@@ -28,12 +34,21 @@ export default forwardRef(({ data, customCells }: InstanceProps, ref: any) => {
       });
       const constraintViolations: ConstrainViolation[] = [];
       forEach(innerData, function (cellData) {
-        if (cellData.required && !cellData.value) {
+        if (!validateRequired(cellData)) {
           constraintViolations.push({
             id: cellData.id,
-            message: `${cellData.label}不能为空`,
+            message: `${cellData.label} 不能为空`,
             value: cellData.value,
             description: "required",
+          });
+        }
+
+        if (!validateFormat(cellData as InputCellData)) {
+          constraintViolations.push({
+            id: cellData.id,
+            message: `${cellData.label} 格式有误`,
+            value: cellData.value,
+            description: "format",
           });
         }
       });
@@ -57,3 +72,5 @@ export default forwardRef(({ data, customCells }: InstanceProps, ref: any) => {
     </InstanceContext.Provider>
   );
 });
+
+export default Form;

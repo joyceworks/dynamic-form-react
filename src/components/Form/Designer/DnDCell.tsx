@@ -4,7 +4,7 @@ import { CellData, SwimlaneLocation } from "../schema";
 import { DesignerContext } from "./index";
 import { createWidgetInstance } from "./util";
 import { Cell, CustomCell } from "./Cell";
-import { DeleteTwoTone } from "@ant-design/icons";
+import DeleteTwoTone from "@ant-design/icons/DeleteTwoTone";
 
 interface DnDCellProps {
   cellData: CellData;
@@ -16,10 +16,11 @@ interface DnDCellProps {
   style?: CSSProperties;
 }
 
-interface DragItem {
+export interface DragItem {
   index: number;
   id: string;
   type: string;
+  createWidgetInstance?: () => CellData;
 }
 
 export const DnDCell = function ({
@@ -30,7 +31,7 @@ export const DnDCell = function ({
   customCells,
   location,
   style,
-}: DnDCellProps) {
+}: DnDCellProps): JSX.Element {
   const data = {
     required: false,
     warnable: false,
@@ -135,18 +136,7 @@ export const DnDCell = function ({
           dropItemId: cellData.id,
         });
       } else {
-        let instance: CellData | null = null;
-        if (customCells) {
-          const find = customCells.find(
-            (customCell) => customCell.type === item.type
-          );
-          if (find && find.createWidgetInstance) {
-            instance = find.createWidgetInstance();
-          }
-        }
-        if (!instance) {
-          instance = createWidgetInstance(item.type as string);
-        }
+        const instance = createWidgetInstance(item, customCells);
         designerDispatch({
           type: "POSITIONED_ADD",
           position: position,
@@ -158,8 +148,8 @@ export const DnDCell = function ({
   });
   const [{ isDragging }, drag] = useDrag({
     item: { type: "instance", id: cellData.id, index },
-    collect: (monitor: any) => ({
-      isDragging: !!monitor.isDragging(),
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
     }),
     begin: () => {
       designerDispatch({
@@ -197,7 +187,7 @@ export const DnDCell = function ({
             style={{ position: "absolute", top: 0, right: "4px", zIndex: 1 }}
           >
             <DeleteTwoTone
-              style={{ cursor: "pointer" }}
+              className="cursor-pointer"
               onClick={() =>
                 designerDispatch({
                   type: "DELETE",

@@ -8,7 +8,7 @@ interface WidgetProps {
 }
 
 const StyledLi = styled.li`
-  font-size: 14px;
+  font-size: 12px;
   box-sizing: border-box;
   width: 125px;
   display: inline-block;
@@ -30,10 +30,15 @@ const StyledLi = styled.li`
 
 export function Widget({ widget }: WidgetProps) {
   const [{ isDragging }, drag] = useDrag({
-    item: { type: widget.type },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
+    item: {
+      type: widget.type,
+      createWidgetInstance: widget.createWidgetInstance,
+    },
+    collect: (monitor) => {
+      return {
+        isDragging: !!monitor.isDragging(),
+      };
+    },
   });
 
   return (
