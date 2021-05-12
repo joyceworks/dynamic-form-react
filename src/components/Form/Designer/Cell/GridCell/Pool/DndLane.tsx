@@ -61,13 +61,7 @@ export const DndLane = function ({
     },
     collect: (monitor) => {
       let isOver = monitor.isOver({ shallow: true });
-      console.log("isOver: " + isOver);
-      console.log(monitor.getItem());
       if (isOver && monitor.getItem().id === location.parentId) {
-        console.log(
-          "isOver && monitor.getItem().id === location.parentId: " + isOver &&
-            monitor.getItem().id === location.parentId
-        );
         isOver = false;
       }
       return { isOver: isOver };
