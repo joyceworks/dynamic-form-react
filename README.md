@@ -58,64 +58,76 @@
 ``` typescript
 <Form
   data={{
-    sn: '00000001',
-    detail: [
-      {
-        price: 10,
-        count: 2,
-        amount: 20
-      },
-      {
-        price: 12,
-        count: 3,
-        amount: 36
-      },
-    ]
-  }}
-  ref={designerRef}
-  toolbar={false}
-  defaultData={{
     type: "grid",
     id: "1127",
     lanes: [
-      { 
+      {
         cellDataList: [
           {
-            "type": "input",
-            "id": "sn",
-            "label": "单号",
+            type: "input",
+            id: "sn",
+            label: "单号",
+            value: "00000001",
           },
           {
-            "id": "detail",
-            "type": "list",
-            "label": "订单明细",
-            "lanes": [
+            id: "detail",
+            type: "list",
+            label: "明细",
+            lanes: [
               {
-                "cellDataList": [
+                cellDataList: [
                   {
-                    "id": "price",
-                    "type": "input",
-                    "label": "单价",
-                    "width": "30%",
+                    id: "price",
+                    type: "input",
+                    label: "单价",
+                    width: "30%",
+                    value: 10,
                   },
                   {
-                    "id": "count",
-                    "type": "input",
-                    "label": "数量",
-                    "width": "30%",
+                    id: "count",
+                    type: "input",
+                    label: "数量",
+                    width: "30%",
+                    value: 10,
                   },
                   {
-                    "id": "amount",
-                    "type": "input",
-                    "label": "小计",
-                    "width": "40%",
-                  }
-                ]
-              }
+                    id: "amount",
+                    type: "input",
+                    label: "小计",
+                    width: "40%",
+                    value: 100,
+                  },
+                ],
+              },
+              {
+                cellDataList: [
+                  {
+                    id: "price",
+                    type: "input",
+                    label: "单价",
+                    width: "30%",
+                    value: 10,
+                  },
+                  {
+                    id: "count",
+                    type: "input",
+                    label: "数量",
+                    width: "30%",
+                    value: 10,
+                  },
+                  {
+                    id: "amount",
+                    type: "input",
+                    label: "小计",
+                    width: "40%",
+                    value: 100,
+                  },
+                ],
+              },
             ],
           },
-        ]
-      }
+        ],
+      },
     ],
   }}
 />
