@@ -35,6 +35,21 @@
                     "type": "input",
                     "label": "数量",
                     "width": "30%",
+                    onChange: function (
+                      val: unknown,
+                      { getValue, setValue, set }: Interactions,
+                      valueObject: never,
+                      location: CellLocation
+                    ) {
+                      const price = getValue(
+                        `${location.parentId}.${location.index}.price`
+                      );
+                      set(
+                        `${location.parentId}.${location.index}.amount`,
+                        "value",
+                        price * (val as number)
+                      );
+                    },
                   },
                   {
                     "id": "amount",

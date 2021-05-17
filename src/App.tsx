@@ -2,6 +2,8 @@ import React from "react";
 import "./App.css";
 import { Designer } from "./components/Form/Designer";
 import Form from "./components/Form";
+import { CellLocation } from "./components/Form/schema";
+import { Interactions } from "./components/Form/hooks/interactions";
 
 function App() {
   return (
@@ -43,6 +45,21 @@ function App() {
                             label: "数量",
                             width: "30%",
                             value: 10,
+                            onChange: function (
+                              val: unknown,
+                              { getValue, setValue, set }: Interactions,
+                              valueObject: never,
+                              location: CellLocation
+                            ) {
+                              const price = getValue(
+                                `${location.parentId}.${location.index}.price`
+                              );
+                              set(
+                                `${location.parentId}.${location.index}.amount`,
+                                "value",
+                                price * (val as number)
+                              );
+                            },
                           },
                           {
                             id: "amount",
