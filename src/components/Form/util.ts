@@ -13,6 +13,7 @@ export function getValues(cell: CellData): any {
         lane.cellDataList.forEach((element) => {
           switch (element.type) {
             case "grid":
+            case "tab":
               func(element);
               break;
             case "list":
