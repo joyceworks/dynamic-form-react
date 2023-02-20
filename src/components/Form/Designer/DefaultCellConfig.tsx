@@ -1,13 +1,13 @@
 import React from "react";
 import { CellData } from "../schema";
 import { Form } from "antd";
-import CellLabelConfig from "../CellLabelConfig";
-import CellRequiredConfig from "../CellRequiredConfig";
-import CellReadonlyConfig from "../CellReadonlyConfig";
-import CellDefaultConfig from "../CellDefaultConfig";
-import { labelCol } from "./constant";
-import CellIdConfig from "../CellIdConfig";
-import CellOnChangeConfig from "../CellOnChangeConfig";
+import CellLabelConfig from "../Config/CellLabelConfig";
+import CellRequiredConfig from "../Config/CellRequiredConfig";
+import CellReadonlyConfig from "../Config/CellReadonlyConfig";
+import CellDefaultConfig from "../Config/CellDefaultConfig";
+import CellIdConfig from "../Config/CellIdConfig";
+import CellOnChangeConfig from "../Config/CellOnChangeConfig";
+import { labelCol } from "../constant";
 
 interface SelectWrapperCellConfigProps {
   data: CellData;

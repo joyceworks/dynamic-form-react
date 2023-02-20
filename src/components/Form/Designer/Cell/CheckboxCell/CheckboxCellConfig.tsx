@@ -1,0 +1,27 @@
+import React from "react";
+import { Form } from "antd";
+import CellLabelConfig from "../../../Config/CellLabelConfig";
+import CellRequiredConfig from "../../../Config/CellRequiredConfig";
+import CellReadonlyConfig from "../../../Config/CellReadonlyConfig";
+import CellOptionsConfig from "../../../Config/CellOptionsConfig";
+import { SelectCellData } from "../SelectCell/schema";
+import { labelCol } from "../../../constant";
+
+interface CheckboxCellConfigProps {
+  data: SelectCellData;
+}
+
+export default function CheckboxCellConfig({
+  data,
+}: CheckboxCellConfigProps): JSX.Element {
+  return (
+    <>
+      <Form labelCol={labelCol}>
+        <CellLabelConfig data={data} />
+        <CellRequiredConfig data={data} />
+        <CellReadonlyConfig data={data} />
+        <CellOptionsConfig data={data} />
+      </Form>
+    </>
+  );
+}

@@ -5,6 +5,8 @@
   "homepage": "https://joyceworks.github.io/dynamic-form-react/",
   "dependencies": {
     "antd": "^4.15.1",
+    "cnchar": "^3.2.2",
+    "dayjs": "^1.11.7",
     "immutability-helper": "^3.1.1",
     "react": "17.0.0",
     "react-dnd": "^11.1.3",

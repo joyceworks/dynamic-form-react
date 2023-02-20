@@ -5,6 +5,7 @@ import { CellData, SwimlaneLocation } from "../../../../schema";
 import { DesignerContext } from "../../../index";
 import { createWidgetInstance } from "../../../util";
 import { CustomCell } from "../../index";
+import { DragItem } from "../../../DnDCell";
 
 interface LaneProps {
   cellDataList: CellData[];
@@ -12,6 +13,7 @@ interface LaneProps {
   location: SwimlaneLocation;
   span?: number;
   customCells?: CustomCell[];
+  disabled?: boolean;
 }
 
 export const DndLane = function ({
@@ -20,7 +22,8 @@ export const DndLane = function ({
   location,
   span = 24,
   customCells,
-}: LaneProps) {
+  disabled,
+}: LaneProps): JSX.Element {
   const dispatch = useContext(DesignerContext);
   const [{ isOver }, drop] = useDrop({
     accept: [
@@ -36,7 +39,7 @@ export const DndLane = function ({
       "tab",
       ...(customCells || []).map((item) => item.type),
     ],
-    drop: (item: any, monitor) => {
+    drop: (item: DragItem, monitor) => {
       if (isOver) {
         const clientOffset = monitor.getClientOffset();
         if (!clientOffset) {
@@ -69,6 +72,7 @@ export const DndLane = function ({
   });
   return (
     <Lane
+      disabled={disabled}
       location={location}
       span={span}
       cellDataList={cellDataList}

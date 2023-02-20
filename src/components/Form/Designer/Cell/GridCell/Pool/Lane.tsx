@@ -6,10 +6,10 @@ import {
 } from "../../../../schema";
 import { DnDCell } from "../../../DnDCell";
 import { Cell, CustomCell } from "../../index";
-import { InstanceContext } from "../../../../index";
 import { Button, Col } from "antd";
 import DeleteOutlined from "@ant-design/icons/DeleteOutlined";
 import { useTimeoutFn } from "react-use";
+import { InstanceContext } from "../../../../index";
 
 interface LaneProps {
   cellDataList: CellData[];
@@ -18,6 +18,7 @@ interface LaneProps {
   span?: number;
   customCells?: CustomCell[];
   location: SwimlaneLocation;
+  disabled?: boolean;
 }
 
 export const Lane = forwardRef(
@@ -29,12 +30,13 @@ export const Lane = forwardRef(
       span = 24,
       customCells,
       location,
+      disabled,
     }: LaneProps,
     ref: any
   ) => {
-    const instanceDispatch = useContext<React.Dispatch<ReducerActionProps>>(
-      InstanceContext
-    );
+    const instanceDispatch =
+      useContext<React.Dispatch<ReducerActionProps>>(InstanceContext);
+    const isDesigner = instanceDispatch === null;
     const [mouseOver, setMouseOver] = useState<boolean>(false);
     const [, cancel, reset] = useTimeoutFn(() => {
       setMouseOver(false);
@@ -71,7 +73,7 @@ export const Lane = forwardRef(
       >
         <div className="w-full h-full relative min-h-px-42" ref={ref}>
           {cells}
-          {direction === "vertical" && mouseOver && (
+          {direction === "vertical" && !disabled && !isDesigner && (
             <Button
               onClick={() =>
                 instanceDispatch({
@@ -79,7 +81,7 @@ export const Lane = forwardRef(
                   ...location,
                 })
               }
-              className="absolute cursor-pointer -right-px-16 top-px-8"
+              className="cursor-pointer mt-2"
               type={"link"}
               size={"small"}
               icon={<DeleteOutlined />}

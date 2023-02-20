@@ -10,8 +10,8 @@ interface DragItem {
 }
 
 export function useVerticalDragDropMemberRef(
-  index: number,
-  move: (from: number, to: number) => void
+    index: number,
+    move: (from: number, to: number) => void
 ): React.RefObject<HTMLDivElement> {
   const ref = useRef<HTMLDivElement>(null);
   const [, drag] = useDrag({
@@ -43,7 +43,7 @@ export function useVerticalDragDropMemberRef(
 
       // Get vertical middle
       const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+          (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
       // Determine mouse position
       const clientOffset = monitor.getClientOffset();
@@ -80,7 +80,7 @@ export function useVerticalDragDropMemberRef(
 }
 
 export function useVerticalDragDropMemberEvent(
-  data: CellData
+    data: CellData
 ): {
   onChange: (index: number, label: string) => void;
   onRemove: (index: number) => void;

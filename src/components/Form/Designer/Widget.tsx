@@ -2,6 +2,7 @@ import React from "react";
 import { WidgetData } from "../schema";
 import { useDrag } from "react-dnd";
 import styled from "styled-components";
+import { Button } from "antd";
 
 interface WidgetProps {
   widget: WidgetData;
@@ -10,10 +11,10 @@ interface WidgetProps {
 const StyledLi = styled.li`
   font-size: 12px;
   box-sizing: border-box;
-  width: 125px;
+  width: 140px;
   display: inline-block;
   cursor: move;
-  border: 1px solid #a3a3a3;
+  border: 1px solid #f0f0f0;
   padding: 5px 10px;
   margin: 2px;
   -moz-user-select: none;
@@ -28,7 +29,7 @@ const StyledLi = styled.li`
   }
 `;
 
-export function Widget({ widget }: WidgetProps) {
+export function Widget({ widget }: WidgetProps): JSX.Element {
   const [{ isDragging }, drag] = useDrag({
     item: {
       type: widget.type,
@@ -42,13 +43,15 @@ export function Widget({ widget }: WidgetProps) {
   });
 
   return (
-    <StyledLi
+    <Button
+      block={true}
+      ref={drag}
+      icon={widget.icon}
       key={widget.name}
       style={{ opacity: isDragging ? "0.5" : 1 }}
-      ref={drag}
+      type={"dashed"}
     >
-      {widget.icon}
-      <span>{widget.name}</span>
-    </StyledLi>
+      {widget.name}
+    </Button>
   );
 }

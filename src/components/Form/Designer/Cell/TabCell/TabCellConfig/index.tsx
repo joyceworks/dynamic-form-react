@@ -3,8 +3,8 @@ import TabConfig from "./TabConfig";
 import update from "immutability-helper";
 import { Button, Form } from "antd";
 import { DesignerContext } from "../../../index";
-import { labelCol } from "../../../constant";
 import { TabCellData } from "../../../../schema";
+import { labelCol } from "../../../../constant";
 
 interface TabCellConfigProps {
   data: TabCellData;

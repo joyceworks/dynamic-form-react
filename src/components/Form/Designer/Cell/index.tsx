@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import {
   CellData,
+  CellDataValueObject,
   CellProps as ActualCellProps,
   DispatchSetValueProps,
   LanedCellData,
@@ -15,19 +16,20 @@ import {
   TabCellData,
 } from "../../schema";
 import { GridCell } from "./GridCell";
-import { InstanceContext } from "../../index";
 import { Interactions } from "../../hooks/interactions";
-import { InteractContext } from "../../util";
+import { InteractionContext } from "../../util";
 import { TabCell } from "./TabCell";
 import { DesignerContext } from "../index";
-import { TextAreaCell } from "../../TextAreaCell";
-import InputCell from "../../InputCell";
-import { SwitchCell } from "../../SwitchCell";
-import { LabelCell } from "../../LabelCell/LabelCell";
-import { DateCell } from "../../DateCell";
-import { SelectCell } from "../../SelectCell";
-import CheckboxCell from "../../CheckboxCell";
-import { SelectCellData } from "../../SelectCell/schema";
+import { TextAreaCell } from "./TextAreaCell";
+import InputCell from "./InputCell";
+import { SwitchCell } from "./SwitchCell";
+import { LabelCell } from "./LabelCell/LabelCell";
+import { DateCell } from "./DateCell";
+import { SelectCell } from "./SelectCell";
+import CheckboxCell from "./CheckboxCell";
+import { SelectCellData } from "./SelectCell/schema";
+import { InstanceContext } from "../../index";
+import {NestedFormData} from "../../../schema";
 
 export interface CustomCell {
   type: string;
@@ -49,6 +51,7 @@ interface CellProps {
   customCells?: CustomCell[];
   children?: JSX.Element;
   location?: SwimlaneLocation;
+  onDoubleClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 export const Cell = forwardRef(
   (
@@ -61,6 +64,7 @@ export const Cell = forwardRef(
       customCells,
       children,
       location,
+      onDoubleClick,
     }: CellProps,
     ref: any
   ) => {
@@ -78,9 +82,9 @@ export const Cell = forwardRef(
       }),
       [cellData]
     );
-    const interactions = useContext<Interactions>(InteractContext);
+    const interactions = useContext<Interactions>(InteractionContext);
     const onChange = useCallback(
-      (value: unknown, valueObject: any) => {
+      (value: unknown, valueObject: CellDataValueObject | undefined) => {
         const targetId =
           location && layout === "vertical"
             ? `${location.parentId}.${location.index}.${data.id}`
@@ -96,7 +100,7 @@ export const Cell = forwardRef(
           designerDispatch(command);
         }
 
-        const unstagedValues: any = {};
+        const unstagedValues: NestedFormData = {};
         data.onChange?.(
           value,
           {
@@ -106,6 +110,7 @@ export const Cell = forwardRef(
              * @param id: e.g., name, details.0.name, details.name
              */
             getValue(id: string): unknown | unknown[] {
+              unstagedValues[targetId] = value;
               for (const unstagedId in unstagedValues) {
                 if (
                   !Object.prototype.hasOwnProperty.call(
@@ -163,9 +168,10 @@ export const Cell = forwardRef(
     return (
       <>
         <div
+          onDoubleClick={onDoubleClick}
           ref={ref}
-          style={{ ...style, position: "relative" }}
-          className={`instance ${
+          style={style}
+          className={`instance relative ${
             !instanceDispatch && data.active ? " active " : " "
           }${className || ""}`}
           onClick={onClick}

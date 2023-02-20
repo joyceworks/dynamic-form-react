@@ -1,20 +1,16 @@
 import React from "react";
-import { AiOutlineMenu, AiOutlineMinusCircle } from "react-icons/ai";
 import { Button, InputNumber } from "antd";
 import { LaneData } from "../../../schema";
 import { useVerticalDragDropMemberRef } from "../../../../hook";
-
-interface DragItem {
-  index: number;
-  type: string;
-}
+import MenuOutlined from "@ant-design/icons/MenuOutlined";
+import MinusCircleOutlined from "@ant-design/icons/MinusCircleOutlined";
 
 interface LaneConfigProps {
   index: number;
   data: LaneData;
   move: (from: number, to: number) => void;
   onRemove: () => void;
-  onResize: (span: string | number | undefined) => void;
+  onResize: (span: number | null) => void;
 }
 
 export default function LaneConfig({
@@ -23,12 +19,12 @@ export default function LaneConfig({
   move,
   onRemove,
   onResize,
-}: LaneConfigProps) {
+}: LaneConfigProps): JSX.Element {
   const ref = useVerticalDragDropMemberRef(index, move);
   return (
     <>
       <div ref={ref}>
-        <AiOutlineMenu style={{ cursor: "move" }} />
+        <MenuOutlined style={{ cursor: "move" }} />
         <InputNumber
           onChange={onResize}
           value={data.span}
@@ -39,7 +35,7 @@ export default function LaneConfig({
           }}
         />
         <Button type={"link"} onClick={onRemove} style={{ padding: "0" }}>
-          <AiOutlineMinusCircle />
+          <MinusCircleOutlined />
         </Button>
       </div>
     </>

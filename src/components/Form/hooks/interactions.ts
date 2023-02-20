@@ -1,13 +1,14 @@
 import React, { useCallback } from "react";
 import { CellData, ReducerActionProps } from "../schema";
-import { getValue as fetchValue } from "../util";
-import { Option } from "../../schema";
+import { get as fetch, getValue as fetchValue } from "../util";
+import {Option} from "../../schema";
 
 export interface Interactions {
   setValue: (id: string, value: any) => void;
   setOption: (id: string, options: Option[]) => void;
   getValue: (id: string) => any;
   set: (id: string, key: string, value: any) => void;
+  get: (id: string, key: string) => any;
 }
 
 export default function useInteractions(
@@ -35,8 +36,14 @@ export default function useInteractions(
     [dispatch]
   );
   const getValue = useCallback(
-    (id: string): any => {
+    (id: string): unknown => {
       return fetchValue(root, id);
+    },
+    [root]
+  );
+  const get = useCallback(
+    (id: string, key: string) => {
+      return fetch(root, id, key);
     },
     [root]
   );
@@ -51,5 +58,5 @@ export default function useInteractions(
     },
     [dispatch]
   );
-  return { setValue, setOption, getValue, set };
+  return { setValue, setOption, getValue, set, get };
 }

@@ -11,7 +11,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Button, Modal, Space } from "antd";
+import { Button, Modal, Space, Typography } from "antd";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { clone, cloneAndForEach, getActive, reducer } from "./util";
@@ -22,33 +22,37 @@ import {
   ReducerActionProps,
   TabCellData,
 } from "../schema";
-import { WidgetGroups } from "../constants/WidgetGroups";
+import { WidgetGroups } from "../constant";
 import { DnDCell } from "./DnDCell";
 import GridCellConfig from "./Cell/GridCellConfig";
 import styled from "styled-components";
 import WidgetGroup from "./WidgetGroup";
-import LabelCellConfig from "../LabelCell/LabelCellConfig";
+import LabelCellConfig from "./Cell/LabelCell/LabelCellConfig";
 import { CustomCell } from "./Cell";
-import { AiOutlineEdit } from "react-icons/all";
-import { WhiteContent, WhiteHeader, WhiteLayout, WhiteSider } from "../Layout";
+import {
+  WhiteContent,
+  WhiteHeader,
+  WhiteLayout,
+  WhiteSider,
+} from "../component";
 import DefaultCellConfig from "./DefaultCellConfig";
 import useInteractions from "../hooks/interactions";
-import Form from "../index";
-import { InteractContext } from "../util";
+import { InteractionContext } from "../util";
 import TabCellConfig from "./Cell/TabCell/TabCellConfig";
 import "./index.css";
-import CheckboxCellConfig from "../CheckboxCell/CheckboxCellConfig";
-import SelectCellConfig from "../SelectCell/SelectCellConfig";
-import DateCellConfig from "../DateCell/DateCellConfig";
-import { contentStyle, layoutStyle, rightSiderStyle } from "./style";
-import InputCellConfig from "../InputCell/InputCellConfig";
-import { InputCellData } from "../InputCell/schema";
-import { SelectCellData } from "../SelectCell/schema";
+import CheckboxCellConfig from "./Cell/CheckboxCell/CheckboxCellConfig";
+import SelectCellConfig from "./Cell/SelectCell/SelectCellConfig";
+import DateCellConfig from "./Cell/DateCell/DateCellConfig";
+import { contentStyle, rightSiderStyle } from "./style";
+import InputCellConfig from "./Cell/InputCell/InputCellConfig";
+import { InputCellData } from "./Cell/InputCell/schema";
+import { SelectCellData } from "./Cell/SelectCell/schema";
+import Form from "../index";
 
 const rootCellData: CellData = {
   type: "grid",
   id: "11270307",
-  lanes: [{ span: 24, cellDataList: [] }],
+  lanes: [{ cellDataList: [] }],
   active: false,
 };
 
@@ -56,21 +60,20 @@ export const DesignerContext = React.createContext<
   Dispatch<ReducerActionProps>
 >({} as Dispatch<ReducerActionProps>);
 const LeftSider = styled(WhiteSider).attrs({
-  width: 280,
+  width: 160,
 })`
   padding: 10px;
-  border-right: 1px solid #d3d3d3;
-  height: 100%;
+  border-right: 1px solid #f0f0f0;
   overflow-y: auto;
 `;
 const FullHeightBorderedLayout = styled(WhiteLayout)`
-  border: 1px solid #d3d3d3;
+  border: 1px solid #f0f0f0;
   height: calc(100% - 1px);
 `;
 const ToolBar = styled(WhiteHeader)`
   padding: 0 10px;
   text-align: right;
-  border-bottom: 1px solid #a3a3a3;
+  border-bottom: 1px solid #f0f0f0;
 `;
 
 export interface IEntityFormDesigner {
@@ -78,13 +81,20 @@ export interface IEntityFormDesigner {
 }
 
 interface DesignerProps {
-  customCells?: CustomCell[];
+  customCells?:
+    | CustomCell[]
+    | {
+        [key: string]: CustomCell[];
+      };
   availableCustomCells?: CustomCell[];
   toolbar?: boolean;
+  property?: boolean;
   style?: CSSProperties;
   defaultCellData?: CellData;
   builtinCellDataTypes?: CellDataType[];
   onChange?: (root: CellData) => void;
+  className?: string;
+  title?: string;
 }
 
 export const Designer = forwardRef(
@@ -97,6 +107,9 @@ export const Designer = forwardRef(
       builtinCellDataTypes,
       onChange,
       style,
+      property = true,
+      className,
+      title,
     }: DesignerProps,
     ref: Ref<IEntityFormDesigner>
   ) => {
@@ -112,9 +125,6 @@ export const Designer = forwardRef(
         designerDispatch({ type: "DELETE_ACTIVE" });
       }
     }, []);
-    const finalAvailableCells = useMemo(() => {
-      return availableCustomCells || customCells;
-    }, [availableCustomCells, customCells]);
     useEffect(() => {
       document.addEventListener("keyup", delFunction, false);
       return () => document.removeEventListener("keyup", delFunction, false);
@@ -131,10 +141,15 @@ export const Designer = forwardRef(
           data: rootCellData,
         });
       },
-      load(data: CellData) {
+      load(cellDataList: CellData[]) {
         designerDispatch({
           type: "INIT",
-          data: data,
+          data: {
+            type: "grid",
+            id: "03071128",
+            lanes: [{ cellDataList }],
+            active: false,
+          },
         });
       },
       get() {
@@ -159,35 +174,68 @@ export const Designer = forwardRef(
       })).filter((group) => group.widgets.length > 0);
     }, [builtinCellDataTypes]);
 
+    const flattedCustomCells: CustomCell[] = useMemo(() => {
+      return customCells
+        ? Array.isArray(customCells)
+          ? customCells
+          : Object.keys(customCells)
+              .map((key) => customCells[key])
+              .flat()
+        : [];
+    }, [customCells]);
+
     return (
       <>
         <DesignerContext.Provider value={designerDispatch}>
-          <InteractContext.Provider value={interactions}>
+          <InteractionContext.Provider value={interactions}>
             <DndProvider backend={HTML5Backend}>
-              <FullHeightBorderedLayout style={style}>
+              <FullHeightBorderedLayout className={className} style={style}>
                 <LeftSider>
+                  {title && (
+                    <Typography.Title level={5}>{title}</Typography.Title>
+                  )}
                   {widgetGroups.map((g) => (
                     <WidgetGroup key={g.name} name={g.name} list={g.widgets} />
                   ))}
-                  {finalAvailableCells && (
-                    <WidgetGroup
-                      key={"Custom"}
-                      name={"Custom"}
-                      list={[
-                        ...finalAvailableCells.map((cell) => {
-                          return {
-                            type: cell.type,
-                            name: cell.name || "Custom",
-                            icon: cell.icon || <AiOutlineEdit />,
-                            createWidgetInstance: cell.createWidgetInstance,
-                          };
-                        }),
-                      ]}
-                    />
-                  )}
+                  {customCells &&
+                    (Array.isArray(customCells) ? (
+                      <WidgetGroup
+                        header={!!widgetGroups.length}
+                        key={"Custom"}
+                        name={"Custom"}
+                        list={[
+                          ...customCells.map((cell) => {
+                            return {
+                              type: cell.type,
+                              name: cell.name || "Custom",
+                              icon: cell.icon,
+                              createWidgetInstance: cell.createWidgetInstance,
+                            };
+                          }),
+                        ]}
+                      />
+                    ) : (
+                      Object.keys(customCells).map((key) => (
+                        <WidgetGroup
+                          header={!!widgetGroups.length}
+                          key={key}
+                          name={key}
+                          list={[
+                            ...customCells[key].map((cell) => {
+                              return {
+                                type: cell.type,
+                                name: cell.name || "Custom",
+                                icon: cell.icon,
+                                createWidgetInstance: cell.createWidgetInstance,
+                              };
+                            }),
+                          ]}
+                        />
+                      ))
+                    ))}
                 </LeftSider>
                 <WhiteContent>
-                  <WhiteLayout style={layoutStyle}>
+                  <WhiteLayout className="h-full">
                     {toolbar && (
                       <ToolBar>
                         <Space>
@@ -221,55 +269,59 @@ export const Designer = forwardRef(
                         className={"root"}
                         cellData={data}
                         index={0}
-                        customCells={customCells}
+                        customCells={flattedCustomCells}
                       />
                     </WhiteContent>
                   </WhiteLayout>
                 </WhiteContent>
-                <WhiteSider width={280} style={rightSiderStyle}>
-                  {active ? (
-                    active.type === "grid" ? (
-                      <GridCellConfig data={active as LanedCellData} />
-                    ) : active.type === "tab" ? (
-                      <TabCellConfig data={active as TabCellData} />
-                    ) : active.type === "datetime" ? (
-                      <DateCellConfig data={active} />
-                    ) : active.type === "select" ? (
-                      <SelectCellConfig data={active as SelectCellData} />
-                    ) : active.type === "checkbox" ? (
-                      <CheckboxCellConfig data={active as SelectCellData} />
-                    ) : active.type === "label" ? (
-                      <LabelCellConfig data={active} />
-                    ) : active.type === "input" ? (
-                      <InputCellConfig data={active as InputCellData} />
-                    ) : (
-                      (customCells &&
-                        customCells.some((item) => item.type === active.type) &&
-                        customCells.filter(
-                          (item) => item.type === active.type
-                        )[0].config &&
-                        React.createElement(
-                          customCells.filter(
+                {property && (
+                  <WhiteSider width={280} style={rightSiderStyle}>
+                    {active ? (
+                      active.type === "grid" ? (
+                        <GridCellConfig data={active as LanedCellData} />
+                      ) : active.type === "tab" ? (
+                        <TabCellConfig data={active as TabCellData} />
+                      ) : active.type === "datetime" ? (
+                        <DateCellConfig data={active} />
+                      ) : active.type === "select" ? (
+                        <SelectCellConfig data={active as SelectCellData} />
+                      ) : active.type === "checkbox" ? (
+                        <CheckboxCellConfig data={active as SelectCellData} />
+                      ) : active.type === "label" ? (
+                        <LabelCellConfig data={active} />
+                      ) : active.type === "input" ? (
+                        <InputCellConfig data={active as InputCellData} />
+                      ) : (
+                        (customCells &&
+                          flattedCustomCells.some(
                             (item) => item.type === active.type
-                          )[0].config!,
-                          {
-                            data: active,
-                            onChange: function (data: CellData) {
-                              designerDispatch({
-                                type: "UPDATE",
-                                data: data,
-                              });
-                            },
-                          }
-                        )) || <DefaultCellConfig data={active} />
-                    )
-                  ) : (
-                    <></>
-                  )}
-                </WhiteSider>
+                          ) &&
+                          flattedCustomCells.filter(
+                            (item) => item.type === active.type
+                          )[0].config &&
+                          React.createElement(
+                            flattedCustomCells.filter(
+                              (item) => item.type === active.type
+                            )[0].config!,
+                            {
+                              data: active,
+                              onChange: function (data: CellData) {
+                                designerDispatch({
+                                  type: "UPDATE",
+                                  data: data,
+                                });
+                              },
+                            }
+                          )) || <DefaultCellConfig data={active} />
+                      )
+                    ) : (
+                      <></>
+                    )}
+                  </WhiteSider>
+                )}
               </FullHeightBorderedLayout>
             </DndProvider>
-          </InteractContext.Provider>
+          </InteractionContext.Provider>
         </DesignerContext.Provider>
         <Modal
           width={1000}
@@ -296,7 +348,7 @@ export const Designer = forwardRef(
         >
           {previewData && (
             <Form
-              customCells={customCells}
+              customCells={flattedCustomCells}
               ref={previewRef}
               data={cloneAndForEach(previewData, (data) => {
                 data.value = data.defaultValue || data.value;

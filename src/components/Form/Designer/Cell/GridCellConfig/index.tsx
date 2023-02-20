@@ -3,7 +3,7 @@ import LaneConfig from "./LaneConfig";
 import update from "immutability-helper";
 import { Button, Form } from "antd";
 import { DesignerContext } from "../../index";
-import { labelCol } from "../../constant";
+import { labelCol } from "../../../constant";
 import { LanedCellData } from "../../../schema";
 
 export default function GridCellConfig({

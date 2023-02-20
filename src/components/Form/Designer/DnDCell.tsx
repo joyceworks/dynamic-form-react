@@ -51,15 +51,16 @@ export const DnDCell = function ({
   const [{ isOver }, drop] = useDrop({
     accept: [
       "instance",
+      "list",
+      "grid",
+      "tab",
+      "switch",
       "input",
       "textarea",
       "select",
       "checkbox",
       "datetime",
-      "grid",
-      "list",
       "label",
-      "tab",
       ...(customCells || []).map((item) => item.type),
     ],
     hover: (item: DragItem, monitor) => {

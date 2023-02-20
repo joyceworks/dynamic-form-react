@@ -150,4 +150,6 @@
 
 ### Preview
 
-https://joyceworks.github.io/dynamic-form-react/
+```shell
+yarn start
+```

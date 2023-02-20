@@ -1,11 +1,11 @@
 import React, { useCallback, useContext, useState } from "react";
 import { LaneData, LanedCellData } from "../../../schema";
-import { Pool } from "../GridCell/Pool";
 import { CustomCell } from "../index";
 import styled from "styled-components";
 import { DesignerContext } from "../../index";
 import update from "immutability-helper";
 import { InstanceContext } from "../../../index";
+import { Pool } from "../GridCell/Pool";
 
 interface TabCellProps {
   data: LanedCellData;
@@ -25,7 +25,7 @@ const ActiveTab = styled(Tab)`
   color: #1890ff;
 `;
 const Tabs = styled("div")`
-  border-bottom: 1px solid #d3d3d3;
+  border-bottom: 1px solid #f0f0f0;
 `;
 
 export const TabCell = ({ data, customCells }: TabCellProps): JSX.Element => {
@@ -68,6 +68,7 @@ export const TabCell = ({ data, customCells }: TabCellProps): JSX.Element => {
           );
         })}
       </Tabs>
+      {/* 通过控制 span 进行 tab 的切换: 24(显示) or 0(隐藏) */}
       <Pool cellData={data} customCells={customCells} />
     </>
   );

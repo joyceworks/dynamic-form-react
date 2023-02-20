@@ -1,5 +1,5 @@
 .instance.active {
-  border-color: #1890ff;
+  border: dashed #1890ff;
 }
 .instance {
   border: 1px solid transparent;
@@ -18,19 +18,18 @@
 }
 .lane {
   padding: 10px;
-  border-top: 1px solid #d3d3d3;
-  border-bottom: 1px solid #d3d3d3;
-  border-left: 1px solid #d3d3d3;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  border-left: 1px solid #f0f0f0;
   min-height: 62px;
   vertical-align: top;
   position: relative;
 }
 .lane:last-child {
-  border-right: 1px solid #d3d3d3;
+  border-right: 1px solid #f0f0f0;
 }
 .lane.vertical {
   width: 100%;
-  overflow-x: auto;
   white-space: nowrap;
 }
 .lane.vertical .instance {

@@ -1,12 +1,8 @@
 import React from "react";
-import { AiOutlineMenu, AiOutlineMinusCircle } from "react-icons/ai";
 import { Button, Input } from "antd";
 import { useVerticalDragDropMemberRef } from "../../../../../hook";
-
-interface DragItem {
-  index: number;
-  type: string;
-}
+import MenuOutlined from "@ant-design/icons/MenuOutlined";
+import MinusCircleOutlined from "@ant-design/icons/MinusCircleOutlined";
 
 interface TabConfigProps {
   index: number;
@@ -27,7 +23,7 @@ export default function TabConfig({
   return (
     <>
       <div ref={ref}>
-        <AiOutlineMenu style={{ cursor: "move" }} />
+        <MenuOutlined style={{ cursor: "move" }} />
         <Input
           onChange={(event) => onRename(event.target.value)}
           value={name}
@@ -37,8 +33,8 @@ export default function TabConfig({
             margin: "0 4px",
           }}
         />
-        <Button type={"link"} onClick={onRemove} style={{ padding: "0" }}>
-          <AiOutlineMinusCircle />
+        <Button type={"link"} onClick={onRemove} className="p-0">
+          <MinusCircleOutlined />
         </Button>
       </div>
     </>

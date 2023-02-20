@@ -7,8 +7,7 @@ import {
 import { set, validateFormat, validateRequired } from "../util";
 import { DragItem } from "./DnDCell";
 import { CustomCell } from "./Cell";
-import { InputCellData } from "../InputCell/schema";
-import { message } from "antd";
+import { InputCellData } from "./Cell/InputCell/schema";
 
 export function clone(src: CellData): CellData {
   const copy = JSON.parse(JSON.stringify(src));
@@ -82,11 +81,6 @@ export function forEach(
   recursion(root);
 }
 
-export function filter(
-  root: CellData,
-  predicate: (item: CellData) => boolean
-): CellData[];
-export function filter(root: CellData, type: string): CellData[];
 export function filter(
   root: CellData,
   predicate: ((item: CellData) => boolean) | string
@@ -285,7 +279,7 @@ export function reducer(state: any, action: ReducerActionProps): CellData {
       if (location[2].lanes.length > 1) {
         location[2].lanes.splice(action.index, 1);
       } else {
-        message.error(`最后一行无法删除`);
+        alert(`最后一行无法删除`);
       }
     }
   }
@@ -326,7 +320,7 @@ export function createWidgetInstance(
 export function createBasicWidgetInstance(type: string): CellData {
   const cellData: CellData = {
     type: type,
-    id: type + new Date().getTime(),
+    id: type + new Date().getTime().toString(32),
     active: false,
     label: type,
   };

@@ -3,12 +3,12 @@ import { Button, Col, Row } from "antd";
 import styled from "styled-components";
 import update from "immutability-helper";
 import { CellData, LaneData, LanedCellData } from "../../../../schema";
-import { InstanceContext } from "../../../../index";
 import { DndLane } from "./DndLane";
 import { Lane } from "./Lane";
 import "./index.css";
 import { CustomCell } from "../../index";
 import { FormGroup } from "../../../FormGroup";
+import { InstanceContext } from "../../../../index";
 
 interface PoolProps {
   direction?: "horizontal" | "vertical";
@@ -20,7 +20,6 @@ const InstanceListHeaderItem = styled(Col)`
   padding: 0 10px;
   white-space: nowrap;
   width: 100%;
-  overflow-x: auto;
 
   > div {
     width: 200px;
@@ -47,29 +46,64 @@ export const Pool = forwardRef(
           },
           span: lane.span,
           customCells: customCells,
+          disabled: cellData.disabled,
         };
         return isDesigner ? <DndLane {...props} /> : <Lane {...props} />;
       },
-      [cellData.id, customCells, direction, isDesigner]
+      [cellData.disabled, cellData.id, customCells, direction, isDesigner]
     );
     const lanes = useMemo(
       () => cellData.lanes.map((lane, index) => getLane(lane, index)),
       [cellData.lanes, getLane]
     );
 
+    const addRow = useCallback(
+      () =>
+        instanceDispatch({
+          type: "UPDATE",
+          data: update(cellData, {
+            lanes: {
+              $push: [
+                update(cellData.lanes[0], {
+                  cellDataList: {
+                    $apply: (x: CellData[]) =>
+                      x.map((y) => ({
+                        ...y,
+                        value: null,
+                      })),
+                  },
+                  hiddenValues: {
+                    $apply: () => ({}),
+                  },
+                }),
+              ],
+            },
+          }),
+        }),
+      [cellData, instanceDispatch]
+    );
+
     return (
       <>
         <Row ref={ref} className={"lanes"}>
           {direction === "horizontal" ? (
+            // Grid, Tab
             <>{lanes}</>
           ) : (
+            // List
             <FormGroup
               required={!!cellData.required}
               warning={cellData.warning}
               warnable={cellData.warnable}
               element={
-                <>
-                  {!isDesigner && (
+                <div
+                  className={`overflow-auto ${
+                    isDesigner
+                      ? "border-[#f0f0f0] border-dashed border [&>.lane]:border-none"
+                      : "[&>.lane]:p-0"
+                  }`}
+                >
+                  {!isDesigner && ( // Header row
                     <InstanceListHeaderItem span={24}>
                       {cellData.lanes[0].cellDataList.map((item) => (
                         <div style={{ width: item.width }} key={item.id}>
@@ -82,38 +116,14 @@ export const Pool = forwardRef(
                     </InstanceListHeaderItem>
                   )}
                   {lanes}
-                  {!isDesigner && direction === "vertical" && (
-                    <Button
-                      size={"small"}
-                      onClick={() =>
-                        instanceDispatch({
-                          type: "UPDATE",
-                          data: update(cellData, {
-                            lanes: {
-                              $push: [
-                                update(cellData.lanes[0], {
-                                  cellDataList: {
-                                    $apply: (x: CellData[]) =>
-                                      x.map((y) => ({
-                                        ...y,
-                                        value: null,
-                                      })),
-                                  },
-                                  hiddenValues: {
-                                    $apply: () => ({}),
-                                  },
-                                }),
-                              ],
-                            },
-                          }),
-                        })
-                      }
-                      type={"link"}
-                    >
-                      添加行
-                    </Button>
-                  )}
-                </>
+                  {!isDesigner &&
+                    direction === "vertical" &&
+                    !cellData.disabled && (
+                      <Button size={"small"} onClick={addRow} type={"link"}>
+                        添加行
+                      </Button>
+                    )}
+                </div>
               }
               label={<span>{cellData.label}</span>}
             />
