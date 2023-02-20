@@ -1,3 +1,9 @@
+### Preview
+
+<img width="623" alt="image" src="https://user-images.githubusercontent.com/5696485/220049830-6b84ea89-9aaf-4b37-979a-e95cc93a40c5.png">
+
+<img width="1356" alt="image" src="https://user-images.githubusercontent.com/5696485/220049691-5ec212c0-5df5-462b-8cdf-95f83fede067.png">
+
 ### Usage
 
 ###### Designer
